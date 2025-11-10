@@ -1,4 +1,4 @@
-package myp.proyecto2.model.basicelements;
+package myp.proyecto2.model.domain;
 
 public class PointOfInterest {
 
