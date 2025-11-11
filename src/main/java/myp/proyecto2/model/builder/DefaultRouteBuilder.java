@@ -30,6 +30,7 @@ public class DefaultRouteBuilder implements RouteBuilder {
     public RouteBuilder setId(String id) {
         if (id == null) 
             throw new NullPointerException("The ID cannot be null.");
+
         this.id = id;
         return this;
     }
@@ -38,6 +39,7 @@ public class DefaultRouteBuilder implements RouteBuilder {
     public RouteBuilder setOrigin(Location origin) {
         if (origin == null) 
             throw new NullPointerException("The origin cannot be null.");
+
         this.origin = origin;
         return this;
     }
@@ -46,6 +48,7 @@ public class DefaultRouteBuilder implements RouteBuilder {
     public RouteBuilder setDestination(Location destination) {
         if (destination == null) 
             throw new NullPointerException("The destination cannot be null.");
+            
         this.destination = destination;
         return this;
     }

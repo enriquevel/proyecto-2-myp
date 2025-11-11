@@ -1,4 +1,5 @@
 package myp.proyecto2.model.catalog;
+
 import java.util.List;
 import java.util.Map;
 
