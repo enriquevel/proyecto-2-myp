@@ -1,5 +1,10 @@
 package myp.proyecto2.model.service;
+
 import java.util.List;
+import myp.proyecto2.model.catalog.ReportCatalog;
+import myp.proyecto2.model.domain.Location;
+import myp.proyecto2.model.domain.Report;
+import myp.proyecto2.model.domain.ReportType;
 
 public class ReportManager {
 
