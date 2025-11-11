@@ -52,21 +52,15 @@ public class DefaultRouteBuilder implements RouteBuilder {
 
     @Override
     public RouteBuilder setDistance(double distance) {
-        if (distance == null)
-            throw new NullPointerException("The route's distance cannot be null.");
-
         if (distance <= 0) 
             throw new IllegalArgumentException("Distance has to be positive.");
 
-        this.distance = distance;
+        this.totalDistance = distance;
         return this;
     }
 
     @Override
     public RouteBuilder setDuration(int seconds) {
-        if (seconds == null)
-            throw new NullPointerException("Duration cannot be null");
-
         if (seconds <= 0)
             throw new IllegalArgumentException("The duration has to be positive.");
 
@@ -89,6 +83,7 @@ public class DefaultRouteBuilder implements RouteBuilder {
             throw new NullPointerException("The path point cannot be null.");
 
         this.pathPoints.add(point);
+        return this;
     }
 
     @Override
@@ -107,13 +102,10 @@ public class DefaultRouteBuilder implements RouteBuilder {
         if (this.destination == null)  
             throw new IllegalStateException("Cannot build route: A destination is required");
 
-        if (this.id == null)  
-            throw new IllegalStateException("Cannot build route: ID is required");
-        
-        if (this.totalDistance == null)  
+        if (this.totalDistance <= null)  
             throw new IllegalStateException("Cannot build route: A route distance is required");
 
-        if (this.totalDurationSeconds == null)  
+        if (this.totalDurationSeconds <= null)  
             throw new IllegalStateException("Cannot build route: A route duration is required");
     }
 }

@@ -20,7 +20,7 @@ public class Route {
 
     private final List<Location> pathPoints;
 
-    public Route(String id, Location origin, Location destination, double totalDistance, double totalDurationSeconds,
+    public Route(String id, Location origin, Location destination, double totalDistance, int totalDurationSeconds,
                         List<RouteSegment> segments, List<Location> pathPoints) {
         this.id = id;
         this.origin = origin;
