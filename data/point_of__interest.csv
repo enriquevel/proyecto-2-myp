@@ -1,5 +1,5 @@
-type,descrpition,location,name
-Faculty,,,Facultad de Ciencias
-Faculty,,,Facultad de Arquitectura
-Recreation,,,Pabellon de la biodiversidad
-Recreation,,,Piscina olimpica
+type,name,latitude,longitude,address,descrpition
+Faculty,Facultad de Ciencias,,,,
+Faculty,Facultad de Arquitectura,,,,
+Recreation,Pabellon de la biodiversidad,,,,
+Recreation,Piscina olimpica,,,,

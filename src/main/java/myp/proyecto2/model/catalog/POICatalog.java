@@ -9,7 +9,8 @@ import myp.proyecto2.model.domain.PointOfInterest;
 import myp.proyecto2.model.domain.POIType;
 
 /**
- * Esta clase se utiliza para dar una representacion interna a varios puntos de interes.
+ * Esta clase se utiliza para dar una representacion interna al conjunto de todos
+ * los puntos de interes.
  */
 public class POICatalog {
     /** Ruta del archivo donde se guardan los POI */
@@ -26,7 +27,7 @@ public class POICatalog {
      * hashMaps y define la ruta del archivo que almacena los puntos de interes (POI).
      */
     public POICatalog(String filePathPOI){
-        this.FilePathPOI = filePathPOI;
+        this.filePathPOI = filePathPOI;
         this.poisByID = new HashMap<>();
         this.poisByType = new EnumMap<>(POIType.class);
     }
@@ -40,15 +41,15 @@ public class POICatalog {
         if (poi == null)
             throw new NullPointerException("The point of interest you want to add cannot be null.");
         //Agrega al punto de interes a una hashMap donde su id funge como llave.
-        POICatalog old = this.poisByID.put(poi.getId(), poi);
+        PointOfInterest old = this.poisByID.put(poi.getId(), poi);
 
         /*Como put regresa <code>null</code> si el objeto agregado no estaba previamente en el hashmap,
          * verificamos el caso contrario.
          */
         if (old !=null)
-            this.poisByType.get(old.getType).remove(old);
+            this.poisByType.get(old.getType()).remove(old);
         //Finalmente agregamos el nuevo punto de interes a la lista del segundo hash map.
-        this.poisByType.get(poi.getType).add(old);
+        this.poisByType.get(poi.getType()).add(old);
     }   
 
     /**
@@ -94,7 +95,7 @@ public class POICatalog {
      * @return el punto de interes con dicho nombre.<code>null</code>si no lo encuentra.
      * @throws NullPointerException si el nombre dado es <code>null</code>.
      */
-    public List<PointOfInterest> findByName(String name)throws NullPointerException{
+    public PointOfInterest findByName(String name)throws NullPointerException{
         if(name == null) 
             throw new NullPointerException("The POI's name cannot be null.");
         for(PointOfInterest poi : this.findAll())
