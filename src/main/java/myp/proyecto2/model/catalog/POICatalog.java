@@ -12,6 +12,8 @@ import myp.proyecto2.model.domain.POIType;
  * Esta clase se utiliza para dar una representacion interna a varios puntos de interes.
  */
 public class POICatalog {
+    /** Ruta del archivo donde se guardan los POI */
+    private final String filePathPOI;
 
     /** Mapa de puntos de interes por ID. */
     private Map<String, PointOfInterest> poisByID;
@@ -20,10 +22,11 @@ public class POICatalog {
     private Map<POIType, List<PointOfInterest>> poisByType;
 
     /**
-     * Constructor principal de la clase {@link POICatalog}. Solamente inicializa los 
-     * atributos.
+     * Constructor principal de la clase {@link POICatalog}. Inicializa los 
+     * hashMaps y define la ruta del archivo que almacena los puntos de interes (POI).
      */
-    public POICatalog(){
+    public POICatalog(String filePathPOI){
+        this.FilePathPOI = filePathPOI;
         this.poisByID = new HashMap<>();
         this.poisByType = new EnumMap<>(POIType.class);
     }
@@ -95,7 +98,7 @@ public class POICatalog {
         if(name == null) 
             throw new NullPointerException("The POI's name cannot be null.");
         for(PointOfInterest poi : this.findAll())
-            if(poi.getName().equals(name))return poi;
+            if(poi.getName().equals(name))return poi; //Podriamos normalizar ambos nombres en las busquedas.
 
         return null;
     }
@@ -111,13 +114,16 @@ public class POICatalog {
         return this.poisByType.get(type);
     }
 
-    
-    public List<PointOfInterest> search(String query)throws NullPointerException{
-
-    }
-
+    /**
+     * 
+     * @param poi
+     * @return
+     * @throws NullPointerException
+     */
     public PointOfInterest save(PointOfInterest poi)throws NullPointerException{
-
+        addPOI(poi);
+        //Aqui se escribe en el archivo.
+        return null;
     }
 
 
