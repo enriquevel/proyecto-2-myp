@@ -7,6 +7,11 @@ public enum RoutePreference {
     BALANCED;
 
     public String getDisplayName() {
-        return null;
+        return swtich(this) {
+            case SAFEST -> "Safe route";
+            case FASTEST -> "Fast route";
+            case BALANCED -> "Balanced route"
+            default -> throw new IllegalArgumentException("The route preference is not valid");
+        };
     }
 }

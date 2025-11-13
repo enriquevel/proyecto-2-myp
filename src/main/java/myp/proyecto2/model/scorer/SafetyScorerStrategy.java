@@ -2,6 +2,8 @@ package myp.proyecto2.model.scorer;
 
 import java.util.Map;
 import java.util.List;
+import myp.proyecto2.model.builder.Route;
+import myp.proyecto2.model.domain.Report;
 
 public class SafetyScorerStrategy implements RouteScorerStrategy {
 

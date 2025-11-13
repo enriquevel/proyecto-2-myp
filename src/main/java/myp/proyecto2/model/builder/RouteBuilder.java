@@ -1,6 +1,5 @@
 package myp.proyecto2.model.builder;
 
-import java.util.List;
 import myp.proyecto2.model.domain.Location;
 import myp.proyecto2.model.domain.RouteSegment;
 

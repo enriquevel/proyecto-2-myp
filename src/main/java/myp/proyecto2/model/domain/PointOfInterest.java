@@ -8,7 +8,6 @@ public class PointOfInterest {
     private Location location;
     private POIType type;
 
-
     public PointOfInterest(String id, String name, String description, Location location, POIType type) {
         this.id = id;
         this.name = name;

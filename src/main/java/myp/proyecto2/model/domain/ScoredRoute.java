@@ -1,4 +1,5 @@
 package myp.proyecto2.model.domain;
+
 import java.util.List;
 
 public class ScoredRoute {
