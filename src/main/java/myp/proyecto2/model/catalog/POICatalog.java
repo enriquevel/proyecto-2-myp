@@ -1,5 +1,6 @@
 package myp.proyecto2.model.catalog;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -12,7 +13,8 @@ import myp.proyecto2.model.domain.POIType;
  * Esta clase se utiliza para dar una representacion interna al conjunto de todos
  * los puntos de interes.
  */
-public class POICatalog {
+public class POICatalog implements Catalog<PointOfInterest, POIType>{
+
     /** Ruta del archivo donde se guardan los POI */
     private final String filePathPOI;
 
@@ -37,7 +39,8 @@ public class POICatalog {
      * @param poi punto de interes que se desea agregar.
      * @throws NullPointerException si el punto de interes que se quiere agregar es <code>null</code>.
      */
-    public void addPOI(PointOfInterest poi)throws NullPointerException{
+    @Override
+    public void add(PointOfInterest poi)throws NullPointerException{
         if (poi == null)
             throw new NullPointerException("The point of interest you want to add cannot be null.");
         //Agrega al punto de interes a una hashMap donde su id funge como llave.
@@ -53,25 +56,32 @@ public class POICatalog {
     }   
 
     /**
-     * Permite eliminar a un punto de interes del catalogo utilizando
-     * su identificador.
-     * @param id del punto de interes que se desea eliminar.
+     * Permite eliminar a un punto de interes del catalogo y nos dice si el punto de interes
+     * se encontraba en el catalogo.
+     * @param  poi punto de interes que se desea eliminar.
+     * @return <code>true</code> si el punto de interes estaba en el catalogo y fue eliminado.
+     * <code>false</code> si el punto de interes no estaba en el catalogo y por tanto no pudo ser eliminado.
      * @throws NullPointerException si el identificador es <code>null</code>.
      */
-    public void deletePOI(String id)throws NullPointerException{
-        if(id == null) 
-            throw new NullPointerException("The ID cannot be null.");
+    @Override
+    public Boolean delete(PointOfInterest poi)throws NullPointerException{
+        if(poi == null) 
+            throw new NullPointerException("The point of interest you want to delete cannot be null.");
 
-        PointOfInterest removed = this.poisByID.remove(id);
+        PointOfInterest removed = this.poisByID.remove(poi.getId());
         //Verificamos si el punto de interes realmente estaba en el catalogo.
-        if (removed!= null)
-            this.poisByType.get(removed.getType()).remove(removed); //Lo removemos de la lista del segundo hashmap.
+        if (removed!= null){
+            this.poisByType.get(removed.getType()).remove(removed);//Lo removemos de la lista del segundo hashmap.
+            return true; 
+        }
+        return false;
     }
 
     /**
      * Regresa una lista de todos los puntos de interes.
      * @return una lista de todos los puntos de interes.
      */
+    @Override
     public List<PointOfInterest> findAll() {
         return new ArrayList<>(this.poisByID.values());
     }
@@ -83,6 +93,7 @@ public class POICatalog {
      * punto de interes con dicho identificador.
      * @throws NullPointerException si el identificador es <code>null</code>.
      */
+    @Override
     public PointOfInterest findById(String id)throws NullPointerException {
         if(id == null) 
             throw new NullPointerException("The ID cannot be null.");
@@ -90,9 +101,50 @@ public class POICatalog {
     }
 
     /**
+     * Regresa una lista de todos los puntos de interes de un mismo tipo.
+     * @param type de todos los puntos de interes.
+     * @return una lista de todos los puntos de interes de un mismo tipo.
+     * <code>null</code> si no existen puntos de interes de ese tipo.
+     * @throws NullPointerException si el tipo dado es <code>null</code>.
+     */
+    @Override
+    public List<PointOfInterest> findByType(POIType type)throws NullPointerException{
+        return this.poisByType.get(type);
+    }
+
+    /**
+     * Agrega un punto de interes al catalogo y a la base de datos.
+     * @param poi punto de interes que se desea agregar.
+     * @throws NullPointerException si el punto de interes dado es <code>null</code>.
+     */
+    @Override
+    public void save(PointOfInterest poi)throws NullPointerException, IOException{
+        if (poi == null)throw new NullPointerException("Cannot save a null point of interest.");
+        add(poi);
+        POICatalogReaderWriter  readerWriter = new POICatalogReaderWriter(this.filePathPOI);
+        readerWriter.add(poi);
+    }
+
+    /**
+     * Elimina un punto de interes del catalogo y de la base de datos.
+     * @param poi punto de interes que se desea eliminar.
+     * @throws NullPointerException si el punto de interes dado es <code>null</code>.
+     */
+    @Override
+    public void dontSave(PointOfInterest poi)throws NullPointerException, IOException{
+        if (poi == null)throw new NullPointerException("Cannot delete a null point of interest.");
+        if (delete(poi)){
+            POICatalogReaderWriter  readerWriter = new POICatalogReaderWriter(this.filePathPOI);
+            readerWriter.delete(poi);
+        }
+    }
+
+    //-----Otras maneras de buscar en un catalogo de POI.-----//
+
+    /**
      * Regresa un punto de interes del catalogo, buscandolo por su nombre.
-     * @param name del punto de interes.
-     * @return el punto de interes con dicho nombre.<code>null</code>si no lo encuentra.
+     * @param name nombre del punto de interes.
+     * @return el punto de interes con dicho nombre.<code>null</code> si no lo encuentra.
      * @throws NullPointerException si el nombre dado es <code>null</code>.
      */
     public PointOfInterest findByName(String name)throws NullPointerException{
@@ -104,28 +156,9 @@ public class POICatalog {
         return null;
     }
 
-    /**
-     * Regresa una lista de todos los puntos de interes de un mismo tipo.
-     * @param type de todos los puntos de interes.
-     * @return una lista de todos los puntos de interes de un mismo tipo.
-     * <code>null</code> si no existen puntos de interes de ese tipo.
-     * @throws NullPointerException si el tipo dado es <code>null</code>.
-     */
-    public List<PointOfInterest> findByType(POIType type)throws NullPointerException{
-        return this.poisByType.get(type);
-    }
 
-    /**
-     * 
-     * @param poi
-     * @return
-     * @throws NullPointerException
-     */
-    public PointOfInterest save(PointOfInterest poi)throws NullPointerException{
-        addPOI(poi);
-        //Aqui se escribe en el archivo.
-        return null;
-    }
+
+
 
 
 }
