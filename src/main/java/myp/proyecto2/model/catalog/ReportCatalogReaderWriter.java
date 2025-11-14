@@ -7,58 +7,55 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import myp.proyecto2.model.domain.Location;
-import myp.proyecto2.model.domain.POIType;
-import myp.proyecto2.model.domain.PointOfInterest;
+import myp.proyecto2.model.domain.Report;
+import myp.proyecto2.model.domain.ReportType;
 
-/**
- * Clase que se encarga de construir una instancia de {@link POICatalog} a partir 
- * de un archivo.
- */
-public class POICatalogReaderWriter{
+public class ReportCatalogReaderWriter {
 
     /** La ruta del archivo. */
     private final String filePathPOI;
 
     /**
-     * Constructor principal de la clase {@link POICatalogReaderWriter}.
+     * Constructor principal de la clase {@link ReportCatalogReaderWriter}.
+     * Inicializa la ruta del archivo.
      * @param filePath ruta del archivo.
-     * @throws NullPointerException si la ruta proporcionada es <code>null</code>.
+     * @throws NullPointerException si la ruta del archivo es <code>null</code>
      */
-    public POICatalogReaderWriter(String filePath)throws NullPointerException{
-        if(filePath == null)throw new NullPointerException("File path to read from cannot be null. From POICatalogReaderWriter.");
+    public ReportCatalogReaderWriter(String filePath)throws NullPointerException{
+        if(filePath == null)throw new NullPointerException("File path to read from cannot be null. From ReportCatalogLoader.");
 
         this.filePathPOI = filePath;
     }
 
     /**
-     * Regresa un catalogo con la informacion (puntos de interes) que contenia
-     * el archivo especificado en la ruta {@link #filePathPOI}.
-     * @return un catalogo de los puntos de interes almacenados en un archivo.
-     * @throws IOException si no se puede leer una linea del archivo.
-     * @throws FileNotFoundException si no puede encontrar el archivo. 
+     * Regresa un catalogo de reportes obtenido del archivo 
+     * almacenado en {@link #filePathPOI}.
+     * @return un catalogo de reportes basado en el contenido de un archivo.
+     * @throws IOException si no se puede  leer una linea del archivo.
+     * @throws FileNotFoundException si no se pudo encontrar el archivo.
      */
-    public POICatalog getCatalog()throws IOException,FileNotFoundException {
-        POICatalog catalog = new POICatalog(this.filePathPOI);
+    public ReportCatalog getCatalog()throws IOException,FileNotFoundException {
+        ReportCatalog catalog = new ReportCatalog(this.filePathPOI);
         return this.load(catalog);
     }
 
     /**
-     * Agrega un punto de interes al archivo.
-     * @param poi punto de interes que se quiere agregar.
+     * Agrega un reporte al archivo.
+     * @param report reporte que se quiere agregar.
      * @throws IOException cuando existen problemas al intentar encontrar el archivo.
      */
-    public void add(PointOfInterest poi) throws IOException{
+    public void add(Report report) throws IOException{
         BufferedWriter bw = null;
         try {
             bw = new BufferedWriter(new FileWriter(this.filePathPOI,true));
             bw.newLine();
-            bw.write(poi.getFileFormat());
+            bw.write(report.getFileFormat());
         } catch (IOException ioe) {
             throw new IOException("ERROR: An error occurred while trying to find the file.");
         }finally{
@@ -67,13 +64,13 @@ public class POICatalogReaderWriter{
     }
 
     /**
-     * Elimina un punto de interes del archivo.
-     * @param poi punto de interes que se quiere eliminar.
+     * ELimina un  reporte del archivo.
+     * @param report reporte que se quiere eliminar.
      * @throws IOException si no se  puede leer una linea del archivo o bien
      * cuando existen problemas al intentar encontrar el archivo durante su reescritura.
      * @throws FileNotFoundException si no se puede encontrar el archivo durante su lectura.
      */
-    public void delete(PointOfInterest poi) throws IOException, FileNotFoundException{
+    public void delete(Report report) throws IOException, FileNotFoundException{
         //Se almacenan todas las lineas del archivo omitiendo la linea correspondiente al punto de interes.
         BufferedReader br = null;
         List<String> lines = new ArrayList<>();
@@ -84,7 +81,7 @@ public class POICatalogReaderWriter{
                 if (line.trim().isEmpty())
                     continue;
 
-                if (!line.equals(poi.getFileFormat()))
+                if (!line.equals(report.getFileFormat()))
                     lines.add(line);
             }
         }catch(FileNotFoundException fnfe){
@@ -112,12 +109,14 @@ public class POICatalogReaderWriter{
 
     /**
      * Metodo auxiliar que lee un archivo utilizando la ruta especificada.
-     * en el atributo {@link #filePathPOI} y regresa un catalogo de POI con la informacion del archivo.
-     * @return un catalogo de POI con la informacion del archivo.
+     * en el atributo {@link #filePathPOI} y llena un catalogo de reportes con la informacion
+     * contenida en dicho archivo.
+     * @param catalog que se va a llenar.
+     * @return un catalogo de reportes con la informacion contenida en el archivo.
      * @throws IOException si no se puede leer una linea del archivo.
      * @throws FileNotFoundException si no puede encontrar el archivo. 
      */
-    private POICatalog load(POICatalog catalog)throws IOException,FileNotFoundException{ 
+    private ReportCatalog load(ReportCatalog catalog)throws IOException,FileNotFoundException{ 
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(this.filePathPOI));
@@ -134,13 +133,10 @@ public class POICatalogReaderWriter{
                 String[] values = line.split(",", 0);
                 Map<String, String> row = new HashMap<>();
                 for (int i = 0; i < cols.length && i < values.length; i++) {
-                    /**if (values[i].isEmpty())
-                        continue;
-                    */
                     row.put(cols[i], values[i]); //Se suben las cadenas con espacios.
                 }
 
-                catalog.add(buildPOI(row));
+                catalog.add(buildReport(row));
             }
         }catch(FileNotFoundException fnfe){
             throw new FileNotFoundException("ERROR: File could not be found in: "+ this.filePathPOI);
@@ -153,19 +149,18 @@ public class POICatalogReaderWriter{
     }
 
     /**
-     * Metodo privado que construye una instancia de {@link PointOfInteres}
-     * a partir de un HashMap que representa a una fila del archivo.
-     * @param row fila con la que se va a construir el POI.
-     * @return un punto de interes. 
+     * Metodo auxiliar que construye una instancia de {@link Report} utilizando
+     * un HashMap que representa una fila del archivo.
+     * @param row fila con la que se va a construir el reporte.
+     * @return un reporte.
      */
-    private PointOfInterest buildPOI(Map<String, String> row){
+    private Report buildReport(Map<String, String> row){
         double latitude = Double.parseDouble(row.get("latitude"));
         double longitude = Double.parseDouble(row.get("longitude"));
         Location location = new Location(latitude,longitude, row.get("address"));
         
-        POIType type = POIType.getType(row.get("type"));
+        ReportType type = ReportType.getType(row.get("type"));
         String id = UUID.randomUUID().toString();
-        return new PointOfInterest(id,row.get("name"),row.get("description"), location, type);
+        return new Report(id, type, location, row.get("description"));
     }
 }
-   

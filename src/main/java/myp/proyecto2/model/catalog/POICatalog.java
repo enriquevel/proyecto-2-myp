@@ -114,8 +114,9 @@ public class POICatalog implements Catalog<PointOfInterest, POIType>{
 
     /**
      * Agrega un punto de interes al catalogo y a la base de datos.
-     * @param poi punto de interes que se desea agregar.
+     * @param poi punto de interes que se desea guardar.
      * @throws NullPointerException si el punto de interes dado es <code>null</code>.
+     * @throws IOException cuando existen problemas al intentar encontrar el archivo.
      */
     @Override
     public void save(PointOfInterest poi)throws NullPointerException, IOException{
@@ -129,6 +130,8 @@ public class POICatalog implements Catalog<PointOfInterest, POIType>{
      * Elimina un punto de interes del catalogo y de la base de datos.
      * @param poi punto de interes que se desea eliminar.
      * @throws NullPointerException si el punto de interes dado es <code>null</code>.
+     * @throws IOException si no se  puede leer una linea del archivo o bien 
+     * existen problemas al intentar encontrar el archivo durante su reescritura.
      */
     @Override
     public void dontSave(PointOfInterest poi)throws NullPointerException, IOException{
@@ -139,7 +142,7 @@ public class POICatalog implements Catalog<PointOfInterest, POIType>{
         }
     }
 
-    //-----Otras maneras de buscar en un catalogo de POI.-----//
+    //-----Otra manera de buscar en un catalogo de POI.-----//
 
     /**
      * Regresa un punto de interes del catalogo, buscandolo por su nombre.

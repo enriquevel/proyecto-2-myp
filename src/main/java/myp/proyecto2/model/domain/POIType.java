@@ -1,6 +1,7 @@
 package myp.proyecto2.model.domain;
 
-/** Representa los distintos tipos en los que pueden ser clasificados los puntos
+/** 
+ * Representa los distintos tipos en los que pueden ser clasificados los puntos
  * de interes.
  */
 public enum POIType {
