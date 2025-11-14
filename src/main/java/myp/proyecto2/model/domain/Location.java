@@ -25,11 +25,18 @@ public class Location {
     }
 
     public double distanceTo(Location other) {
+        if(other == null) 
+            throw new NullPointerException("A location needs to be provided in order to calculate the distance.");
+        
         return 0;
     }
 
     @Override 
     public String toString() {
-        return null;
+        StringBuilder sb = new StringBuilder();
+        sb.append("\nLatitude:\n").append(this.latitude)
+            .append("\nLongitude:\n").append(this.longitude)
+            .append("\nAddress:\n").append(this.address);
+        return sb.toString();
     }
 }

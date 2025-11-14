@@ -1,9 +1,11 @@
 package myp.proyecto2.model.domain;
+
+import myp.proyecto2.model.builder.Route;
 import java.util.List;
 
 public class ScoredRoute {
     
-    private Route route;
+    private Route route; //Donde esta route?
     private double score;
     private List<Report> affectingReports;
     private String scoredBy;

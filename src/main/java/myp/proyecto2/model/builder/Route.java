@@ -60,9 +60,15 @@ public class Route {
     }
 
     public void displayRoute() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n\nDisplaying route's details:\n")
+            .append("\n\nOrigin:\n").append(this.origin)
+            .append("\n\nDestination:\n").append(this.destination)
+            .append("\n\nTotal distance:\n").append(this.totalDistance).append(" meters.")
+            .append("\n\nTotal duration:\n").append(this.totalDurationSeconds).append(" seconds");
     }
 
-    public int getSegmentCount {
+    public int getSegmentCount() {
         return this.segments.size();
     }
 

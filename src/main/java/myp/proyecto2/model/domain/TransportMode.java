@@ -5,14 +5,19 @@ public enum TransportMode {
     BICYCLING,
     BUS, 
     DRIVING,
-    WALKING, 
-    TAXI;
+    WALKING;
 
-    public String getGoogleMapsmode() {
+    public String getGoogleMapsMode() {
         return null;
     }
 
     public String getDisplayName() {
-        return null;
+        return switch(this) {
+            case BICYCLING -> "Bicycling";
+            case BUS -> "Bus";
+            case DRIVING -> "Driving";
+            case WALKING -> "Walking";
+            default -> throw new IllegalArgumentException("The transport mode provided is not valid.");
+        };
     }
 }

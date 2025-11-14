@@ -18,7 +18,7 @@ public enum ReportType {
     TRAFFIC_JAM,
 
     /** Falla en el alumbrado publico. */
-    STREETLIGHT_OUT,
+    STREET_LIGHT_OUT,
 
     /** Escombros naturales. */
     NATURAL_DEBRIS,
@@ -27,7 +27,10 @@ public enum ReportType {
     FLOODING,
 
     /** Articulo perdido. */
-    LOST_ITEM;
+    LOST_ITEM,
+
+    /** Otro */
+    OTHER;
     
     /** 
 	 * Define como se mostrara el valor de cada enum cuando se convierta en texto.
@@ -35,14 +38,15 @@ public enum ReportType {
 	*/
     public String toString(){
         return switch (this){
-            case CRIME_INCIDENT -> "CRIME_INCIDENT";
+            case CRIME_INCIDENT -> "CRIME INCIDENT";
             case ACCIDENT -> "ACCIDENT";
             case CONSTRUCTION -> "CONSTRUCTION";
-            case TRAFFIC_JAM -> "TRAFFIC_JAM";
-            case STREETLIGHT_OUT -> "STREETLIGHT_OUT";
-            case NATURAL_DEBRIS -> "NATURAL_DEBRIS";
+            case TRAFFIC_JAM -> "TRAFFIC JAM";
+            case STREET_LIGHT_OUT -> "STREET LIGHT OUT";
+            case NATURAL_DEBRIS -> "NATURAL DEBRIS";
             case FLOODING -> "FLOODING";
-            case LOST_ITEM -> "LOST_ITEM";
+            case LOST_ITEM -> "LOST ITEM";
+            case OTHER -> "OTHER";
         };
     }
 
@@ -53,25 +57,22 @@ public enum ReportType {
      * @throws IllegalArgumentException si la cadena no esta asociada a ningun elemento de la enumeracion.
      */
     public static ReportType getType(String type)throws IllegalArgumentException{
-        return switch (type) {
+        return switch (type) { 
             case "CRIME_INCIDENT" -> CRIME_INCIDENT;
             case "ACCIDENT" -> ACCIDENT;
             case "CONSTRUCTION" -> CONSTRUCTION;
-            case "TRAFFIC_JAM" -> TRAFFIC_JAM;
-            case "STREETLIGHT_OUT" -> STREETLIGHT_OUT;
-            case "NATURAL_DEBRIS" -> NATURAL_DEBRIS;
+            case "TRAFFIC JAM" -> TRAFFIC_JAM;
+            case "STREET LIGHT OUT" -> STREET_LIGHT_OUT;
+            case "NATURAL DEBRIS" -> NATURAL_DEBRIS;
             case "FLOODING" -> FLOODING;
-            case "LOST_ITEM" -> LOST_ITEM;
-            default -> throw new IllegalArgumentException("Type " + type + " is not a valid type");
+            case "LOST ITEM" -> LOST_ITEM;
+            case "OTHER" -> OTHER;
+            default -> throw new IllegalArgumentException("Report type " + type + " is not a valid report type");
         };
-    }
+    } 
 
     public int getDefaultPenalty() {
         return 0;
-    }
-
-    public String getDisplayName() {
-        return null;
     }
 
     public int getSeverity() {

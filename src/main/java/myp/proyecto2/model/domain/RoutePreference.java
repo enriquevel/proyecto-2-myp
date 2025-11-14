@@ -7,6 +7,10 @@ public enum RoutePreference {
     BALANCED;
 
     public String getDisplayName() {
-        return null;
+        return switch(this) {
+            case SAFEST -> "Safe route";
+            case FASTEST -> "Fast route";
+            case BALANCED -> "Balanced route";
+        };
     }
 }

@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 type,name,latitude,longitude,address,descrpition
 FACULTY,Facultad de Ciencias,,,,
 FACULTY,Facultad de Arquitectura,,,,
 RECREATION,Pabellon de la biodiversidad,,,,
 RECREATION,Piscina olimpica,,,,
+=======
+type,name,latitude,longitude,address,description
+Faculty,Facultad de Ciencias,,,,
+Faculty,Facultad de Arquitectura,,,,
+Recreation,Pabellon de la biodiversidad,,,,
+Recreation,Piscina olimpica,,,,
+>>>>>>> origin/feat/Catalog

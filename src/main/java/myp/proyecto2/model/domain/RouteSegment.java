@@ -8,7 +8,6 @@ public class RouteSegment {
     private Location endPoint;
 
     public RouteSegment(String instruction, double distanceInMeters, Location startPoint, Location endPoint) {
-
         this.instruction = instruction;
         this.distanceInMeters = distanceInMeters;
         this.startPoint = startPoint;
