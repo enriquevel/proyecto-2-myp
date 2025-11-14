@@ -21,7 +21,7 @@ public enum POIType {
     /** Parada de autobus. */
     BUS_STOP, 
 
-    /** Lugar donde venden comida. */
+    /** Establecimiento de comida. */
     FOOD,
 
     /** Estacionamiento. */
@@ -32,6 +32,7 @@ public enum POIType {
 
     /** 
 	 * Define como se mostrara el valor de cada enum cuando se convierta en texto.
+     *
 	 * @return el valor de cada enum cuando se convierta en texto.
 	*/
 	@Override
@@ -50,12 +51,13 @@ public enum POIType {
 
     /**
      * Regresa el elemento de la enumeracion asociado a una cadena.
+     *
      * @param type cadena que se quiere verificar.
-     * @returnel elemento de la enumeracion asociado a una cadena.
+     * @return el elemento de la enumeracion asociado a una cadena.
      * @throws IllegalArgumentException si la cadena no esta asociada a ningun elemento de la enumeracion.
      */
-    public static POIType getType(String type)throws IllegalArgumentException{
-        return switch (type) { //Switch expresion
+    public static POIType getType(String type) throws IllegalArgumentException {
+        return switch (type) {
             case "FACULTY" -> FACULTY;
             case "SCHOOL" -> SCHOOL;
             case "CENTER" -> CENTER;
@@ -78,7 +80,6 @@ public enum POIType {
             case FOOD -> "Food";
             case PARKING -> "Parking";
             case OTHER -> "Other";
-            default -> throw new IllegalArgumentException("The type provided is not valid.");  
         };
     }
 }

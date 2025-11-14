@@ -1,4 +1,4 @@
-package myp.proyecto2.model.builder;
+package myp.proyecto2.model.domain.builder;
 
 import myp.proyecto2.model.domain.Location;
 import myp.proyecto2.model.domain.RouteSegment;

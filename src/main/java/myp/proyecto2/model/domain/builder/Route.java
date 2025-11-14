@@ -1,4 +1,4 @@
-package myp.proyecto2.model.builder;
+package myp.proyecto2.model.domain.builder;
 
 import java.util.List;
 import myp.proyecto2.model.domain.Location;
