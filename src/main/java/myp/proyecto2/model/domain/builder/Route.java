@@ -77,6 +77,6 @@ public class Route {
     }
 
     public double getTotalDistanceKilometers() {
-        return this.totalDistance / 1000;
+        return this.totalDistance / 1000.0;
     }
 }
