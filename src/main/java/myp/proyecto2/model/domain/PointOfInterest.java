@@ -22,7 +22,8 @@ public class PointOfInterest {
     private POIType type;
 
     /**
-     * Contrusctor principal de la clase {@link PointOfInteres}. 
+     * Constructor principal de la clase {@link PointOfInterest}.
+     *
      * @param id identificador unico del punto.
      * @param name nombre del punto de interes.
      * @param description descripcion del punto de interes.

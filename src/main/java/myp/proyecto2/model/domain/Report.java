@@ -16,9 +16,13 @@ public class Report {
 
     /** Descripcion del reporte. */
     private String description;
+
+    /** Indica si el reporte esta activo. */
+    private boolean active;
     
     /**
-     * COnstructor principal de la clase {@link Report}.
+     * Constructor principal de la clase {@link Report}.
+     *
      * @param id identificador unico del reporte.
      * @param type tipo del reporte.
      * @param location localizacion del reporte.
@@ -29,10 +33,12 @@ public class Report {
         this.type = type;
         this.location = location;
         this.description = description;
+        this.active = true;
     }
 
     /**
      * Regresa el identificador del reporte.
+     *
      * @return el identificador del reporte.
      */
     public String getId() {
@@ -41,6 +47,7 @@ public class Report {
 
     /**
      * Regresa el tipo del reporte.
+     *
      * @return el tipo del reporte.
      */
     public ReportType getType() {
@@ -49,6 +56,7 @@ public class Report {
 
     /**
      * Regresa la localizacion del reporte.
+     *
      * @return la localizacion del reporte.
      */
     public Location getLocation() {
@@ -57,6 +65,7 @@ public class Report {
 
     /**
      * Regresa la descripcion del reporte.
+     *
      * @return la descripcion del reporte.
      */
     public String getDescription() {
@@ -65,19 +74,22 @@ public class Report {
 
     /**
      * Nos dice si el reporte esta activo.
-     * @return 
+     *
+     * @return <code>true</code> si el reporte esta activo, <code>false</code> en otro caso.
      */
     public boolean isActive() {
-        return false;
+        return this.active;
     }
 
-    public void resolve() {}
+    public void resolve() {
+        this.active = false;
+    }
 
     /**
      * Regresa una representacion en cadena del reporte, lista para ser
      * escrita en un archivo.
-     * @return una representacion en cadena del reporte, lista para ser
-     * escrita en un archivo.
+     *
+     * @return una representacion en cadena del reporte.
      */
     public String getFileFormat(){
         return this.type.toString()+","
@@ -89,6 +101,6 @@ public class Report {
 
     @Override
     public String toString() {
-        return null;
+
     }
 }

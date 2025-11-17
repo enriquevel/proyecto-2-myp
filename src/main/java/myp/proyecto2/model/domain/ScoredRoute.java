@@ -1,11 +1,11 @@
 package myp.proyecto2.model.domain;
 
-import myp.proyecto2.model.builder.Route;
+import myp.proyecto2.model.domain.builder.Route;
 import java.util.List;
 
-public class ScoredRoute {
+public class ScoredRoute implements Comparable<ScoredRoute> {
     
-    private Route route; //Donde esta route?
+    private Route route;
     private double score;
     private List<Report> affectingReports;
     private String scoredBy;
@@ -31,5 +31,18 @@ public class ScoredRoute {
 
     public String getScorer() {
         return this.scoredBy;
+    }
+
+    public int getReportCount() {
+        return this.affectingReports.size();
+    }
+
+    public boolean hasReports() {
+        return !this.affectingReports.isEmpty();
+    }
+
+    @Override
+    public int compareTo(ScoredRoute other) {
+        return Double.compare(this.score, other.score);
     }
 }

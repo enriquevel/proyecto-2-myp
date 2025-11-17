@@ -1,8 +1,10 @@
-package myp.proyecto2.model.builder;
+package myp.proyecto2.model.domain.builder;
 
 import java.util.List;
+import java.util.Set;
 import myp.proyecto2.model.domain.Location;
 import myp.proyecto2.model.domain.RouteSegment;
+import myp.proyecto2.model.domain.TransportMode;
 
 public class Route {
 
@@ -20,8 +22,10 @@ public class Route {
 
     private final List<Location> pathPoints;
 
-    public Route(String id, Location origin, Location destination, double totalDistance, int totalDurationSeconds,
-                        List<RouteSegment> segments, List<Location> pathPoints) {
+    private final Set<TransportMode> transportModes;
+
+    Route(String id, Location origin, Location destination, double totalDistance, int totalDurationSeconds,
+                        List<RouteSegment> segments, List<Location> pathPoints, Set<TransportMode> transportModes) {
         this.id = id;
         this.origin = origin;
         this.destination = destination;
@@ -29,6 +33,7 @@ public class Route {
         this.totalDurationSeconds = totalDurationSeconds;
         this.segments = segments;
         this.pathPoints = pathPoints;
+        this.transportModes = transportModes;
     }
 
     public String getId() {
@@ -59,6 +64,10 @@ public class Route {
         return this.pathPoints;
     }
 
+    public Set<TransportMode> getTransportModes() {
+        return this.transportModes;
+    }
+
     public void displayRoute() {
         StringBuilder sb = new StringBuilder();
         sb.append("\n\nDisplaying route's details:\n")
@@ -77,6 +86,6 @@ public class Route {
     }
 
     public double getTotalDistanceKilometers() {
-        return this.totalDistance / 1000;
+        return this.totalDistance / 1000.0;
     }
 }
