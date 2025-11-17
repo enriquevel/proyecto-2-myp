@@ -1,7 +1,10 @@
 package myp.proyecto2.model.domain.builder;
 
+import java.util.List;
+import java.util.Set;
 import myp.proyecto2.model.domain.Location;
 import myp.proyecto2.model.domain.RouteSegment;
+import myp.proyecto2.model.domain.TransportMode;
 
 public interface RouteBuilder {
 
@@ -15,9 +18,11 @@ public interface RouteBuilder {
 
     RouteBuilder setDuration(int seconds);
 
-    RouteBuilder addSegment(RouteSegment segment);
+    RouteBuilder setSegments(List<RouteSegment> segment);
 
-    RouteBuilder addPathPoint(Location point);
+    RouteBuilder setPathPoints(List<Location> point);
+
+    RouteBuilder setTransportModes(Set<TransportMode> transportModes);
 
     Route build();
 }

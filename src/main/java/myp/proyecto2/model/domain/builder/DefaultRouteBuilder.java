@@ -1,9 +1,10 @@
 package myp.proyecto2.model.domain.builder;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import myp.proyecto2.model.domain.Location;
 import myp.proyecto2.model.domain.RouteSegment;
+import myp.proyecto2.model.domain.TransportMode;
 
 public class DefaultRouteBuilder implements RouteBuilder {
 
@@ -21,10 +22,9 @@ public class DefaultRouteBuilder implements RouteBuilder {
 
     private List<Location> pathPoints;
 
-    public DefaultRouteBuilder() {
-        this.segments = new ArrayList<>();
-        this.pathPoints = new ArrayList<>();
-    }
+    private Set<TransportMode> transportModes;
+
+    public DefaultRouteBuilder() {}
     
     @Override
     public RouteBuilder setId(String id) {
@@ -72,27 +72,37 @@ public class DefaultRouteBuilder implements RouteBuilder {
     }
 
     @Override
-    public RouteBuilder addSegment(RouteSegment segment) {
-        if (segment == null)
+    public RouteBuilder setSegments(List<RouteSegment> segments) {
+        if (segments == null)
             throw new NullPointerException("Route segment cannot be null.");
 
-        this.segments.add(segment);
+        this.segments = segments;
         return this;
     }
     
     @Override
-    public RouteBuilder addPathPoint(Location point) {
-        if (point == null) 
+    public RouteBuilder setPathPoints(List<Location> pathPoints) {
+        if (pathPoints == null)
             throw new NullPointerException("Path point cannot be null.");
 
-        this.pathPoints.add(point);
+        this.pathPoints = pathPoints;
+        return this;
+    }
+
+    @Override
+    public RouteBuilder setTransportModes(Set<TransportMode> modes) {
+        if (modes == null)
+            throw new NullPointerException("Transport modes cannot be null.");
+
+        this.transportModes = modes;
         return this;
     }
 
     @Override
     public Route build() {
         validateCompleteBuild();
-        return new Route(this.id, this.origin, this.destination, this.totalDistance, this.totalDurationSeconds, this.segments, this.pathPoints);
+        return new Route(this.id, this.origin, this.destination, this.totalDistance,
+                this.totalDurationSeconds, this.segments, this.pathPoints, this.transportModes);
     }
 
     private void validateCompleteBuild() {
@@ -111,10 +121,13 @@ public class DefaultRouteBuilder implements RouteBuilder {
         if (this.totalDurationSeconds == 0.0)
             throw new IllegalStateException("Cannot build route: A route duration is required");
 
-        if (this.segments.isEmpty())
+        if (this.segments == null)
             throw new IllegalStateException("Cannot build route: No route segments have been added.");
 
-        if (this.pathPoints.isEmpty())
+        if (this.pathPoints == null)
             throw new IllegalStateException("Cannot build route: No path points have been added.");
+
+        if (this.transportModes == null)
+            throw new IllegalStateException("Cannot build route: No transport modes have been added.");
     }
 }

@@ -4,16 +4,19 @@ public class RouteSegment {
 
     private String instruction;
     private double distanceInMeters;
+    private double durationInSeconds;
     private Location startPoint;
     private Location endPoint;
     private TransportMode mode;
 
-    public RouteSegment(String instruction, double distanceInMeters,
+    public RouteSegment(String instruction, double distanceInMeters, double durationInSeconds,
                         Location startPoint, Location endPoint, TransportMode mode) {
         if (instruction == null)
             throw new NullPointerException("Instruction cannot be null");
         if (distanceInMeters < 0)
             throw new IllegalArgumentException("Distance cannot be negative");
+        if (durationInSeconds < 0)
+            throw new IllegalArgumentException("Duration cannot be negative");
         if (startPoint == null)
             throw new NullPointerException("Start point cannot be null");
         if (endPoint == null)
@@ -23,6 +26,7 @@ public class RouteSegment {
 
         this.instruction = instruction;
         this.distanceInMeters = distanceInMeters;
+        this.durationInSeconds = durationInSeconds;
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.mode = mode;
@@ -34,6 +38,10 @@ public class RouteSegment {
 
     public double getDistanceInMeters() {
         return this.distanceInMeters;
+    }
+
+    public double getDurationInSeconds() {
+        return this.durationInSeconds;
     }
 
     public Location getStartPoint() {
