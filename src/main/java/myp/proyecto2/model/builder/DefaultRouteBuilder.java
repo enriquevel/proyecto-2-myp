@@ -105,10 +105,10 @@ public class DefaultRouteBuilder implements RouteBuilder {
         if (this.destination == null)  
             throw new IllegalStateException("Cannot build route: A destination is required");
 
-        if (this.totalDistance <= null)  
-            throw new IllegalStateException("Cannot build route: A route distance is required");
+        if (this.totalDistance <= 0)  
+            throw new IllegalStateException("Cannot build route: A valid route distance is required");
 
-        if (this.totalDurationSeconds <= null)  
-            throw new IllegalStateException("Cannot build route: A route duration is required");
+        if (this.totalDurationSeconds <= 0)  
+            throw new IllegalStateException("Cannot build route: A valid route duration is required");
     }
 }

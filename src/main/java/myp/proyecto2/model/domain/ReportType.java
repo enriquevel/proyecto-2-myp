@@ -31,24 +31,6 @@ public enum ReportType {
 
     /** Otro */
     OTHER;
-    
-    /** 
-	 * Define como se mostrara el valor de cada enum cuando se convierta en texto.
-	 * @return el valor de cada enum cuando se convierta en texto.
-	*/
-    public String toString(){
-        return switch (this){
-            case CRIME_INCIDENT -> "CRIME INCIDENT";
-            case ACCIDENT -> "ACCIDENT";
-            case CONSTRUCTION -> "CONSTRUCTION";
-            case TRAFFIC_JAM -> "TRAFFIC JAM";
-            case STREET_LIGHT_OUT -> "STREET LIGHT OUT";
-            case NATURAL_DEBRIS -> "NATURAL DEBRIS";
-            case FLOODING -> "FLOODING";
-            case LOST_ITEM -> "LOST ITEM";
-            case OTHER -> "OTHER";
-        };
-    }
 
     /**
      * Regrese el elemento de la enumeracion asociado a una cadena.
@@ -57,19 +39,37 @@ public enum ReportType {
      * @throws IllegalArgumentException si la cadena no esta asociada a ningun elemento de la enumeracion.
      */
     public static ReportType getType(String type)throws IllegalArgumentException{
-        return switch (type) { 
-            case "CRIME_INCIDENT" -> CRIME_INCIDENT;
-            case "ACCIDENT" -> ACCIDENT;
-            case "CONSTRUCTION" -> CONSTRUCTION;
-            case "TRAFFIC JAM" -> TRAFFIC_JAM;
-            case "STREET LIGHT OUT" -> STREET_LIGHT_OUT;
-            case "NATURAL DEBRIS" -> NATURAL_DEBRIS;
-            case "FLOODING" -> FLOODING;
-            case "LOST ITEM" -> LOST_ITEM;
-            case "OTHER" -> OTHER;
+        return switch (type.toLowerCase()) { 
+            case "crime incident" -> CRIME_INCIDENT;
+            case "accident" -> ACCIDENT;
+            case "construction" -> CONSTRUCTION;
+            case "traffic jam" -> TRAFFIC_JAM;
+            case "street light out" -> STREET_LIGHT_OUT;
+            case "natural debris" -> NATURAL_DEBRIS;
+            case "flooding" -> FLOODING;
+            case "lost item" -> LOST_ITEM;
+            case "other" -> OTHER;
             default -> throw new IllegalArgumentException("Report type " + type + " is not a valid report type");
         };
     } 
+
+    /** 
+	 * Define como se mostrara el valor de cada enum cuando se convierta en texto.
+	 * @return el valor de cada enum cuando se convierta en texto.
+	*/
+    public String getDisplayName(){
+        return switch (this) {
+            case CRIME_INCIDENT -> "Crime incident";
+            case ACCIDENT -> "Accident";
+            case CONSTRUCTION -> "Construction";
+            case TRAFFIC_JAM -> "Traffic jam";
+            case STREET_LIGHT_OUT -> "Street light out";
+            case NATURAL_DEBRIS -> "Natural debris";
+            case FLOODING -> "Flooding";
+            case LOST_ITEM -> "Lost item";
+            case OTHER -> "Other";
+        };
+    }
 
     public int getDefaultPenalty() {
         return 0;

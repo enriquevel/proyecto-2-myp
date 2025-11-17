@@ -18,13 +18,23 @@ public class Report {
     private String description;
     
     /**
-     * COnstructor principal de la clase {@link Report}.
+     * Constructor principal de la clase {@link Report}.
      * @param id identificador unico del reporte.
      * @param type tipo del reporte.
      * @param location localizacion del reporte.
      * @param description descripcion del reporte.
+     * @throws NullPointerExcepetion si algun parametro es null.
      */
     public Report(String id, ReportType type, Location location, String description) {
+        if(id == null)
+            throw new NullPointerException("ID cannot be null.");
+        if(type == null)
+            throw new NullPointerException("Report type cannot be null.");
+        if(location == null)
+            throw new NullPointerException("Report's location cannot be null.");
+        if(description == null)
+            throw new NullPointerException("Report's description cannot be null.");
+        
         this.id = id;
         this.type = type;
         this.location = location;

@@ -22,14 +22,24 @@ public class PointOfInterest {
     private POIType type;
 
     /**
-     * Contrusctor principal de la clase {@link PointOfInteres}. 
+     * Constructor principal de la clase {@link PointOfInteres}. 
      * @param id identificador unico del punto.
      * @param name nombre del punto de interes.
      * @param description descripcion del punto de interes.
      * @param location localizacion del punto de interes.
      * @param type el tipo del punto de interes.
+     * @throws NullPointerException si algun parametro es null.
      */
     public PointOfInterest(String id, String name, String description, Location location, POIType type) {
+        if(id == null)
+            throw new NullPointerException("ID cannot be null.");
+        if(description == null)
+            throw new NullPointerException("Point of interest's description cannot be null.");
+        if(location == null)
+            throw new NullPointerException("Location cannot be null.");
+        if(type == null)
+            throw new NullPointerException("POI's type cannot be null");
+        
         this.id = id;
         this.name = name;
         this.description = description;
