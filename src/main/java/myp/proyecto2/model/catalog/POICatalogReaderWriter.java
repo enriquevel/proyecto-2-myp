@@ -30,8 +30,9 @@ public class POICatalogReaderWriter{
      * @param filePath ruta del archivo.
      * @throws NullPointerException si la ruta proporcionada es <code>null</code>.
      */
-    public POICatalogReaderWriter(String filePath)throws NullPointerException{
-        if(filePath == null)throw new NullPointerException("File path to read from cannot be null. From POICatalogReaderWriter.");
+    public POICatalogReaderWriter(String filePath) throws NullPointerException {
+        if (filePath == null)
+            throw new NullPointerException("File path to read from cannot be null. From POICatalogReaderWriter.");
 
         this.filePathPOI = filePath;
     }
@@ -43,7 +44,7 @@ public class POICatalogReaderWriter{
      * @throws IOException si no se puede leer una linea del archivo.
      * @throws FileNotFoundException si no puede encontrar el archivo. 
      */
-    public POICatalog getCatalog()throws IOException,FileNotFoundException {
+    public POICatalog getCatalog() throws IOException,FileNotFoundException {
         POICatalog catalog = new POICatalog(this.filePathPOI);
         return this.load(catalog);
     }
@@ -53,7 +54,7 @@ public class POICatalogReaderWriter{
      * @param poi punto de interes que se quiere agregar.
      * @throws IOException cuando existen problemas al intentar encontrar el archivo.
      */
-    public void add(PointOfInterest poi) throws IOException{
+    public void add(PointOfInterest poi) throws IOException {
         BufferedWriter bw = null;
         try {
             bw = new BufferedWriter(new FileWriter(this.filePathPOI,true));
@@ -73,25 +74,25 @@ public class POICatalogReaderWriter{
      * cuando existen problemas al intentar encontrar el archivo durante su reescritura.
      * @throws FileNotFoundException si no se puede encontrar el archivo durante su lectura.
      */
-    public void delete(PointOfInterest poi) throws IOException, FileNotFoundException{
+    public void delete(PointOfInterest poi) throws IOException, FileNotFoundException {
         //Se almacenan todas las lineas del archivo omitiendo la linea correspondiente al punto de interes.
         BufferedReader br = null;
         List<String> lines = new ArrayList<>();
         try {
             br = new BufferedReader(new FileReader(this.filePathPOI));
             String line;
-            while ((line = br.readLine()) != null){
+            while ((line = br.readLine()) != null) {
                 if (line.trim().isEmpty())
                     continue;
 
                 if (!line.equals(poi.getFileFormat()))
                     lines.add(line);
             }
-        }catch(FileNotFoundException fnfe){
+        } catch(FileNotFoundException fnfe) {
             throw new FileNotFoundException("ERROR: File could not be found in: "+ this.filePathPOI);
-        }catch(IOException ioe){
+        } catch(IOException ioe) {
             throw new IOException("ERROR: Could not read the line.");
-        }finally{
+        } finally {
             if (br!= null) br.close();
         }
         
@@ -99,13 +100,13 @@ public class POICatalogReaderWriter{
         BufferedWriter bw = null;
         try {
             bw = new BufferedWriter(new FileWriter(this.filePathPOI));
-            for (String l : lines){
+            for (String l : lines) {
                 bw.write(l);
                 bw.newLine();
             }
         } catch (IOException ioe) {
             throw new IOException("ERROR: An error occurred while trying to find the file.");
-        }finally{
+        } finally {
             if (bw!= null) bw.close();
         }
     }
@@ -117,7 +118,7 @@ public class POICatalogReaderWriter{
      * @throws IOException si no se puede leer una linea del archivo.
      * @throws FileNotFoundException si no puede encontrar el archivo. 
      */
-    private POICatalog load(POICatalog catalog)throws IOException,FileNotFoundException{ 
+    private POICatalog load(POICatalog catalog) throws IOException,FileNotFoundException { 
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(this.filePathPOI));
@@ -142,11 +143,11 @@ public class POICatalogReaderWriter{
 
                 catalog.add(buildPOI(row));
             }
-        }catch(FileNotFoundException fnfe){
-            throw new FileNotFoundException("ERROR: File could not be found in: "+ this.filePathPOI);
-        }catch(IOException ioe){
+        } catch(FileNotFoundException fnfe) {
+            throw new FileNotFoundException("ERROR: File could not be found in: " + this.filePathPOI);
+        } catch(IOException ioe) {
             throw new IOException("ERROR: Could not read the line.");
-        }finally{
+        } finally {
             if (br!= null) br.close();
         }
         return catalog;
@@ -158,7 +159,7 @@ public class POICatalogReaderWriter{
      * @param row fila con la que se va a construir el POI.
      * @return un punto de interes. 
      */
-    private PointOfInterest buildPOI(Map<String, String> row){
+    private PointOfInterest buildPOI(Map<String, String> row) {
         double latitude = Double.parseDouble(row.get("latitude"));
         double longitude = Double.parseDouble(row.get("longitude"));
         Location location = new Location(latitude,longitude, row.get("address"));
@@ -168,4 +169,3 @@ public class POICatalogReaderWriter{
         return new PointOfInterest(id,row.get("name"),row.get("description"), location, type);
     }
 }
-   

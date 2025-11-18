@@ -30,25 +30,6 @@ public enum POIType {
     /** Otro tipo. */
     OTHER;
 
-    /** 
-	 * Define como se mostrara el valor de cada enum cuando se convierta en texto.
-     *
-	 * @return el valor de cada enum cuando se convierta en texto.
-	*/
-	@Override
-	public String toString() {
-		return switch (this) {
-            case FACULTY -> "FACULTY";
-            case SCHOOL -> "SCHOOL";
-            case CENTER  -> "CENTER";
-            case RECREATION  -> "RECREATION";
-            case BUS_STOP -> "BUS_STOP"; 
-            case FOOD -> "FOOD";
-            case PARKING -> "PARKING"; 
-            case OTHER -> "OTHER";
-		};
-	}
-
     /**
      * Regresa el elemento de la enumeracion asociado a una cadena.
      *
@@ -57,19 +38,24 @@ public enum POIType {
      * @throws IllegalArgumentException si la cadena no esta asociada a ningun elemento de la enumeracion.
      */
     public static POIType getType(String type) throws IllegalArgumentException {
-        return switch (type) {
-            case "FACULTY" -> FACULTY;
-            case "SCHOOL" -> SCHOOL;
-            case "CENTER" -> CENTER;
-            case "RECREATION" -> RECREATION;
-            case "BUS_STOP" -> BUS_STOP;
-            case "FOOD" -> FOOD;
-            case "PARKING" -> PARKING;
-            case "OTHER" -> OTHER;
+        return switch (type.toLowerCase()) {
+            case "faculty" -> FACULTY;
+            case "school" -> SCHOOL;
+            case "center" -> CENTER;
+            case "recreation" -> RECREATION;
+            case "bus stop" -> BUS_STOP;
+            case "food" -> FOOD;
+            case "parking" -> PARKING;
+            case "other" -> OTHER;
             default -> throw new IllegalArgumentException("Type " + type + " is not a valid type");
         };
     }
 
+    /** 
+	 * Define como se mostrara el valor de cada enum cuando se convierta en texto.
+     *
+	 * @return el valor de cada enum cuando se convierta en texto.
+	*/
     public String getDisplayName() {
         return switch(this) {
             case FACULTY -> "Faculty";

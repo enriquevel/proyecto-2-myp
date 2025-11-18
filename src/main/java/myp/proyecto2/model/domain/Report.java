@@ -27,8 +27,21 @@ public class Report {
      * @param type tipo del reporte.
      * @param location localizacion del reporte.
      * @param description descripcion del reporte.
+     * @throws NullPointerException si alguno de los parametros es null.
      */
     public Report(String id, ReportType type, Location location, String description) {
+        if (id == null)
+            throw new NullPointerException("Report's ID cannot be null.");
+        
+        if (type == null)
+            throw new NullPointerException("Report's type cannot be null.");
+        
+        if (location == null)
+            throw new NullPointerException("Report's location cannot be null.");
+        
+        if(description == null)
+            throw new NullPointerException("Report's description cannot be null.");
+
         this.id = id;
         this.type = type;
         this.location = location;
@@ -91,16 +104,12 @@ public class Report {
      *
      * @return una representacion en cadena del reporte.
      */
-    public String getFileFormat(){
-        return this.type.toString()+","
+    @Override
+    public String toString() {
+        return this.type.toString()+ ","
         + this.location.getLatitude() + ","
         + this.location.getLongitude() + ","
         + this.location.getAddress() + ","
         + this.description;
-    }
-
-    @Override
-    public String toString() {
-
     }
 }
