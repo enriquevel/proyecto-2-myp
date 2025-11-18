@@ -13,14 +13,19 @@ public class RouteSegment {
                         Location startPoint, Location endPoint, TransportMode mode) {
         if (instruction == null)
             throw new NullPointerException("Instruction cannot be null");
+
         if (distanceInMeters < 0)
             throw new IllegalArgumentException("Distance cannot be negative");
+
         if (durationInSeconds < 0)
             throw new IllegalArgumentException("Duration cannot be negative");
+
         if (startPoint == null)
             throw new NullPointerException("Start point cannot be null");
+
         if (endPoint == null)
             throw new NullPointerException("End point cannot be null");
+            
         if (mode == null)
             throw new NullPointerException("Transport mode cannot be null");
 

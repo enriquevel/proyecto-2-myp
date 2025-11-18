@@ -28,7 +28,7 @@ public class POICatalog implements Catalog<PointOfInterest, POIType>{
      * Constructor principal de la clase {@link POICatalog}. Inicializa los 
      * hashMaps y define la ruta del archivo que almacena los puntos de interes (POI).
      */
-    public POICatalog(String filePathPOI){
+    public POICatalog(String filePathPOI) {
         this.filePathPOI = filePathPOI;
         this.poisByID = new HashMap<>();
         this.poisByType = new EnumMap<>(POIType.class);
@@ -40,7 +40,7 @@ public class POICatalog implements Catalog<PointOfInterest, POIType>{
      * @throws NullPointerException si el punto de interes que se quiere agregar es <code>null</code>.
      */
     @Override
-    public void add(PointOfInterest poi)throws NullPointerException{
+    public void add(PointOfInterest poi) throws NullPointerException {
         if (poi == null)
             throw new NullPointerException("The point of interest you want to add cannot be null.");
         //Agrega al punto de interes a una hashMap donde su id funge como llave.
@@ -64,14 +64,14 @@ public class POICatalog implements Catalog<PointOfInterest, POIType>{
      * @throws NullPointerException si el identificador es <code>null</code>.
      */
     @Override
-    public Boolean delete(PointOfInterest poi)throws NullPointerException{
-        if(poi == null) 
+    public Boolean delete(PointOfInterest poi) throws NullPointerException {
+        if (poi == null) 
             throw new NullPointerException("The point of interest you want to delete cannot be null.");
 
         PointOfInterest removed = this.poisByID.remove(poi.getId());
         //Verificamos si el punto de interes realmente estaba en el catalogo.
-        if (removed!= null){
-            this.poisByType.get(removed.getType()).remove(removed);//Lo removemos de la lista del segundo hashmap.
+        if (removed != null) {
+            this.poisByType.get(removed.getType()).remove(removed); //Lo removemos de la lista del segundo hashmap.
             return true; 
         }
         return false;
@@ -94,9 +94,10 @@ public class POICatalog implements Catalog<PointOfInterest, POIType>{
      * @throws NullPointerException si el identificador es <code>null</code>.
      */
     @Override
-    public PointOfInterest findById(String id)throws NullPointerException {
+    public PointOfInterest findById(String id) throws NullPointerException {
         if(id == null) 
             throw new NullPointerException("The ID cannot be null.");
+            
         return this.poisByID.get(id);
     }
 
@@ -108,7 +109,7 @@ public class POICatalog implements Catalog<PointOfInterest, POIType>{
      * @throws NullPointerException si el tipo dado es <code>null</code>.
      */
     @Override
-    public List<PointOfInterest> findByType(POIType type)throws NullPointerException{
+    public List<PointOfInterest> findByType(POIType type) throws NullPointerException {
         return this.poisByType.get(type);
     }
 
@@ -119,8 +120,10 @@ public class POICatalog implements Catalog<PointOfInterest, POIType>{
      * @throws IOException cuando existen problemas al intentar encontrar el archivo.
      */
     @Override
-    public void save(PointOfInterest poi)throws NullPointerException, IOException{
-        if (poi == null)throw new NullPointerException("Cannot save a null point of interest.");
+    public void save(PointOfInterest poi) throws NullPointerException, IOException {
+        if (poi == null)
+            throw new NullPointerException("Cannot save a null point of interest.");
+
         add(poi);
         POICatalogReaderWriter  readerWriter = new POICatalogReaderWriter(this.filePathPOI);
         readerWriter.add(poi);
@@ -134,15 +137,15 @@ public class POICatalog implements Catalog<PointOfInterest, POIType>{
      * existen problemas al intentar encontrar el archivo durante su reescritura.
      */
     @Override
-    public void dontSave(PointOfInterest poi)throws NullPointerException, IOException{
-        if (poi == null)throw new NullPointerException("Cannot delete a null point of interest.");
-        if (delete(poi)){
+    public void dontSave(PointOfInterest poi) throws NullPointerException, IOException {
+        if (poi == null)
+            throw new NullPointerException("Cannot delete a null point of interest.");
+
+        if (delete(poi)) {
             POICatalogReaderWriter  readerWriter = new POICatalogReaderWriter(this.filePathPOI);
             readerWriter.delete(poi);
         }
     }
-
-    //-----Otra manera de buscar en un catalogo de POI.-----//
 
     /**
      * Regresa un punto de interes del catalogo, buscandolo por su nombre.
@@ -150,18 +153,13 @@ public class POICatalog implements Catalog<PointOfInterest, POIType>{
      * @return el punto de interes con dicho nombre.<code>null</code> si no lo encuentra.
      * @throws NullPointerException si el nombre dado es <code>null</code>.
      */
-    public PointOfInterest findByName(String name)throws NullPointerException{
-        if(name == null) 
+    public PointOfInterest findByName(String name) throws NullPointerException {
+        if (name == null) 
             throw new NullPointerException("The POI's name cannot be null.");
-        for(PointOfInterest poi : this.findAll())
+
+        for (PointOfInterest poi : this.findAll())
             if(poi.getName().equals(name))return poi; //Podriamos normalizar ambos nombres en las busquedas.
 
         return null;
     }
-
-
-
-
-
-
 }

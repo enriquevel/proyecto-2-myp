@@ -24,8 +24,32 @@ public class Route {
 
     private final Set<TransportMode> transportModes;
 
-    Route(String id, Location origin, Location destination, double totalDistance, int totalDurationSeconds,
-                        List<RouteSegment> segments, List<Location> pathPoints, Set<TransportMode> transportModes) {
+    Route(String id, Location origin, Location destination, double totalDistance, int totalDurationSeconds, List<RouteSegment> segments,
+            List<Location> pathPoints, Set<TransportMode> transportModes) {
+        if (id == null) 
+            throw new NullPointerException("Route's ID cannot be null.");
+
+        if (origin == null) 
+            throw new NullPointerException("Route's origin cannot be null.");
+        
+        if (destination == null)
+            throw new NullPointerException("Route's destination cannot be null.");
+
+        if (totalDistance <= 0)
+            throw new IllegalArgumentException("Route's total distance needs to be a positive value.");
+
+        if (totalDurationSeconds <= 0)
+            throw new IllegalArgumentException("Route's total duration needs to be a positive value.");
+
+        if (segments == null) 
+            throw new NullPointerException("Route's segments cannot be null.");
+
+        if (pathPoints == null)
+            throw new NullPointerException("Route's path points cannot be null.");
+
+        if (transportModes == null)
+            throw new NullPointerException("Route's transport mode cannot be null.");
+    
         this.id = id;
         this.origin = origin;
         this.destination = destination;

@@ -13,7 +13,7 @@ import myp.proyecto2.model.domain.ReportType;
 /**
  * Clase utilizada para dar una representacion interna a todos los reportes.
  */
-public class ReportCatalog implements Catalog<Report,ReportType>{
+public class ReportCatalog implements Catalog<Report,ReportType> {
 
     /** Ruta del archivo donde se guardan los reportes. */
     private final String filePath;
@@ -125,7 +125,9 @@ public class ReportCatalog implements Catalog<Report,ReportType>{
      */
     @Override
     public void save(Report report) throws NullPointerException, IOException {
-        if (report == null)throw new NullPointerException("Cannot save a null report.");
+        if (report == null)
+            throw new NullPointerException("Cannot save a null report.");
+
         add(report);
         ReportCatalogReaderWriter readerWriter = new ReportCatalogReaderWriter(this.filePath);
         readerWriter.add(report);
@@ -140,25 +142,26 @@ public class ReportCatalog implements Catalog<Report,ReportType>{
      */
     @Override
     public void dontSave(Report report) throws NullPointerException, IOException {
-        if (report == null)throw new NullPointerException("Cannot delete a null report.");
-        if(delete(report)){
+        if (report == null)
+            throw new NullPointerException("Cannot delete a null report.");
+
+        if (delete(report)) {
             ReportCatalogReaderWriter readerWriter = new ReportCatalogReaderWriter(this.filePath);
             readerWriter.delete(report);
         }
     }
 
-    //-----Otra manera de buscar en un catalogo de reportes.-----//
     /**
      * Regresa una lista de todos los reportes activos.
      * @return una lista de todos los reportes activos.
      */
-    public List<Report> findByActive(){
+    public List<Report> findByActive() {
         List <Report> activeReports = new ArrayList<>();
 
-        for(Report report: findAll())
-            if (report.isActive()) activeReports.add(report);
-
+        for(Report report: findAll()) {
+            if (report.isActive()) 
+                activeReports.add(report);
+        }
         return activeReports;
     }
-
 }

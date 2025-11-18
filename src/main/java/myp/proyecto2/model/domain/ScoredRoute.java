@@ -11,6 +11,18 @@ public class ScoredRoute implements Comparable<ScoredRoute> {
     private String scoredBy;
 
     public ScoredRoute(Route route, double score, List<Report> affectingReports, String scoredBy) {
+        if (route == null)
+            throw new NullPointerException("The route cannot be null.");
+        
+        if (score < 0)
+            throw new IllegalArgumentException("The route's score needs to be positive.");
+        
+        if (affectingReports == null)
+            throw new NullPointerException("Route's affecting reports cannot be null.");
+
+        if (scoredBy == null)
+            throw new NullPointerException("Route's scorer cannot be null.");
+
         this.route = route;
         this.score = score;
         this.affectingReports = affectingReports;

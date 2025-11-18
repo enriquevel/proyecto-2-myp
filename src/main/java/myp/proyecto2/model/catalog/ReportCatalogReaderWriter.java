@@ -27,8 +27,9 @@ public class ReportCatalogReaderWriter {
      * @param filePath ruta del archivo.
      * @throws NullPointerException si la ruta del archivo es <code>null</code>
      */
-    public ReportCatalogReaderWriter(String filePath)throws NullPointerException{
-        if(filePath == null)throw new NullPointerException("File path to read from cannot be null. From ReportCatalogLoader.");
+    public ReportCatalogReaderWriter(String filePath) throws NullPointerException {
+        if (filePath == null)
+            throw new NullPointerException("File path to read from cannot be null. From ReportCatalogLoader.");
 
         this.filePathPOI = filePath;
     }
@@ -40,7 +41,7 @@ public class ReportCatalogReaderWriter {
      * @throws IOException si no se puede  leer una linea del archivo.
      * @throws FileNotFoundException si no se pudo encontrar el archivo.
      */
-    public ReportCatalog getCatalog()throws IOException,FileNotFoundException {
+    public ReportCatalog getCatalog() throws IOException,FileNotFoundException {
         ReportCatalog catalog = new ReportCatalog(this.filePathPOI);
         return this.load(catalog);
     }
@@ -50,45 +51,45 @@ public class ReportCatalogReaderWriter {
      * @param report reporte que se quiere agregar.
      * @throws IOException cuando existen problemas al intentar encontrar el archivo.
      */
-    public void add(Report report) throws IOException{
+    public void add(Report report) throws IOException {
         BufferedWriter bw = null;
         try {
             bw = new BufferedWriter(new FileWriter(this.filePathPOI,true));
             bw.newLine();
-            bw.write(report.getFileFormat());
+            bw.write(report.toString());
         } catch (IOException ioe) {
             throw new IOException("ERROR: An error occurred while trying to find the file.");
-        }finally{
+        } finally {
             if (bw!= null) bw.close();
         }
     }
 
     /**
-     * ELimina un  reporte del archivo.
+     * Elimina un  reporte del archivo.
      * @param report reporte que se quiere eliminar.
      * @throws IOException si no se  puede leer una linea del archivo o bien
      * cuando existen problemas al intentar encontrar el archivo durante su reescritura.
      * @throws FileNotFoundException si no se puede encontrar el archivo durante su lectura.
      */
-    public void delete(Report report) throws IOException, FileNotFoundException{
+    public void delete(Report report) throws IOException, FileNotFoundException {
         //Se almacenan todas las lineas del archivo omitiendo la linea correspondiente al punto de interes.
         BufferedReader br = null;
         List<String> lines = new ArrayList<>();
         try {
             br = new BufferedReader(new FileReader(this.filePathPOI));
             String line;
-            while ((line = br.readLine()) != null){
+            while ((line = br.readLine()) != null) {
                 if (line.trim().isEmpty())
                     continue;
 
-                if (!line.equals(report.getFileFormat()))
+                if (!line.equals(report.toString()))
                     lines.add(line);
             }
-        }catch(FileNotFoundException fnfe){
+        } catch(FileNotFoundException fnfe) {
             throw new FileNotFoundException("ERROR: File could not be found in: "+ this.filePathPOI);
-        }catch(IOException ioe){
+        } catch(IOException ioe) {
             throw new IOException("ERROR: Could not read the line.");
-        }finally{
+        } finally {
             if (br!= null) br.close();
         }
         
@@ -96,13 +97,13 @@ public class ReportCatalogReaderWriter {
         BufferedWriter bw = null;
         try {
             bw = new BufferedWriter(new FileWriter(this.filePathPOI));
-            for (String l : lines){
+            for (String l : lines) {
                 bw.write(l);
                 bw.newLine();
             }
         } catch (IOException ioe) {
             throw new IOException("ERROR: An error occurred while trying to find the file.");
-        }finally{
+        } finally {
             if (bw!= null) bw.close();
         }
     }
@@ -116,7 +117,10 @@ public class ReportCatalogReaderWriter {
      * @throws IOException si no se puede leer una linea del archivo.
      * @throws FileNotFoundException si no puede encontrar el archivo. 
      */
-    private ReportCatalog load(ReportCatalog catalog)throws IOException,FileNotFoundException{ 
+    private ReportCatalog load(ReportCatalog catalog) throws IOException,FileNotFoundException { 
+        if (catalog == null)
+            throw new NullPointerException("The catalog to fill needs to be provided.");
+
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(this.filePathPOI));
@@ -138,11 +142,11 @@ public class ReportCatalogReaderWriter {
 
                 catalog.add(buildReport(row));
             }
-        }catch(FileNotFoundException fnfe){
+        } catch(FileNotFoundException fnfe) {
             throw new FileNotFoundException("ERROR: File could not be found in: "+ this.filePathPOI);
-        }catch(IOException ioe){
+        } catch(IOException ioe) {
             throw new IOException("ERROR: Could not read the line.");
-        }finally{
+        } finally {
             if (br!= null) br.close();
         }
         return catalog;
@@ -154,7 +158,7 @@ public class ReportCatalogReaderWriter {
      * @param row fila con la que se va a construir el reporte.
      * @return un reporte.
      */
-    private Report buildReport(Map<String, String> row){
+    private Report buildReport(Map<String, String> row) {
         double latitude = Double.parseDouble(row.get("latitude"));
         double longitude = Double.parseDouble(row.get("longitude"));
         Location location = new Location(latitude,longitude, row.get("address"));
