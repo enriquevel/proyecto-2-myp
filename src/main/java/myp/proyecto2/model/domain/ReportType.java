@@ -73,6 +73,10 @@ public enum ReportType {
         };
     }
 
+    /**
+     * Regresa la penalizacion (un entero) asociada a un elemento de la enumeracion.
+     * @return la penalizacion (un entero) asociado a un elemento de la enumeracion.
+     */
     public int getDefaultPenalty() {
         return switch (this) {
             case CRIME_INCIDENT -> 300;
@@ -87,6 +91,16 @@ public enum ReportType {
         };
     }
 
+    /*
+     * 
+     *                  Eliminar si no se usa.
+     *                  
+     */
+
+    /**
+     * Regresa la severidad (un entero) asociada a un elemento de la enumeracion.
+     * @return la severidad (un entero) asociada a un elemento de la enumeracion.
+     */
     public int getSeverity() {
         return switch (this) {
             case CRIME_INCIDENT -> 5;
