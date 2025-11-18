@@ -3,11 +3,11 @@ package myp.proyecto2.model.catalog;
 import java.io.IOException;
 import java.util.List;
 
-/** Interfaz que define el comportamiento de un catalogo. 
+/** 
+ * Interfaz que define el comportamiento de un catalogo. 
  * @param <O> representa los objetos que se almacenaran en el catalogo.
  * @param <T> representa la clasificacion por "tipos" compatible con dichos objetos.
- * 
-*/
+ */
 public interface Catalog <O,T> {
     
     /**
@@ -44,7 +44,7 @@ public interface Catalog <O,T> {
      * @return una lista de todos los objetos que estan clasificados con el tipo T en el catalogo.
      * @throws NullPointerException si el tipo dado es <code>null</code>.
      */
-    List<O> findByType(T type)throws NullPointerException;
+    List<O> findByType(T type) throws NullPointerException;
 
     /**
      * Agrega un objeto al catalogo y lo guarda en una base de datos.
@@ -59,5 +59,4 @@ public interface Catalog <O,T> {
      * @throws NullPointerException si el objeto dado es <code>null</code>.
      */
     void dontSave(O object) throws NullPointerException,IOException;
-
 }
