@@ -7,55 +7,48 @@ import myp.proyecto2.model.domain.RouteSegment;
 import myp.proyecto2.model.domain.TransportMode;
 
 /**
- * Implementacion concreta del patron Builder para consturir rutas para
- * usuarios.
- * Esta clase proporciona una implementacion por defecto de la interfaz
- * RouteBuilder,
- * permitiendo la construccion fluida de objetos de tipo Route mediante el
- * encadenamiento de metodos.
+ * Clase que define al constructor predeterminado de rutas.
  */
 public class DefaultRouteBuilder implements RouteBuilder {
 
-    /** Una identificacion para la ruta. */
+    /** Identificador unico. */
     private String id;
 
-    /** El lugar origen de la ruta. */
+    /** Lugar de origen. */
     private Location origin;
 
-    /** El lugar destino de la ruta. */
+    /** Lugar de destino. */
     private Location destination;
 
-    /** La distancia total de la ruta. */
+    /** Distancia que se recorre al usar la ruta. */
     private double totalDistance;
 
-    /** La duracion total en segundos de la ruta. */
+    /** Duracion esperada (en segundos) del recorrido.  */
     private int totalDurationSeconds;
 
-    /** Lista con los segmentos de la ruta. */
+    /** Lista de segmentos de ruta. */
     private List<RouteSegment> segments;
 
-    /** Lista con los puntos de ruta de la ruta. */
+    /** Lista de localizaciones. */
     private List<Location> pathPoints;
 
-    /** Lista con los modos de transporte disponibles de la ruta. */
+    /** Conjunto de medios de transporte. */
     private Set<TransportMode> transportModes;
 
     /**
-     * Constructor que inicializa un nuevo builder de rutas.
+     * Constructor por defecto de {@link DefaultBuilder}
      */
-    public DefaultRouteBuilder() {
-    }
-
+    public DefaultRouteBuilder() {}
+    
     /**
-     * Establece el ID de la ruta a construir.
-     * 
-     * @param id el ID de la ruta a construir.
-     * @return esta instancia del builder para permitir encadenar metodos.
-     * @throws NullPointerException si el ID de la ruta es <code>null</code>.
+     * Establece el identificador el DefaultRouteBuilder que invoca al metodo.
+     * @param id identificador.
+     * @return el objeto DefaultRouteBuilder ahora con el id dado.
+     * @throws NullPointerException si el id dado es null.
      */
     @Override
-    public RouteBuilder setId(String id) {
-        if (id == null)
+    public RouteBuilder setId(String id)throws NullPointerException{
+        if (id == null) 
             throw new NullPointerException("Route's ID cannot be null.");
 
         this.id = id;
@@ -63,11 +56,10 @@ public class DefaultRouteBuilder implements RouteBuilder {
     }
 
     /**
-     * Establece el origen de la ruta a construir.
-     * 
-     * @param origin el origen de la ruta a construir.
-     * @return esta instancia del builder para permitir encadenar metodos.
-     * @throws NullPointerException si el origen de la ruta es <code>null</code>.
+     * Establece el punto de origen del DefaultRouteBuilder que invoca al metodo.
+     * @param origin el punto de origen.
+     * @return el objeto DefaultRouteBuilder ahora con el punto de origen dado.
+     * @throws NullPointerException si el punto de origen es <code>null</code>.
      */
     @Override
     public RouteBuilder setOrigin(Location origin) {
@@ -79,11 +71,10 @@ public class DefaultRouteBuilder implements RouteBuilder {
     }
 
     /**
-     * Establece el destino de la ruta a construir.
-     * 
-     * @param destination el destino de la ruta a construir.
-     * @return esta instancia del builder para permitir encadenar metodos.
-     * @throws NullPointerException si el destino de la ruta es <code>null</code>.
+     * Establece el punto de destino del DefaultRouteBuilder que invoca al metodo.
+     * @param destination el punto de destino.
+     * @return el objeto DefaultRouteBuilder ahora con el punto de deestino dado.
+     * @throws NullPointerException si el punto de destino es <code>null</code>.
      */
     @Override
     public RouteBuilder setDestination(Location destination) {
@@ -95,11 +86,10 @@ public class DefaultRouteBuilder implements RouteBuilder {
     }
 
     /**
-     * Establece la distancia de la ruta a construir.
-     * 
-     * @param distance la distancia de la ruta a construir.
-     * @return esta instancia del builder para permitir encadenar metodos.
-     * @throws IllegalArgumentException si la distancia de la ruta no es un valor positivo.
+     * Establece la distancia del DefaultRouteBuilder que invoca al metodo.
+     * @param distance la distancia.
+     * @return el objeto DefaultRouteBuilder ahora con la distancia dada.
+     * @throws IllegalArgumentException si la distancia dada es menor igual a cero.
      */
     @Override
     public RouteBuilder setDistance(double distance) {
@@ -111,11 +101,10 @@ public class DefaultRouteBuilder implements RouteBuilder {
     }
 
     /**
-     * Establece la duracion en segundos de la ruta a construir.
-     * 
-     * @param seconds la duracion en segundos de la ruta a construir.
-     * @return esta instancia del builder para permitir encadenar metodos.
-     * @throws IllegalArgumentException si la duracion en segundos de la ruta no es un valor positivo.
+     * Establece la duracion del DefaultRouteBuilder que invoca al metodo.
+     * @param seconds duracion en segundos.
+     * @return el objeto DefaultRouteBuilder ahora con la duracion dada.
+     * @throws IllegalArgumentException si la duracion dada es menor igual a cero.
      */
     @Override
     public RouteBuilder setDuration(int seconds) {
@@ -127,11 +116,10 @@ public class DefaultRouteBuilder implements RouteBuilder {
     }
 
     /**
-     * Establece los segmentos de la ruta a construir.
-     * 
-     * @param segments lista con los segmentos de la ruta a construir.
-     * @return esta instancia del builder para permitir encadenar metodos.
-     * @throws NullPointerException si la lista con los segmentos de la ruta es <code>null</code>.
+     * Establece la lista de segmentos de ruta del DefaultRouteBuilder que invoca al metodo.
+     * @param segments una lista de segmentos de ruta.
+     * @return el objeto DefaultRouteBuilder ahora con la lista de segmentos de ruta dada.
+     * @throws NullPointerException si la lista dada es <code>null</code>.
      */
     @Override
     public RouteBuilder setSegments(List<RouteSegment> segments) {
@@ -141,13 +129,12 @@ public class DefaultRouteBuilder implements RouteBuilder {
         this.segments = segments;
         return this;
     }
-
+    
     /**
-     * Establece los puntos de ruta de la ruta a construir.
-     * 
-     * @param pathPoints los puntos de ruta de la ruta a construir.
-     * @return esta instancia del builder para permitir encadenar metodos.
-     * @throws NullPointerException si la lista con puntos de ruta es <code>null</code>.
+     * Establece la lista de localizaciones del DefaultRouteBuilder que invoca al metodo.
+     * @param segments una lista de segmentos de localizaciones.
+     * @return el objeto DefaultRouteBuilder ahora con la lista de segmentos de localizaciones dada.
+     * @throws NullPointerException si la lista dada es <code>null</code>.
      */
     @Override
     public RouteBuilder setPathPoints(List<Location> pathPoints) {
@@ -159,11 +146,10 @@ public class DefaultRouteBuilder implements RouteBuilder {
     }
 
     /**
-     * Establece los modos de transporte de la ruta a construir.
-     * 
-     * @param modes los modos de transporte de la ruta a construir.
-     * @return esta instancia del builder para permitir encadenar metodos.
-     * @throws NullPointerException si la lista con los modos de transporte de la ruta es <code>null</code>.
+     * Establece el conjunto de medios de trasnporte del DefaultRouteBuilder que invoca al metodo.
+     * @param segments una conjunto de medios de trasnporte.
+     * @return el objeto DefaultRouteBuilder ahora con el conjunto de medios de trasnporte.
+     * @throws NullPointerException si el conjunto dado es <code>null</code>.
      */
     @Override
     public RouteBuilder setTransportModes(Set<TransportMode> modes) {
@@ -175,10 +161,9 @@ public class DefaultRouteBuilder implements RouteBuilder {
     }
 
     /**
-	 * Construye y devuelve la configuracion final de la ruta con todos los parametros agregados.
-	 *
-	 * @return un nuevo objeto Route con todas los parametros configurados.
-	 */
+     * Construye una instancia de {@link Route} a partir de un objeto {@link DefaultRouteBuilder}.
+     * @return una instancia de {@link Route}.
+     */
     @Override
     public Route build() {
         validateCompleteBuild();
@@ -187,12 +172,22 @@ public class DefaultRouteBuilder implements RouteBuilder {
     }
 
     /**
-	 * Metodo auxiliar que se encarga de verificar que la ruta no tenga ningun parametro faltante.
-	 * 
-	 * @throws IllegalStateException si alguno de los parametros no existe en la configuracion de la ruta.
-	 */
-    private void validateCompleteBuild() {
-        if (this.id == null)
+     * Metodo auxiliar que verifica si es posible construir una instancia de {@link Route} con 
+     * un objeto {@link RouteBuilder}, en caso contrario lanza una excepcion. 
+     * Este metodo es util en caso de que no se utilicen todos lo setters de la clase y aun asi se quiera 
+     * utilizar el metodo <code>build()</code>.
+     * @throws IllegalStateException si ocurre al menos uno de los siguientes:
+     *      El identificador es <code>null</code>.
+     *      El punto de origen es <code>null</code>.
+     *      El punto de destino es <code>null</code>.
+     *      La distancia total es 0.
+     *      La duracion total es 0.
+     *      La lista de segmentos de ruta es <code>null</code>.
+     *      La lista de localizacions es <code>null</code>.
+     *      El conjunto de medios de trasnporte es <code>null</code>.
+     */
+    private void validateCompleteBuild() throws IllegalStateException {
+        if (this.id == null)  
             throw new IllegalStateException("Cannot build route: ID is required");
 
         if (this.origin == null)

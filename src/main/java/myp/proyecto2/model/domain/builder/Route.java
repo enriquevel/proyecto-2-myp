@@ -7,52 +7,50 @@ import myp.proyecto2.model.domain.RouteSegment;
 import myp.proyecto2.model.domain.TransportMode;
 
 /**
- * Clase que representa una configuracion de ruta.
- * Esta clase es el producto final del patron builder implementado
- * por DefaultRouteBuilder.
+ * Clase que define a las rutas.
  */
 public class Route {
 
-    /** Una identificacion para la ruta. */
+    /** Identificador unico de la ruta. */
     private final String id;
 
-    /** El lugar origen de la ruta. */
+    /** Lugar donde empieza la ruta. */
     private final Location origin;
 
-    /** El lugar destino de la ruta. */
+    /** Lugar donde termina la ruta. */
     private final Location destination;
 
-    /** La distancia total de la ruta. */
+    /** Distancia total que se recorre al usar la ruta. */
     private final double totalDistance;
 
-    /** La duracion total en segundos de la ruta. */
+    /** Tiempo estimado (en segundos) que toma recorrer la ruta. */
     private final int totalDurationSeconds;
 
-    /** Lista con los segmentos de la ruta. */
+    /** Lista de segmentos de ruta de los que se compone la ruta. */
     private final List<RouteSegment> segments;
 
-    /** Lista con los puntos de ruta de la ruta. */
+    /** Lista de localizaciones de las que se compone la ruta. */
     private final List<Location> pathPoints;
 
-    /** Lista con los modos de transporte disponibles de la ruta. */
+    /** Conjunto de medios de transporte que se emplean durante el recorrido de la ruta.*/
     private final Set<TransportMode> transportModes;
 
     /**
-     * Constructor de una ruta con los parametros especificados.
-     * 
-     * @param id una identificacion para la ruta.
-     * @param origin el lugar origen de la ruta.
-     * @param destination el lugar destino de la ruta.
-     * @param totalDistance la distancia total de la ruta.
-     * @param totalDurationSeconds la duracion total en segundos de la ruta.
-     * @param segments lista con los segmentos de la ruta.
-     * @param pathPoints lista con los puntos de ruta de la ruta.
-     * @param transportModes lista con los modos de transporte disponibles de la ruta.
-     * @throws NullPointerException si alguno de los parametros no numericos es <code>null</code>.
-     * @throws IllegalArgumentException si alguno de los parametros numericos no es positivo.
+     * Constructor principal de la clase{@link Route}. Permite construir una ruta.
+     * @param id identificador de la ruta.
+     * @param origin lugar donde comienza la ruta.
+     * @param destination lugar donde termina la ruta.
+     * @param totalDistance distancia total que se recorre al usar la ruta.
+     * @param totalDurationSeconds tiempo (en segundos) que toma recorrer la ruta.
+     * @param segments lista de segmentos de los que se compone la ruta.
+     * @param pathPoints lista de localizaciones de las que se compone la ruta.
+     * @param transportModes conjunto de medios de transporte que se emplean durante el recorrido de la ruta.
+     * @throws NullPointerException si el ID, el punto de origen, el punto destino, la lista de segmentos, 
+     * la lista de puntos o la lista de medios de trasnporte dadas es <code>null</code>.
+     * @throws IllegalArgumentException si la distancia total o la duracion total es <code>null</code>.
      */
     Route(String id, Location origin, Location destination, double totalDistance, int totalDurationSeconds, List<RouteSegment> segments,
-            List<Location> pathPoints, Set<TransportMode> transportModes) {
+            List<Location> pathPoints, Set<TransportMode> transportModes) throws NullPointerException, IllegalArgumentException{
         if (id == null) 
             throw new NullPointerException("Route's ID cannot be null.");
 
@@ -88,111 +86,102 @@ public class Route {
     }
 
     /**
-     * Devuelve el ID de la ruta.
-     * 
-     * @return el ID de la ruta.
+     * Regresa el identificador de la ruta.
+     * @return el identificador de la ruta.
      */
     public String getId() {
         return this.id;
     }
 
     /**
-     * Devuelve el lugar origen de la ruta.
-     * 
-     * @return el lugar origen de la ruta.
+     * Regresa el punto donde inicia la ruta.
+     * @return el punto donde inicia la ruta.
      */
     public Location getOrigin() {
         return this.origin;
     }
 
     /**
-     * Devuelve el lugar destino de la ruta.
-     * 
-     * @return el lugar destino de la ruta.
+     * Regresa el punto donde termina la ruta.
+     * @return el punto donde termina la ruta.
      */
     public Location getDestination() {
         return this.destination;
     }
 
     /**
-     * Devuelve la distancia total de la ruta.
-     * 
-     * @return la distancia total de la ruta.
+     * Regresa la distancia que se recorre (en metros) al usar la ruta.
+     * @return la distancia que se recorre (en metros) al usar la ruta.
      */
     public double getTotalDistance() {
         return this.totalDistance;
     }
 
     /**
-     * Devuelve la duracion total en segundos de la ruta.
-     * 
-     * @return la duracion total en segundos de la ruta.
+     * Regresa el tiempo estimado (en segundos) que toma recorrer la ruta.
+     * @return el tiempo estimado (en segundos) que toma recorrer la ruta.
      */
     public int getTotalDurationSeconds() {
         return this.totalDurationSeconds;
     }
 
     /**
-     * Devuelve una lista con los segmentos de la ruta.
-     * 
-     * @return una lista con los segmentos de la ruta.
+     * Regresa la lista de segmentos de ruta que componen la ruta.
+     * @return la lista de segmentos de ruta que componen la ruta.
      */
     public List<RouteSegment> getSegments() {
         return this.segments;
     }
 
     /**
-     * Devuelve una lista con los puntos de ruta de la ruta.
-     * 
-     * @return una lista con los puntos de ruta de la ruta.
+     * Regresa la lista de localizaciones de las que se compone la ruta.
+     * @return la lista de localizaciones de las que se compone la ruta.
      */
     public List<Location> getPathPoints() {
         return this.pathPoints;
     }
 
     /**
-     * Devuelve una lista con los modos de transporte disponibles de la ruta.
-     * 
-     * @return una lista con los modos de transporte disponibles de la ruta.
+     * Regresa el conjunto de medios de trasnporte que se utilizan al recorrer la ruta.
+     * @return el conjunto de medios de trasnporte que se utilizan al recorrer la ruta.
      */
     public Set<TransportMode> getTransportModes() {
         return this.transportModes;
     }
 
     /**
-     * Muestra los detalles e informacion de la ruta. 
+     * Regresa una representacion en cadena de la ruta.
+     * @return una representacion en cadena de la ruta.
      */
-    public void displayRoute() {
+    public String displayRoute() {
         StringBuilder sb = new StringBuilder();
         sb.append("\n\nDisplaying route's details:\n")
             .append("\n\nOrigin:\n").append(this.origin)
             .append("\n\nDestination:\n").append(this.destination)
             .append("\n\nTotal distance:\n").append(this.totalDistance).append(" meters.")
             .append("\n\nTotal duration:\n").append(this.totalDurationSeconds).append(" seconds");
+        return sb.toString();
     }
 
     /**
-     * Devuelve el contador de segmentos de la ruta.
-     * 
-     * @return el contador de segmentos de la ruta.
+     * Regresa el numero de segmentos de ruta que componen la ruta.
+     * @return el numero de segmentos de ruta que componen la ruta.
      */
     public int getSegmentCount() {
         return this.segments.size();
     }
 
     /**
-     * Devuelve la duracion total de la ruta en minutos.
-     * 
-     * @return la duracion total de la ruta en minutos.
+     * Regresa el tiempo estimado (en minutos) que toma recorrer la ruta.
+     * @return el tiempo estimado (en minutos) que toma recorrer la ruta.
      */
     public int getTotalDurationMinutes() {
         return this.totalDurationSeconds / 60;
     }
 
     /**
-     * Devuelve la distancia total de la ruta en kilometros.
-     * 
-     * @return la distancia total de la ruta en kilometros.
+     * Regresa la distancia que se recorre (en kilometros) al usar la ruta.
+     * @return la distancia que se recorre (en kilometros) al usar la ruta.
      */
     public double getTotalDistanceKilometers() {
         return this.totalDistance / 1000.0;

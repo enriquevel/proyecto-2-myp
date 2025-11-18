@@ -7,89 +7,69 @@ import myp.proyecto2.model.domain.RouteSegment;
 import myp.proyecto2.model.domain.TransportMode;
 
 /**
- * Interfaz que establece el contrato que todos los objetos builder de Route
- * deben seguir.
- * Permite agregar diferentes tipos de parametros de ruta de manera fluida
- * y construir una ruta al final del proceso.
+ * Interfaz que define los distintos metodos para construir una instancia de {@link Route}.
  */
 public interface RouteBuilder {
 
     /**
-     * Establece el ID de la ruta a construir.
-     * 
-     * @param id el ID de la ruta a construir.
-     * @return esta instancia del builder para permitir encadenar metodos.
-     * @throws NullPointerException si el ID de la ruta es <code>null</code>.
+     * Establece el identificador unico de un objeto RouteBuilder que invoca al metodo.
+     * @param id el identificador unico de un objeto RouteBuilder.
+     * @return el objeto RouteBuilder ahora con el identificador.
      */
     RouteBuilder setId(String id);
     
     /**
-     * Establece el origen de la ruta a construir.
-     * 
-     * @param origin el origen de la ruta a construir.
-     * @return esta instancia del builder para permitir encadenar metodos.
-     * @throws NullPointerException si el origen de la ruta es <code>null</code>.
+     * Establece el punto de inicio del objeto RouteBuilder que invoca al metodo.
+     * @param origin el punto de inicio del objeto RouteBuilder.
+     * @return el objeto RouteBuilder ahora con dicho punto de origen.
      */
     RouteBuilder setOrigin(Location origin);
 
     /**
-     * Establece el destino de la ruta a construir.
-     * 
-     * @param destination el destino de la ruta a construir.
-     * @return esta instancia del builder para permitir encadenar metodos.
-     * @throws NullPointerException si el destino de la ruta es <code>null</code>.
+     * Establece el punto de destino del objeto RouteBuilder que invoca al metodo. 
+     * @param destination el punto de destino del objeto RouteBuilder.
+     * @return el objeto RouteBuilder ahora con dicho punto de destino.
      */
     RouteBuilder setDestination(Location destination);
 
     /**
-     * Establece la distancia de la ruta a construir.
-     * 
-     * @param distance la distancia de la ruta a construir.
-     * @return esta instancia del builder para permitir encadenar metodos.
-     * @throws IllegalArgumentException si la distancia de la ruta no es un valor positivo.
+     * Establece una distancia en el objeto RouteBuilder que invoca al metodo.
+     * @param distance la distancia.
+     * @return el objeto RouteBuilder ahora con esa distancia.
      */
     RouteBuilder setDistance(double distance);
 
     /**
-     * Establece la duracion en segundos de la ruta a construir.
-     * 
-     * @param seconds la duracion en segundos de la ruta a construir.
-     * @return esta instancia del builder para permitir encadenar metodos.
-     * @throws IllegalArgumentException si la duracion en segundos de la ruta no es un valor positivo.
+     * Establece una tiempo (en segundos) en el objeto RouteBuilder que invoca al metodo.
+     * @param seconds  el tiempo.
+     * @return el objeto RouteBuilder ahora con dicho tiempo.
      */
     RouteBuilder setDuration(int seconds);
 
     /**
-     * Establece los segmentos de la ruta a construir.
-     * 
-     * @param segments lista con los segmentos de la ruta a construir.
-     * @return esta instancia del builder para permitir encadenar metodos.
-     * @throws NullPointerException si la lista con los segmentos de la ruta es <code>null</code>.
+     * Establece una lista de segmentos de ruta en el objeto RouteBuilder que invoca al metodo.
+     * @param segment lista de segmentos de ruta.
+     * @return el objeto RouteBuilder ahora con la lista de segmentos de ruta.
      */
     RouteBuilder setSegments(List<RouteSegment> segment);
 
     /**
-     * Establece los puntos de ruta de la ruta a construir.
-     * 
-     * @param pathPoints los puntos de ruta de la ruta a construir.
-     * @return esta instancia del builder para permitir encadenar metodos.
-     * @throws NullPointerException si la lista con puntos de ruta es <code>null</code>.
+     * Establece una lista de localizaciones en el objeto RouteBuilder que invoca al metodo.
+     * @param points la lista de localizaciones.
+     * @return el objeto RouteBuilder ahora con la lista de localizaciones.
      */
-    RouteBuilder setPathPoints(List<Location> point);
+    RouteBuilder setPathPoints(List<Location> points);
 
     /**
-     * Establece los modos de transporte de la ruta a construir.
-     * 
-     * @param modes los modos de transporte de la ruta a construir.
-     * @return esta instancia del builder para permitir encadenar metodos.
-     * @throws NullPointerException si la lista con los modos de transporte de la ruta es <code>null</code>.
+     * Establece un conjunto de medios de transporte en el objeto RouteBuilder que invoca al metodo.
+     * @param transportModes conjunto de medios de transporte.
+     * @return el objeto RouteBuilder ahora con el conjunto de medios de transporte.
      */
     RouteBuilder setTransportModes(Set<TransportMode> transportModes);
 
     /**
-	 * Construye y devuelve la configuracion final de la ruta con todos los parametros agregados.
-	 *
-	 * @return un nuevo objeto Route con todas los parametros configurados.
-	 */
+     * Regresa una instancia de {@link Route} a partir de un objeto {@link RouteBuilder}.
+     * @return una instancia de {@link Route} a partir de un objeto {@link RouteBuilder}.
+     */
     Route build();
 }
