@@ -63,7 +63,7 @@ public class DefaultRouteBuilder implements RouteBuilder {
      */
     @Override
     public RouteBuilder setOrigin(Location origin) {
-        if (origin == null) 
+        if (origin == null)
             throw new NullPointerException("Route's origin cannot be null.");
 
         this.origin = origin;
@@ -78,9 +78,9 @@ public class DefaultRouteBuilder implements RouteBuilder {
      */
     @Override
     public RouteBuilder setDestination(Location destination) {
-        if (destination == null) 
+        if (destination == null)
             throw new NullPointerException("Route's destination cannot be null.");
-            
+
         this.destination = destination;
         return this;
     }
@@ -93,7 +93,7 @@ public class DefaultRouteBuilder implements RouteBuilder {
      */
     @Override
     public RouteBuilder setDistance(double distance) {
-        if (distance <= 0) 
+        if (distance < 0)
             throw new IllegalArgumentException("Route's distance has to be positive.");
 
         this.totalDistance = distance;
@@ -108,7 +108,7 @@ public class DefaultRouteBuilder implements RouteBuilder {
      */
     @Override
     public RouteBuilder setDuration(int seconds) {
-        if (seconds <= 0)
+        if (seconds < 0)
             throw new IllegalArgumentException("Route's duration has to be positive.");
 
         this.totalDurationSeconds = seconds;
@@ -190,10 +190,10 @@ public class DefaultRouteBuilder implements RouteBuilder {
         if (this.id == null)  
             throw new IllegalStateException("Cannot build route: ID is required");
 
-        if (this.origin == null)  
+        if (this.origin == null)
             throw new IllegalStateException("Cannot build route: An origin is required");
 
-        if (this.destination == null)  
+        if (this.destination == null)
             throw new IllegalStateException("Cannot build route: A destination is required");
 
         if (this.totalDistance == 0)

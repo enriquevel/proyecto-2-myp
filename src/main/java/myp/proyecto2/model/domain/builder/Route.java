@@ -60,10 +60,10 @@ public class Route {
         if (destination == null)
             throw new NullPointerException("Route's destination cannot be null.");
 
-        if (totalDistance <= 0)
+        if (totalDistance < 0)
             throw new IllegalArgumentException("Route's total distance needs to be a positive value.");
 
-        if (totalDurationSeconds <= 0)
+        if (totalDurationSeconds < 0)
             throw new IllegalArgumentException("Route's total duration needs to be a positive value.");
 
         if (segments == null) 
