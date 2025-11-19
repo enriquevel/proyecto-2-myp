@@ -6,17 +6,16 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import myp.proyecto2.model.domain.Report;
 import myp.proyecto2.model.domain.ReportType;
 
 /**
  * Clase utilizada para dar una representacion interna a todos los reportes.
  */
-public class ReportCatalog implements Catalog<Report,ReportType> {
+public class ReportCatalog implements Catalog<Report, ReportType> {
 
-    /** Ruta del archivo donde se guardan los reportes. */
-    private final String filePath;
+    /** Lector y escritor de archivos para reportes. */
+    private final CSVReportReaderWriter readerWriter;
 
     /** Mapa de los reportes por ID. */
     private Map<String, Report> reportsByID;
@@ -25,61 +24,111 @@ public class ReportCatalog implements Catalog<Report,ReportType> {
     private Map<ReportType, List<Report>> reportsByType;
 
     /**
-     * Constructor principal de la clase {@link ReportCatalog}. Inicializa
-     * los diccionariios y define la ruta del archivo.
+     * Constructor principal de la clase {@link ReportCatalog}.
+     * Inicializa los diccionarios y define la ruta del archivo.
+     *
      * @param filePath ruta del archivo donde se guardan los reportes.
      */
     public ReportCatalog(String filePath) {
-        if(filePath == null)    
+        if (filePath == null)
             throw new NullPointerException("The file path cannot be null.");
-        
-        this.filePath = filePath;
+
+        this.readerWriter = new CSVReportReaderWriter(filePath);
         this.reportsByID = new HashMap<>();
         this.reportsByType = new EnumMap<>(ReportType.class);
+
+        initialize();
     }
-    
+
+    private void initialize() {
+        try {
+            List<Report> loaded = this.readerWriter.readAll();
+
+            for (ReportType type : ReportType.values())
+                this.reportsByType.put(type, new ArrayList<>());
+
+            for (Report report : loaded) {
+                this.reportsByID.put(report.getId(), report);
+                this.reportsByType.get(report.getType()).add(report);
+            }
+            System.out.println("Loaded " + this.reportsByID.size() + " reports from CSV");
+        } catch (IOException ioe) {
+            System.err.println("Failed to load reports: " + ioe.getMessage());
+            ioe.printStackTrace();
+        }
+    }
+
+    /**
+     * Agrega un reporte al catalogo y tambien lo guarda en la base de datos.
+     *
+     * @param report el reporte que se quiere guardar.
+     * @throws NullPointerException si el reporte que se quiere guardar es <code>null</code>.
+     * @throws RuntimeException si ocurrio un error al guardar el reporte.
+     */
+    @Override
+    public Report save(Report report) throws IOException {
+        if (report == null)
+            throw new NullPointerException("Cannot save a null report.");
+
+        add(report);
+
+        try {
+            this.readerWriter.add(report);
+        } catch (IOException ioe) {
+            delete(report);
+            throw new RuntimeException("Failed to save report.", ioe);
+        }
+
+        return report;
+    }
+
     /**
      * Agrega un reporte al catalogo.
+     *
      * @param report reporte que se dedesa agregar.
      * @throws NullPointerException si el reporte que se quiere agregar es <code>null</code>.
      */
-    @Override
-    public void add(Report report) throws NullPointerException {
+    private void add(Report report) {
         if (report == null)
-            throw new NullPointerException("The point of interest you want to add cannot be null.");
+            throw new NullPointerException("Cannot add a null report.");
         //Agrega el reporte a un hashMap donde su id funge como llave.
         Report old = this.reportsByID.put(report.getId(), report);
 
         /*Como put regresa <code>null</code> si el objeto agregado no estaba previamente en el hashmap,
          * verificamos el caso contrario.
          */
-        if (old !=null)
+        if (old != null)
             this.reportsByType.get(old.getType()).remove(old);
         //Finalmente agregamos el nuevo punto de interes a la lista del segundo hash map.//
-        this.reportsByType.get(report.getType()).add(old);
+        this.reportsByType.get(report.getType()).add(report);
     }
 
-
-
     /** 
-     * Elimina un reporte del catalogo.
-     * @param report reporte que se quiere eliminar.
-     * @return <code>true</code> si el reporte estaba en el catalogo y fue eliminado.<code>false</code> 
-     * si el reporte no estaba en el catalogo y no pudo ser eliminado.
+     * Elimina un reporte del catalogo y de la base de datos.
+     *
+     * @param report el reporte que se quiere eliminar.
+     * @return <code>true</code> si el reporte estaba en el catalogo y fue eliminado, <code>false</code>
+     *          en otro caso.
      * @throws NullPointerException si el reporte que se quiere eliminar es <code>null</code>.
     */
     @Override
-    public Boolean delete(Report report) throws NullPointerException {
-        if(report == null) 
-            throw new NullPointerException("The point of interest you want to delete cannot be null.");
+    public boolean delete(Report report) throws NullPointerException {
+        if (report == null)
+            throw new NullPointerException("Cannot delete a null report.");
 
         Report removed = this.reportsByID.remove(report.getId());
         //Verificamos si el reporte realmente estaba en el catalogo.
-        if (removed!= null){
+        if (removed != null)
             this.reportsByType.get(removed.getType()).remove(removed);//Lo removemos de la lista del segundo hashmap.
-            return true; 
+
+        try {
+            this.readerWriter.delete(report);
+        } catch (IOException ioe) {
+            this.reportsByID.put(report.getId(), report);
+            this.reportsByType.get(report.getType()).add(report);
+            throw new RuntimeException("Failed to delete report", ioe);
         }
-        return false;
+        return removed != null;
     }
 
     /**  
@@ -93,9 +142,10 @@ public class ReportCatalog implements Catalog<Report,ReportType> {
 
     /**
      * Regresa el reporte asociado a un identificador.
+     *
      * @param id identificador con el que se quiere buscar el reporte.
      * @return el reporte reporte asociado al identificador.<code>null</code> si 
-     * no existe un reporte con dicho identificador.
+     *          no existe un reporte con dicho identificador.
      * @throws NullPointerException si el identificador es <code>null</code>.
      */
     @Override
@@ -106,8 +156,9 @@ public class ReportCatalog implements Catalog<Report,ReportType> {
     }
 
     /**
-     * Regresa una lista de todos los reportes de un cierto tipo. Los tipos validos
-     * son elementos {@link ReportType}).
+     * Regresa una lista de todos los reportes de un cierto tipo.
+     * Los tipos validos son elementos {@link ReportType}).
+     *
      * @param type tipo de reporte. Elemento {@link ReportType}).
      * @return una lista de todos los reportes del tipo dado.
      * @throws NullPointerException si el tipo dado es <code>null</code>.
@@ -118,47 +169,14 @@ public class ReportCatalog implements Catalog<Report,ReportType> {
     }
 
     /**
-     * Agrega un reporte al catalogo y tambien lo guarda en la base de datos.
-     * @param report reporte que se quiere guardar.
-     * @throws NullPointerException si el reporte que se quiereguardar es <code>null</code>.
-     * @throws IOException cuando existen problemas al intentar encontrar el archivo.
-     */
-    @Override
-    public void save(Report report) throws NullPointerException, IOException {
-        if (report == null)
-            throw new NullPointerException("Cannot save a null report.");
-
-        add(report);
-        ReportCatalogReaderWriter readerWriter = new ReportCatalogReaderWriter(this.filePath);
-        readerWriter.add(report);
-    }
-
-    /**
-     * Elimina un reporte del catalogo y de la base de datos.
-     * @param report reporte que se desea eliminar.
-     * @throws NullPointerException si el reporte dado es <code>null</code>.
-     * @throws IOException si no se  puede leer una linea del archivo o bien 
-     * existen problemas al intentar encontrar el archivo durante su reescritura.
-     */
-    @Override
-    public void dontSave(Report report) throws NullPointerException, IOException {
-        if (report == null)
-            throw new NullPointerException("Cannot delete a null report.");
-
-        if (delete(report)) {
-            ReportCatalogReaderWriter readerWriter = new ReportCatalogReaderWriter(this.filePath);
-            readerWriter.delete(report);
-        }
-    }
-
-    /**
      * Regresa una lista de todos los reportes activos.
+     *
      * @return una lista de todos los reportes activos.
      */
-    public List<Report> findByActive() {
+    public List<Report> findActive() {
         List <Report> activeReports = new ArrayList<>();
 
-        for(Report report: findAll()) {
+        for (Report report: findAll()) {
             if (report.isActive()) 
                 activeReports.add(report);
         }
