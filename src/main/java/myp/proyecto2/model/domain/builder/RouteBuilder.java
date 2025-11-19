@@ -13,6 +13,7 @@ public interface RouteBuilder {
 
     /**
      * Establece el identificador unico de un objeto RouteBuilder que invoca al metodo.
+     *
      * @param id el identificador unico de un objeto RouteBuilder.
      * @return el objeto RouteBuilder ahora con el identificador.
      */
@@ -20,13 +21,15 @@ public interface RouteBuilder {
     
     /**
      * Establece el punto de inicio del objeto RouteBuilder que invoca al metodo.
+     *
      * @param origin el punto de inicio del objeto RouteBuilder.
      * @return el objeto RouteBuilder ahora con dicho punto de origen.
      */
     RouteBuilder setOrigin(Location origin);
 
     /**
-     * Establece el punto de destino del objeto RouteBuilder que invoca al metodo. 
+     * Establece el punto de destino del objeto RouteBuilder que invoca al metodo.
+     *
      * @param destination el punto de destino del objeto RouteBuilder.
      * @return el objeto RouteBuilder ahora con dicho punto de destino.
      */
@@ -34,13 +37,15 @@ public interface RouteBuilder {
 
     /**
      * Establece una distancia en el objeto RouteBuilder que invoca al metodo.
+     *
      * @param distance la distancia.
      * @return el objeto RouteBuilder ahora con esa distancia.
      */
     RouteBuilder setDistance(double distance);
 
     /**
-     * Establece una tiempo (en segundos) en el objeto RouteBuilder que invoca al metodo.
+     * Establece un tiempo (en segundos) en el objeto RouteBuilder que invoca al metodo.
+     *
      * @param seconds  el tiempo.
      * @return el objeto RouteBuilder ahora con dicho tiempo.
      */
@@ -48,6 +53,7 @@ public interface RouteBuilder {
 
     /**
      * Establece una lista de segmentos de ruta en el objeto RouteBuilder que invoca al metodo.
+     *
      * @param segment lista de segmentos de ruta.
      * @return el objeto RouteBuilder ahora con la lista de segmentos de ruta.
      */
@@ -55,6 +61,7 @@ public interface RouteBuilder {
 
     /**
      * Establece una lista de localizaciones en el objeto RouteBuilder que invoca al metodo.
+     *
      * @param points la lista de localizaciones.
      * @return el objeto RouteBuilder ahora con la lista de localizaciones.
      */
@@ -62,6 +69,7 @@ public interface RouteBuilder {
 
     /**
      * Establece un conjunto de medios de transporte en el objeto RouteBuilder que invoca al metodo.
+     *
      * @param transportModes conjunto de medios de transporte.
      * @return el objeto RouteBuilder ahora con el conjunto de medios de transporte.
      */
@@ -69,6 +77,7 @@ public interface RouteBuilder {
 
     /**
      * Regresa una instancia de {@link Route} a partir de un objeto {@link RouteBuilder}.
+     *
      * @return una instancia de {@link Route} a partir de un objeto {@link RouteBuilder}.
      */
     Route build();

@@ -17,14 +17,15 @@ public class Location {
     private String address;
 
     /**
-     * Constructor principal de la clase {@link Location}. 
+     * Constructor principal de la clase {@link Location}.
+     *
      * @param latitude latitud de la nueva localizacion
      * @param longitude longitud de la nueva localizacion.
      * @param address direccion de la nueva localizacion.
-     * @throws IllegalArgumentException si la latitud es mayor a 90 o menor a -90. 
-     * Si la longitud es mayor a 180 o menor a -180.
+     * @throws IllegalArgumentException si la latitud es mayor a 90 o menor a -90, o si la longitud
+     *          es mayor a 180 o menor a -180.
      */
-    public Location(double latitude, double longitude, String address)throws IllegalArgumentException{
+    public Location(double latitude, double longitude, String address) {
         if (latitude < -90.0 || latitude > 90.0)
             throw new IllegalArgumentException("Invalid latitude: " + latitude);
 
@@ -38,6 +39,7 @@ public class Location {
 
     /**
      * Regresa la latitud de la localizacion.
+     *
      * @return la latitud de la localizacion.
      */
     public double getLatitude() {
@@ -46,6 +48,7 @@ public class Location {
 
     /**
      * Regresa la longitud de la localizacion.
+     *
      * @return regresa la longitud de la localizacion.
      */
     public double getLongitude() {
@@ -54,6 +57,7 @@ public class Location {
 
     /**
      * Regresa la direccion de la localizacion.
+     *
      * @return la direccion de la localizacion.
      */
     public String getAddress() {
@@ -63,12 +67,13 @@ public class Location {
     /**
      * Calcula la distancia a otra localizacion, utilizando las coordenadas
      * geograficas de ambas localizaciones.
+     *
      * @param other localizacion respecto a la que se quiere obtener la distancia.
      * @return la distancia (en metros) a otra localizacion.
      * @throws NullPointerException si la localizacion dada, respecto a la que se quiere calcular
-     * la distancia es <code>null</code>.
+     *          la distancia es <code>null</code>.
      */
-    public double distanceTo(Location other)throws NullPointerException{
+    public double distanceTo(Location other) {
         if (other == null)
             throw new NullPointerException("A location needs to be provided in order to calculate the distance.");
 
@@ -89,7 +94,8 @@ public class Location {
 
     /**
      * Regresa una representacion en cadena de una localizacion.
-     * @param return una representacion en cadena de una localizacion.
+     *
+     * @return una representacion en cadena de una localizacion.
      */
     @Override
     public String toString() {

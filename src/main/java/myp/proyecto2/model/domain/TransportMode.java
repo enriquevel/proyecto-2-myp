@@ -17,6 +17,7 @@ public enum TransportMode {
 
     /**
      * Regresa la cadena asociada a algun elemento de la enumeracion.
+     *
      * @return la cadena asociada a algun elemento de la enumeracion.
      */
     public String getGoogleMapsMode() {
@@ -29,8 +30,9 @@ public enum TransportMode {
     }
 
      /**
-     * Regresa el nombre asociado a algun elemento de la enumeracion y que sera el texo
+     * Regresa el nombre asociado a algun elemento de la enumeracion y que sera el texto
      * visible por el usuario.
+      *
      * @return el nombre asociado a algun elemento de la enumeracion.
      */
     public String getDisplayName() {
@@ -44,6 +46,7 @@ public enum TransportMode {
 
     /**
      * Regresa el elemento de la enumeracion asociado a una cadena.
+     * 
      * @param mode cadena que se quiere saber cual es su elemento asociado.
      * @return el elemento de la enumeracion asociado a la cadena.
      */

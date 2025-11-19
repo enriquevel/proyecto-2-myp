@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Clase que define a las rutas puntuadas. Las rutas puntuadas son en general una ruta
  * mas informacion relevante asociada a dicha ruta, en especifico: la puntuacion de la ruta, 
- * el metodo que se utiliza para calcular dihca puntuacion y una lista de reportes de puntos de la ruta.
+ * el metodo que se utiliza para calcular dicha puntuacion y una lista de reportes de puntos de la ruta.
  */
 public class ScoredRoute implements Comparable<ScoredRoute> {
     
@@ -25,6 +25,7 @@ public class ScoredRoute implements Comparable<ScoredRoute> {
     /**
      * Constructor principal de la clase {@link ScoredRoute}. Permite 
      * crear una ruta puntuada.
+     *
      * @param route ruta de donde se va a obtener la informacion.
      * @param score puntuacion de la ruta.
      * @param affectingReports lista de reportes asociados a la ruta.
@@ -32,8 +33,7 @@ public class ScoredRoute implements Comparable<ScoredRoute> {
      * @throws NullPointerException si la ruta, la lista de reportes, o las puntuaciones son <code>null</code>.
      * @throws IllegalArgumentException si la puntuacion de la ruta es menor que cero.
      */
-    public ScoredRoute(Route route, double score, List<Report> affectingReports, String scoredBy)
-    throws NullPointerException, IllegalArgumentException {
+    public ScoredRoute(Route route, double score, List<Report> affectingReports, String scoredBy) {
         if (route == null)
             throw new NullPointerException("The route cannot be null.");
         
@@ -54,6 +54,7 @@ public class ScoredRoute implements Comparable<ScoredRoute> {
     
     /**
      * Regresa la ruta.
+     *
      * @return la ruta.
      */
     public Route getRoute() {
@@ -62,6 +63,7 @@ public class ScoredRoute implements Comparable<ScoredRoute> {
 
     /**
      * Regresa la puntuacion que se calculo con la ruta.
+     *
      * @return la puntuacion que se calculo con la ruta.
      */
     public double getScore() {
@@ -70,6 +72,7 @@ public class ScoredRoute implements Comparable<ScoredRoute> {
 
     /**
      * Regresa la lista de reportes asociados a la ruta.
+     *
      * @return la lista de reportes asociados a la ruta.
      */
     public List<Report> getAffectingReports() {
@@ -78,6 +81,7 @@ public class ScoredRoute implements Comparable<ScoredRoute> {
 
     /**
      * Regresa la manera en la que se calculo la puntuacion de la ruta.
+     *
      * @return la manera en la que se calculo la puntuacion de la ruta.
      */
     public String getScorer() {
@@ -86,6 +90,7 @@ public class ScoredRoute implements Comparable<ScoredRoute> {
 
     /**
      * Regresa el numero de reportes asociados a la ruta.
+     *
      * @return el numero de reportes asociados a la ruta.
      */
     public int getReportCount() {
@@ -94,8 +99,9 @@ public class ScoredRoute implements Comparable<ScoredRoute> {
 
     /**
      * Nos dice si en la ruta existen reportes.
-     * @return <code>true</code> si la lista de reportes de la ruta no esta vacia. 
-     * <code>false</code> en caso contrario..
+     *
+     * @return <code>true</code> si la lista de reportes de la ruta no esta vacia,
+     *          <code>false</code> en caso contrario.
      */
     public boolean hasReports() {
         return !this.affectingReports.isEmpty();
@@ -103,11 +109,12 @@ public class ScoredRoute implements Comparable<ScoredRoute> {
 
     /**
      * Permite comparar a dos rutas puntuadas; nos dice cual de las dos rutas puntuadas es mayor. 
-     * Esto se calcula en base a sus puntuaciones.
+     * Esto se calcula con base en sus puntuaciones.
+     *
      * @param other ruta puntuada con la que se va a comparar.
      * @return 0 si ambas rutas tienen la misma puntuacion. Un valor positivo
-     * si la puntuacion de la ruta punutada que llama al metodo es mayor. Un valor
-     * negativo si la puntuacion de la ruta punutada que invoca al metodo es menor.
+     *          si la puntuacion de la ruta punutada que llama al metodo es mayor. Un valor
+     *          negativo si la puntuacion de la ruta punutada que invoca al metodo es menor.
      */
     @Override
     public int compareTo(ScoredRoute other) {

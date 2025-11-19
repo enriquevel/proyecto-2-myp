@@ -46,11 +46,11 @@ public class Route {
      * @param pathPoints lista de localizaciones de las que se compone la ruta.
      * @param transportModes conjunto de medios de transporte que se emplean durante el recorrido de la ruta.
      * @throws NullPointerException si el ID, el punto de origen, el punto destino, la lista de segmentos, 
-     * la lista de puntos o la lista de medios de trasnporte dadas es <code>null</code>.
+     *          la lista de puntos o la lista de medios de transporte dadas es <code>null</code>.
      * @throws IllegalArgumentException si la distancia total o la duracion total es <code>null</code>.
      */
     Route(String id, Location origin, Location destination, double totalDistance, int totalDurationSeconds, List<RouteSegment> segments,
-            List<Location> pathPoints, Set<TransportMode> transportModes) throws NullPointerException, IllegalArgumentException{
+            List<Location> pathPoints, Set<TransportMode> transportModes) {
         if (id == null) 
             throw new NullPointerException("Route's ID cannot be null.");
 
@@ -87,6 +87,7 @@ public class Route {
 
     /**
      * Regresa el identificador de la ruta.
+     *
      * @return el identificador de la ruta.
      */
     public String getId() {
@@ -95,6 +96,7 @@ public class Route {
 
     /**
      * Regresa el punto donde inicia la ruta.
+     *
      * @return el punto donde inicia la ruta.
      */
     public Location getOrigin() {
@@ -103,6 +105,7 @@ public class Route {
 
     /**
      * Regresa el punto donde termina la ruta.
+     *
      * @return el punto donde termina la ruta.
      */
     public Location getDestination() {
@@ -111,6 +114,7 @@ public class Route {
 
     /**
      * Regresa la distancia que se recorre (en metros) al usar la ruta.
+     *
      * @return la distancia que se recorre (en metros) al usar la ruta.
      */
     public double getTotalDistance() {
@@ -119,6 +123,7 @@ public class Route {
 
     /**
      * Regresa el tiempo estimado (en segundos) que toma recorrer la ruta.
+     *
      * @return el tiempo estimado (en segundos) que toma recorrer la ruta.
      */
     public int getTotalDurationSeconds() {
@@ -127,6 +132,7 @@ public class Route {
 
     /**
      * Regresa la lista de segmentos de ruta que componen la ruta.
+     *
      * @return la lista de segmentos de ruta que componen la ruta.
      */
     public List<RouteSegment> getSegments() {
@@ -135,6 +141,7 @@ public class Route {
 
     /**
      * Regresa la lista de localizaciones de las que se compone la ruta.
+     *
      * @return la lista de localizaciones de las que se compone la ruta.
      */
     public List<Location> getPathPoints() {
@@ -142,8 +149,9 @@ public class Route {
     }
 
     /**
-     * Regresa el conjunto de medios de trasnporte que se utilizan al recorrer la ruta.
-     * @return el conjunto de medios de trasnporte que se utilizan al recorrer la ruta.
+     * Regresa el conjunto de medios de transporte que se utilizan al recorrer la ruta.
+     *
+     * @return el conjunto de medios de transporte que se utilizan al recorrer la ruta.
      */
     public Set<TransportMode> getTransportModes() {
         return this.transportModes;
@@ -151,6 +159,7 @@ public class Route {
 
     /**
      * Regresa una representacion en cadena de la ruta.
+     *
      * @return una representacion en cadena de la ruta.
      */
     public String displayRoute() {
@@ -165,6 +174,7 @@ public class Route {
 
     /**
      * Regresa el numero de segmentos de ruta que componen la ruta.
+     *
      * @return el numero de segmentos de ruta que componen la ruta.
      */
     public int getSegmentCount() {
@@ -173,6 +183,7 @@ public class Route {
 
     /**
      * Regresa el tiempo estimado (en minutos) que toma recorrer la ruta.
+     *
      * @return el tiempo estimado (en minutos) que toma recorrer la ruta.
      */
     public int getTotalDurationMinutes() {
@@ -181,6 +192,7 @@ public class Route {
 
     /**
      * Regresa la distancia que se recorre (en kilometros) al usar la ruta.
+     *
      * @return la distancia que se recorre (en kilometros) al usar la ruta.
      */
     public double getTotalDistanceKilometers() {
