@@ -47,8 +47,9 @@ class CSVReportReaderWriter implements CSVReaderWriter<Report> {
         if (!file.exists())
             return reports;
 
+        BufferedReader reader = null;
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+            reader = new BufferedReader(new FileReader(file));
             String header = reader.readLine();
             if (header == null)
                 return reports;
@@ -67,6 +68,9 @@ class CSVReportReaderWriter implements CSVReaderWriter<Report> {
             }
         } catch (Exception e) {
             throw new IOException("Error reading file " + this.filePath, e);
+        } finally {
+            if (reader != null)
+                reader.close();
         }
 
         return reports;

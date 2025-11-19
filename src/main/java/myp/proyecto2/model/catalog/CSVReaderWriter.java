@@ -11,9 +11,9 @@ import java.util.List;
 interface CSVReaderWriter<T> {
 
     /**
-     * Devuelve una lista con todos las entidades en el archivo.
+     * Devuelve una lista con todas las entidades en el archivo.
      *
-     * @return una lista con todos las entidades en el archivo.
+     * @return una lista con todas las entidades en el archivo.
      * @throws IOException si ocurrio un error al leer el archivo.
      */
     List<T> readAll() throws IOException;

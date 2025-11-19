@@ -51,10 +51,10 @@ public class ReportCatalog implements Catalog<Report, ReportType> {
                 this.reportsByID.put(report.getId(), report);
                 this.reportsByType.get(report.getType()).add(report);
             }
+
             System.out.println("Loaded " + this.reportsByID.size() + " reports from CSV");
         } catch (IOException ioe) {
-            System.err.println("Failed to load reports: " + ioe.getMessage());
-            ioe.printStackTrace();
+            throw new RuntimeException("Failed to load reports: " + ioe.getMessage(), ioe);
         }
     }
 
@@ -108,29 +108,33 @@ public class ReportCatalog implements Catalog<Report, ReportType> {
      * @return <code>true</code> si el reporte estaba en el catalogo y fue eliminado, <code>false</code>
      *          en otro caso.
      * @throws NullPointerException si el reporte que se quiere eliminar es <code>null</code>.
+     * @throws RuntimeException si ocurrio un error al eliminar el reporte.
     */
     @Override
     public boolean delete(Report report) {
         if (report == null)
             throw new NullPointerException("Cannot delete a null report.");
 
-        Report removed = this.reportsByID.remove(report.getId());
-        //Verificamos si el reporte realmente estaba en el catalogo.
-        if (removed != null)
-            this.reportsByType.get(removed.getType()).remove(removed);//Lo removemos de la lista del segundo hashmap.
-
         try {
-            this.readerWriter.delete(report);
+            boolean deletedFromFile = this.readerWriter.delete(report);
+
+            if (deletedFromFile) {
+                Report removed = this.reportsByID.remove(report.getId());
+                if (removed != null)
+                    this.reportsByType.get(removed.getType()).remove(removed);
+
+                return true;
+            }
+
+            return false;
         } catch (IOException ioe) {
-            this.reportsByID.put(report.getId(), report);
-            this.reportsByType.get(report.getType()).add(report);
-            throw new RuntimeException("Failed to delete report", ioe);
+            throw new RuntimeException("Failed to delete report: " + ioe.getMessage(), ioe);
         }
-        return removed != null;
     }
 
     /**  
      * Regresa una lista de todos los reportes.
+     *
      * @return una lista de todos los reportes.
     */
     @Override

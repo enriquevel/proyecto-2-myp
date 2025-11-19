@@ -36,6 +36,7 @@ public class Report {
      * @param upvotes el numero de votos a favor del reporte.
      * @param downvotes el numero de votos en contra del reporte.
      * @throws NullPointerException si alguno de los parametros es null.
+     * @throws IllegalArgumentException si alguno de los votos es negativo.
      */
     public Report(String id, ReportType type, Location location, String description, int upvotes, int downvotes) {
         if (id == null)
@@ -51,7 +52,7 @@ public class Report {
             throw new NullPointerException("Report's description cannot be null.");
 
         if (upvotes < 0 || downvotes < 0)
-            throw new NullPointerException("Report's upvotes or downvotes cannot be negative.");
+            throw new IllegalArgumentException("Report's upvotes or downvotes cannot be negative.");
 
         this.id = id;
         this.type = type;

@@ -15,7 +15,7 @@ import myp.proyecto2.model.domain.POIType;
  */
 public class POICatalog implements Catalog<PointOfInterest, POIType>{
 
-    /** Lector y escritor de archivos para reportes. */
+    /** Lector y escritor de archivos para puntos de interes. */
     private final CSVPOIReaderWriter readerWriter;
 
     /** Mapa de puntos de interes por ID. */
@@ -50,10 +50,10 @@ public class POICatalog implements Catalog<PointOfInterest, POIType>{
                 this.poisByID.put(poi.getId(), poi);
                 this.poisByType.get(poi.getType()).add(poi);
             }
+
             System.out.println("Loaded " + this.poisByID.size() + " POIs from CSV");
         } catch (IOException ioe) {
-            System.err.println("Failed to load POIs: " + ioe.getMessage());
-            ioe.printStackTrace();
+            throw new RuntimeException("Failed to load POIs: " + ioe.getMessage(), ioe);
         }
     }
 
@@ -107,25 +107,28 @@ public class POICatalog implements Catalog<PointOfInterest, POIType>{
      * @return <code>true</code> si el punto de interes estaba en el catalogo y fue eliminado, <code>false</code>
      *          en otro caso.
      * @throws NullPointerException si el punto de interes que se quiere eliminar es <code>null</code>.
+     * @throws RuntimeException si ocurrio un error al eliminar el punto de interes.
      */
     @Override
     public boolean delete(PointOfInterest poi) {
         if (poi == null)
             throw new NullPointerException("Cannot delete a null point of interest.");
 
-        PointOfInterest removed = this.poisByID.remove(poi.getId());
-        //Verificamos si el reporte realmente estaba en el catalogo.
-        if (removed != null)
-            this.poisByType.get(removed.getType()).remove(removed);//Lo removemos de la lista del segundo hashmap.
-
         try {
-            this.readerWriter.delete(poi);
+            boolean deletedFromFile = this.readerWriter.delete(poi);
+
+            if (deletedFromFile) {
+                PointOfInterest removed = this.poisByID.remove(poi.getId());
+                if (removed != null)
+                    this.poisByType.get(removed.getType()).remove(removed);
+
+                return true;
+            }
+
+            return false;
         } catch (IOException ioe) {
-            this.poisByID.put(poi.getId(), poi);
-            this.poisByType.get(poi.getType()).add(poi);
-            throw new RuntimeException("Failed to delete point of interest", ioe);
+            throw new RuntimeException("Failed to delete POI: " + ioe.getMessage(), ioe);
         }
-        return removed != null;
     }
 
     /**
@@ -169,6 +172,7 @@ public class POICatalog implements Catalog<PointOfInterest, POIType>{
 
     /**
      * Regresa un punto de interes del catalogo, buscandolo por su nombre.
+     *
      * @param name nombre del punto de interes.
      * @return el punto de interes con dicho nombre.<code>null</code> si no lo encuentra.
      * @throws NullPointerException si el nombre dado es <code>null</code>.
