@@ -165,8 +165,7 @@ public class Report {
      *
      * @return una representacion en cadena del reporte.
      */
-    @Override
-    public String toString() {
+    public String getFileFormat() {
         return this.id + ","
                 + this.type.toString() + ","
                 + this.location.getLatitude() + ","

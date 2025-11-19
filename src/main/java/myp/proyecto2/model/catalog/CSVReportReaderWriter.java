@@ -94,7 +94,7 @@ class CSVReportReaderWriter implements CSVReaderWriter<Report> {
                 bw.newLine();
             }
 
-            bw.write(report.toString());
+            bw.write(report.getFileFormat());
             bw.newLine();
 
         } catch (IOException ioe) {
@@ -128,7 +128,7 @@ class CSVReportReaderWriter implements CSVReaderWriter<Report> {
             bw.newLine();
 
             for (Report r : allReports) {
-                bw.write(r.toString());
+                bw.write(r.getFileFormat());
                 bw.newLine();
             }
         } catch (IOException ioe) {

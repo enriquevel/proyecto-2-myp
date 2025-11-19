@@ -93,7 +93,7 @@ class CSVPOIReaderWriter implements CSVReaderWriter<PointOfInterest> {
                 bw.newLine();
             }
 
-            bw.write(poi.toString());
+            bw.write(poi.getFileFormat());
             bw.newLine();
 
         } catch (IOException ioe) {
@@ -127,7 +127,7 @@ class CSVPOIReaderWriter implements CSVReaderWriter<PointOfInterest> {
             bw.newLine();
 
             for (PointOfInterest p : allPOIs) {
-                bw.write(p.toString());
+                bw.write(p.getFileFormat());
                 bw.newLine();
             }
         } catch (IOException ioe) {
