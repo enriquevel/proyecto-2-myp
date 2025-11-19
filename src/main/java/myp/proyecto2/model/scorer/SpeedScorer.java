@@ -2,13 +2,12 @@ package myp.proyecto2.model.scorer;
 
 import java.util.Map;
 import java.util.EnumMap;
-import myp.proyecto2.model.domain.Report;
 import myp.proyecto2.model.domain.ReportType;
 
 /**
  * Calificador de rutas enfocadas en velocidad, que priorizan este rubro.
  */
-public class SpeedScorer extends RouteScorer {
+public class SpeedScorer extends AbstractRouteScorer {
 
     /** Mapa de pesos personalizados para cada tipo de reporte.*/
     private final Map<ReportType, Double> weights;
@@ -26,9 +25,10 @@ public class SpeedScorer extends RouteScorer {
      */
     private void defineWeights() {
         weights.put(ReportType.TRAFFIC_JAM, 5.0);
-        weights.put(ReportType.CONSTRUCTION, 4.5);
-        weights.put(ReportType.FLOODING, 3.0);
+        weights.put(ReportType.CONSTRUCTION, 4.0);
+        weights.put(ReportType.FLOODING, 4.5);
         weights.put(ReportType.ACCIDENT, 3.0);
+        weights.put(ReportType.STREETLIGHT_OUT, 0.5);
         weights.put(ReportType.NATURAL_DEBRIS, 2.5);
         weights.put(ReportType.CRIME_INCIDENT, 0.5);
         weights.put(ReportType.LOST_ITEM, 0.0);
@@ -46,22 +46,13 @@ public class SpeedScorer extends RouteScorer {
     }
 
     /**
-     * Calcula la penalizacion para un reporte especifico, tomando en cuenta los pesos de velocidad.
-     * 
-     * @param report el reporte a evaluar.
-     * @return la penalizacion en segundos que el reporte aporta al score de la ruta.
+     * Calcula el peso que le otorga el calificador al tipo especificado de reporte.
+     *
+     * @param reportType el tipo de reporte a evaluar.
+     * @return el peso que le otorga el calificador al tipo de reporte.
      */
     @Override
-    public double calculatePenalty(Report report) {
-        if (report == null || !report.isActive()) {
-            return 0.0;
-        }
-
-        ReportType type = report.getType();
-
-        double basePenalty = type.getDefaultPenalty();
-        double speedWeight = weights.getOrDefault(type, 1.0);
-         
-        return basePenalty + (basePenalty * speedWeight);
+    protected double getTypeWeight(ReportType reportType) {
+        return this.weights.get(reportType);
     }
 }
