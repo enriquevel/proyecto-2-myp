@@ -10,7 +10,7 @@ import myp.proyecto2.model.domain.Report;
 import myp.proyecto2.model.domain.ReportType;
 
 /**
- * Clase utilizada para dar una representacion interna a todos los reportes.
+ * Clase utilizada para dar una representacion interna al conjunto de todos los reportes.
  */
 public class ReportCatalog implements Catalog<Report, ReportType> {
 
@@ -66,7 +66,7 @@ public class ReportCatalog implements Catalog<Report, ReportType> {
      * @throws RuntimeException si ocurrio un error al guardar el reporte.
      */
     @Override
-    public Report save(Report report) throws IOException {
+    public void save(Report report) {
         if (report == null)
             throw new NullPointerException("Cannot save a null report.");
 
@@ -78,14 +78,12 @@ public class ReportCatalog implements Catalog<Report, ReportType> {
             delete(report);
             throw new RuntimeException("Failed to save report.", ioe);
         }
-
-        return report;
     }
 
     /**
      * Agrega un reporte al catalogo.
      *
-     * @param report reporte que se dedesa agregar.
+     * @param report reporte que se desea agregar.
      * @throws NullPointerException si el reporte que se quiere agregar es <code>null</code>.
      */
     private void add(Report report) {
@@ -112,7 +110,7 @@ public class ReportCatalog implements Catalog<Report, ReportType> {
      * @throws NullPointerException si el reporte que se quiere eliminar es <code>null</code>.
     */
     @Override
-    public boolean delete(Report report) throws NullPointerException {
+    public boolean delete(Report report) {
         if (report == null)
             throw new NullPointerException("Cannot delete a null report.");
 
@@ -149,7 +147,7 @@ public class ReportCatalog implements Catalog<Report, ReportType> {
      * @throws NullPointerException si el identificador es <code>null</code>.
      */
     @Override
-    public Report findById(String id) throws NullPointerException {
+    public Report findById(String id) {
         if(id == null) 
             throw new NullPointerException("The ID cannot be null.");
         return this.reportsByID.get(id);
@@ -164,7 +162,7 @@ public class ReportCatalog implements Catalog<Report, ReportType> {
      * @throws NullPointerException si el tipo dado es <code>null</code>.
      */
     @Override
-    public List<Report> findByType(ReportType type) throws NullPointerException {
+    public List<Report> findByType(ReportType type) {
         return this.reportsByType.get(type);
     }
 

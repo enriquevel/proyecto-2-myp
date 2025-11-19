@@ -1,6 +1,5 @@
 package myp.proyecto2.model.catalog;
 
-import java.io.IOException;
 import java.util.List;
 
 /** 
@@ -15,11 +14,9 @@ public interface Catalog <O,T> {
      * Agrega un objeto al catalogo o lo actualiza, y lo guarda en una base de datos.
      *
      * @param object objeto que se desea guardar o actualizar.
-     * @return el objeto que estaba almacenado antes de actualizarlo por el nuevo.
      * @throws NullPointerException si el objeto dado es <code>null</code>.
-     * @throws IOException si ocurrio un error al agregarlo a la base de datos.
      */
-    O save(O object) throws IOException;
+    void save(O object);
 
     /**
      * Elimina un objeto del catalogo y de la base de datos.
@@ -28,9 +25,8 @@ public interface Catalog <O,T> {
      * @return <code>true</code> si se elimino el objeto deseado, <code>false</code> en
      *          otro caso.
      * @throws NullPointerException si el objeto que se quiere eliminar es <code>null</code>.
-     * @throws IOException si ocurrio un error al eliminarlo de la base de datos.
      */
-    boolean delete(O object) throws IOException;
+    boolean delete(O object);
 
     /**
      * Devuelve una lista de todos los objetos del catalogo.

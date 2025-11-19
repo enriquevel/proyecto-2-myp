@@ -15,8 +15,8 @@ import myp.proyecto2.model.domain.POIType;
  */
 public class POICatalog implements Catalog<PointOfInterest, POIType>{
 
-    /** Ruta del archivo donde se guardan los POI */
-    private final String filePathPOI;
+    /** Lector y escritor de archivos para reportes. */
+    private final CSVPOIReaderWriter readerWriter;
 
     /** Mapa de puntos de interes por ID. */
     private Map<String, PointOfInterest> poisByID;
@@ -28,57 +28,109 @@ public class POICatalog implements Catalog<PointOfInterest, POIType>{
      * Constructor principal de la clase {@link POICatalog}. Inicializa los 
      * hashMaps y define la ruta del archivo que almacena los puntos de interes (POI).
      */
-    public POICatalog(String filePathPOI) {
-        this.filePathPOI = filePathPOI;
+    public POICatalog(String filePath) {
+        if (filePath == null)
+            throw new NullPointerException("The file path cannot be null.");
+
+        this.readerWriter = new CSVPOIReaderWriter(filePath);
         this.poisByID = new HashMap<>();
         this.poisByType = new EnumMap<>(POIType.class);
+
+        initialize();
+    }
+
+    private void initialize() {
+        try {
+            List<PointOfInterest> loaded = this.readerWriter.readAll();
+
+            for (POIType type : POIType.values())
+                this.poisByType.put(type, new ArrayList<>());
+
+            for (PointOfInterest poi : loaded) {
+                this.poisByID.put(poi.getId(), poi);
+                this.poisByType.get(poi.getType()).add(poi);
+            }
+            System.out.println("Loaded " + this.poisByID.size() + " POIs from CSV");
+        } catch (IOException ioe) {
+            System.err.println("Failed to load POIs: " + ioe.getMessage());
+            ioe.printStackTrace();
+        }
+    }
+
+    /**
+     * Agrega un punto de interes al catalogo y tambien lo guarda en la base de datos.
+     *
+     * @param poi el punto de interes que se quiere guardar.
+     * @throws NullPointerException si el punto de interes que se quiere guardar es <code>null</code>.
+     * @throws RuntimeException si ocurrio un error al guardar el punto de interes.
+     */
+    @Override
+    public void save(PointOfInterest poi) {
+        if (poi == null)
+            throw new NullPointerException("Cannot save a null point of interest.");
+
+        add(poi);
+
+        try {
+            this.readerWriter.add(poi);
+        } catch (IOException ioe) {
+            delete(poi);
+            throw new RuntimeException("Failed to save point of interest.", ioe);
+        }
     }
 
     /**
      * Agrega un punto de interes (POI), instancia de {@link PointOfInterest}, al catalogo.
+     *
      * @param poi punto de interes que se desea agregar.
      * @throws NullPointerException si el punto de interes que se quiere agregar es <code>null</code>.
      */
-    @Override
-    public void add(PointOfInterest poi) throws NullPointerException {
+    public void add(PointOfInterest poi) {
         if (poi == null)
-            throw new NullPointerException("The point of interest you want to add cannot be null.");
+            throw new NullPointerException("Cannot add a null point of interest.");
         //Agrega al punto de interes a una hashMap donde su id funge como llave.
         PointOfInterest old = this.poisByID.put(poi.getId(), poi);
 
         /*Como put regresa <code>null</code> si el objeto agregado no estaba previamente en el hashmap,
          * verificamos el caso contrario.
          */
-        if (old !=null)
+        if (old != null)
             this.poisByType.get(old.getType()).remove(old);
         //Finalmente agregamos el nuevo punto de interes a la lista del segundo hash map.
-        this.poisByType.get(poi.getType()).add(old);
-    }   
+        this.poisByType.get(poi.getType()).add(poi);
+    }
 
     /**
-     * Permite eliminar a un punto de interes del catalogo y nos dice si el punto de interes
-     * se encontraba en el catalogo.
-     * @param  poi punto de interes que se desea eliminar.
-     * @return <code>true</code> si el punto de interes estaba en el catalogo y fue eliminado.
-     * <code>false</code> si el punto de interes no estaba en el catalogo y por tanto no pudo ser eliminado.
-     * @throws NullPointerException si el identificador es <code>null</code>.
+     * Elimina un punto de interes del catalogo y de la base de datos.
+     *
+     * @param poi el punto de interes que se quiere eliminar.
+     * @return <code>true</code> si el punto de interes estaba en el catalogo y fue eliminado, <code>false</code>
+     *          en otro caso.
+     * @throws NullPointerException si el punto de interes que se quiere eliminar es <code>null</code>.
      */
     @Override
-    public Boolean delete(PointOfInterest poi) throws NullPointerException {
-        if (poi == null) 
-            throw new NullPointerException("The point of interest you want to delete cannot be null.");
+    public boolean delete(PointOfInterest poi) {
+        if (poi == null)
+            throw new NullPointerException("Cannot delete a null point of interest.");
 
         PointOfInterest removed = this.poisByID.remove(poi.getId());
-        //Verificamos si el punto de interes realmente estaba en el catalogo.
-        if (removed != null) {
-            this.poisByType.get(removed.getType()).remove(removed); //Lo removemos de la lista del segundo hashmap.
-            return true; 
+        //Verificamos si el reporte realmente estaba en el catalogo.
+        if (removed != null)
+            this.poisByType.get(removed.getType()).remove(removed);//Lo removemos de la lista del segundo hashmap.
+
+        try {
+            this.readerWriter.delete(poi);
+        } catch (IOException ioe) {
+            this.poisByID.put(poi.getId(), poi);
+            this.poisByType.get(poi.getType()).add(poi);
+            throw new RuntimeException("Failed to delete point of interest", ioe);
         }
-        return false;
+        return removed != null;
     }
 
     /**
      * Regresa una lista de todos los puntos de interes.
+     *
      * @return una lista de todos los puntos de interes.
      */
     @Override
@@ -88,6 +140,7 @@ public class POICatalog implements Catalog<PointOfInterest, POIType>{
 
     /**
      * Regresa un punto de interes del catalogo, en base a un identificador.
+     *
      * @param id del punto de interes que se desea encontrar.
      * @return el punto de interes con el identificador dado.<code>null</code> si no existe un 
      * punto de interes con dicho identificador.
@@ -103,6 +156,7 @@ public class POICatalog implements Catalog<PointOfInterest, POIType>{
 
     /**
      * Regresa una lista de todos los puntos de interes de un mismo tipo.
+     *
      * @param type de todos los puntos de interes.
      * @return una lista de todos los puntos de interes de un mismo tipo.
      * <code>null</code> si no existen puntos de interes de ese tipo.
@@ -111,40 +165,6 @@ public class POICatalog implements Catalog<PointOfInterest, POIType>{
     @Override
     public List<PointOfInterest> findByType(POIType type) throws NullPointerException {
         return this.poisByType.get(type);
-    }
-
-    /**
-     * Agrega un punto de interes al catalogo y a la base de datos.
-     * @param poi punto de interes que se desea guardar.
-     * @throws NullPointerException si el punto de interes dado es <code>null</code>.
-     * @throws IOException cuando existen problemas al intentar encontrar el archivo.
-     */
-    @Override
-    public void save(PointOfInterest poi) throws NullPointerException, IOException {
-        if (poi == null)
-            throw new NullPointerException("Cannot save a null point of interest.");
-
-        add(poi);
-        POICatalogReaderWriter  readerWriter = new POICatalogReaderWriter(this.filePathPOI);
-        readerWriter.add(poi);
-    }
-
-    /**
-     * Elimina un punto de interes del catalogo y de la base de datos.
-     * @param poi punto de interes que se desea eliminar.
-     * @throws NullPointerException si el punto de interes dado es <code>null</code>.
-     * @throws IOException si no se  puede leer una linea del archivo o bien 
-     * existen problemas al intentar encontrar el archivo durante su reescritura.
-     */
-    @Override
-    public void dontSave(PointOfInterest poi) throws NullPointerException, IOException {
-        if (poi == null)
-            throw new NullPointerException("Cannot delete a null point of interest.");
-
-        if (delete(poi)) {
-            POICatalogReaderWriter  readerWriter = new POICatalogReaderWriter(this.filePathPOI);
-            readerWriter.delete(poi);
-        }
     }
 
     /**
