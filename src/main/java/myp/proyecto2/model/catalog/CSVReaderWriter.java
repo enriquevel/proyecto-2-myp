@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @param <T> el tipo de entidades almacenadas en el archivo.
  */
-public interface CSVReaderWriter<T> {
+interface CSVReaderWriter<T> {
 
     /**
      * Devuelve una lista con todos las entidades en el archivo.

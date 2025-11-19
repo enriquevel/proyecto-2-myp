@@ -12,7 +12,7 @@ import myp.proyecto2.model.domain.Location;
 import myp.proyecto2.model.domain.Report;
 import myp.proyecto2.model.domain.ReportType;
 
-public class CSVReportReaderWriter implements CSVReaderWriter<Report> {
+class CSVReportReaderWriter implements CSVReaderWriter<Report> {
 
     /** La ruta del archivo. */
     private final String filePath;
@@ -26,7 +26,7 @@ public class CSVReportReaderWriter implements CSVReaderWriter<Report> {
      * @param filePath ruta del archivo.
      * @throws NullPointerException si la ruta del archivo es <code>null</code>
      */
-    public CSVReportReaderWriter(String filePath) {
+    CSVReportReaderWriter(String filePath) {
         if (filePath == null)
             throw new NullPointerException("File path cannot be null.");
 

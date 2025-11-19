@@ -12,7 +12,7 @@ import myp.proyecto2.model.domain.Location;
 import myp.proyecto2.model.domain.PointOfInterest;
 import myp.proyecto2.model.domain.POIType;
 
-public class CSVPOIReaderWriter implements CSVReaderWriter<PointOfInterest> {
+class CSVPOIReaderWriter implements CSVReaderWriter<PointOfInterest> {
 
     /** La ruta del archivo. */
     private final String filePath;
@@ -25,7 +25,7 @@ public class CSVPOIReaderWriter implements CSVReaderWriter<PointOfInterest> {
      * @param filePath ruta del archivo.
      * @throws NullPointerException si la ruta proporcionada es <code>null</code>.
      */
-    public CSVPOIReaderWriter(String filePath) {
+    CSVPOIReaderWriter(String filePath) {
         if (filePath == null)
             throw new NullPointerException("File path cannot be null.");
 
