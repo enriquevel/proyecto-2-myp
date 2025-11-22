@@ -161,6 +161,15 @@ public class Report {
     }
 
     /**
+     * Devuelve el valor neto de votos de este reporte.
+     *
+     * @return el valor neto de votos de este reporte.
+     */
+    public int getNetVotes() {
+        return this.upvotes + this.downvotes;
+    }
+
+    /**
      * Regresa una representacion en cadena del reporte, lista para ser
      * escrita en un archivo.
      *
