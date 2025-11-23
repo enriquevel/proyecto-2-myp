@@ -56,9 +56,13 @@ public enum ReportType {
      *
      * @param type cadena que se quiere verificar.
      * @return el elemento de la enumeracion asociado a una cadena.
+     * @throws NullPointerException si el tipo a buscar es null.
      * @throws IllegalArgumentException si la cadena no esta asociada a ningun elemento de la enumeracion.
      */
     public static ReportType getType(String type) throws IllegalArgumentException {
+        if (type == null)
+            throw new NullPointerException("Type cannot be null");
+
         return switch (type.toLowerCase()) {
             case "crime incident" -> CRIME_INCIDENT;
             case "accident" -> ACCIDENT;
