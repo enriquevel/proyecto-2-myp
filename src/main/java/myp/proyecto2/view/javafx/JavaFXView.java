@@ -64,9 +64,7 @@ public class JavaFXView implements View {
     public JavaFXView(Stage stage, UniversityBounds campusBounds) {
         this.stage = stage;
         this.campusBounds = campusBounds;
-
-        // Create components
-        this.mapCanvas = new MapCanvas(800, 600, campusBounds);
+        this.mapCanvas = new MapCanvas(823, 900, campusBounds);
         this.controlPanel = new ControlPanel();
         this.routeListPanel = new RouteListPanel();
         this.reportListPanel = new ReportListPanel();

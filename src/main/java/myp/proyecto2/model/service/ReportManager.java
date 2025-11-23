@@ -8,6 +8,7 @@ import myp.proyecto2.model.domain.ReportType;
 
 public class ReportManager {
 
+    /*
     private ReportCatalog reportCatalog;
 
     public ReportManager(ReportCatalog reportCatalog) {
@@ -37,4 +38,6 @@ public class ReportManager {
     public boolean isNearRoute(Location reportLocation, List<Location> pathPoints, double bufferMeters) {
         return false;
     }
+
+     */
 }

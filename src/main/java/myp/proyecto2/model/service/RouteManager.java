@@ -5,6 +5,7 @@ import java.util.Set;
 
 public class RouteManager {
 
+    /*
     private GoogleMapsRouteProvider routeProvider;
     private ReportManager reportManager;
     private ScorerFactory scorerFactory;
@@ -23,4 +24,6 @@ public class RouteManager {
 
     }
 
+
+     */
 }
