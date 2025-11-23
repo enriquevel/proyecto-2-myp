@@ -1,13 +1,10 @@
 package myp.proyecto2.model.catalog;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import myp.proyecto2.model.domain.PointOfInterest;
 import myp.proyecto2.model.domain.POIType;
+import myp.proyecto2.model.domain.Report;
 
 /**
  * Esta clase se utiliza para dar una representacion interna al conjunto de todos
@@ -150,7 +147,7 @@ public class POICatalog implements Catalog<PointOfInterest, POIType>{
      * @throws NullPointerException si el identificador es <code>null</code>.
      */
     @Override
-    public PointOfInterest findById(String id) throws NullPointerException {
+    public PointOfInterest findById(String id) {
         if(id == null) 
             throw new NullPointerException("The ID cannot be null.");
             
@@ -166,8 +163,36 @@ public class POICatalog implements Catalog<PointOfInterest, POIType>{
      * @throws NullPointerException si el tipo dado es <code>null</code>.
      */
     @Override
-    public List<PointOfInterest> findByType(POIType type) throws NullPointerException {
+    public List<PointOfInterest> findByType(POIType type) {
         return this.poisByType.get(type);
+    }
+
+    /**
+     * Actualiza un punto de interes existente en el catalogo y la base de datos.
+     *
+     * @param poi el punto de interes a actualizar.
+     * @throws NullPointerException si el punto de interes dado es <code>null</code>.
+     * @throws NoSuchElementException si el punto de interes no se encuentra en el catalogo.
+     */
+    @Override
+    public void update(PointOfInterest poi) {
+        if (poi == null)
+            throw new NullPointerException("Cannot update a null point of interest.");
+
+        List<PointOfInterest> all = findAll();
+
+        PointOfInterest updated = findById(poi.getId());
+        if (updated == null)
+            throw new NullPointerException("Point of interest with id " + poi.getId() + " does not exist.");
+
+        all.remove(updated);
+        all.add(poi);
+
+        try {
+            this.readerWriter.writeAll(all);
+        } catch (IOException ioe) {
+            throw new RuntimeException("Failed to update POI: " + ioe.getMessage(), ioe);
+        }
     }
 
     /**
@@ -177,7 +202,7 @@ public class POICatalog implements Catalog<PointOfInterest, POIType>{
      * @return el punto de interes con dicho nombre.<code>null</code> si no lo encuentra.
      * @throws NullPointerException si el nombre dado es <code>null</code>.
      */
-    public PointOfInterest findByName(String name) throws NullPointerException {
+    public PointOfInterest findByName(String name) {
         if (name == null) 
             throw new NullPointerException("The POI's name cannot be null.");
 
