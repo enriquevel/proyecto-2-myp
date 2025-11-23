@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.*;
 import myp.proyecto2.model.domain.PointOfInterest;
 import myp.proyecto2.model.domain.POIType;
-import myp.proyecto2.model.domain.Report;
 
 /**
  * Esta clase se utiliza para dar una representacion interna al conjunto de todos

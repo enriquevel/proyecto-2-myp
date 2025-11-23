@@ -1,18 +1,17 @@
 package myp.proyecto2.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import myp.proyecto2.model.catalog.ReportCatalog;
-//import myp.proyecto2.model.domain.Location;
+import myp.proyecto2.model.domain.Location;
 import myp.proyecto2.model.domain.Report;
-import myp.proyecto2.model.service.ReportManager;
 
 public class ReportController {
-    private final ReportCatalog reportCatalog;
-    private final ReportManager reportManager;
 
-    public ReportController(ReportCatalog reportCatalog, ReportManager reportManager) {
+    private final ReportCatalog reportCatalog;
+
+    public ReportController(ReportCatalog reportCatalog) {
         this.reportCatalog = reportCatalog;
-        this.reportManager = reportManager;
     }
 
     public void submitReport(Report report) {
@@ -41,13 +40,43 @@ public class ReportController {
         return this.reportCatalog.findActive();
     }
 
-    /*
     public List<Report> findReportsInArea(Location center, double radiusMeters) {
-        List<Report> allReports = getActiveReports();
-        return this.reportManager.isNearRoute(center, , radiusMeters);
+        List<Report> nearby = new ArrayList<>();
+
+        for (Report report : getActiveReports()) {
+            double distance = center.distanceTo(report.getLocation());
+            if (distance <= radiusMeters)
+                nearby.add(report);
+        }
+
+        return nearby;
     }
 
+    public List<Report> findReportsNearRoute(List<Location> pathPoints, double thresholdMeters) {
+        List<Report> nearby = new ArrayList<>();
+
+        for (Report report : getActiveReports()) {
+            if (isReportNearRoute(report, pathPoints, thresholdMeters))
+                nearby.add(report);
+        }
+
+        return nearby;
+    }
+
+    /**
+     * Check if report is near any point on route.
      */
+    private boolean isReportNearRoute(Report report, List<Location> pathPoints, double thresholdMeters) {
+        Location reportLoc = report.getLocation();
+
+        for (Location point : pathPoints) {
+            double distance = reportLoc.distanceTo(point);
+            if (distance <= thresholdMeters)
+                return true;
+        }
+
+        return false;
+    }
 
 
 }
