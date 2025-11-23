@@ -21,7 +21,7 @@ public abstract class AbstractRouteScorer {
      * 
      * @param route la ruta a calificar.
      * @param affectingReports los reportes que se encuentran a lo largo de la ruta.
-     * @return el puntaje final en segundos de la ruta.
+     * @return el puntaje final en minutos de la ruta.
      * @throws NullPointerException si la ruta o la lista de reportes son null.
      */
     public final double score(Route route, List<Report> affectingReports) {
