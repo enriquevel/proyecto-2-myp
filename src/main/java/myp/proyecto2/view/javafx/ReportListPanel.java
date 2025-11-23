@@ -108,8 +108,8 @@ public class ReportListPanel extends VBox {
                 if (onUpvote != null) onUpvote.accept(report);
             });
 
-            //Label votes = new Label(String.valueOf(report.getNetVotes()));
-            //votes.setStyle("-fx-font-weight: bold;");
+            Label votes = new Label(String.valueOf(report.getNetVotes()));
+            votes.setStyle("-fx-font-weight: bold;");
 
             Button downvote = new Button("▼");
             downvote.setStyle("-fx-font-size: 10; -fx-padding: 2 6;");
@@ -117,8 +117,8 @@ public class ReportListPanel extends VBox {
                 if (onDownvote != null) onDownvote.accept(report);
             });
 
-            //HBox.setHgrow(new javafx.scene.layout.Region(), Priority.ALWAYS);
-            //voting.getChildren().addAll(upvote, votes, downvote, new Region());
+            HBox.setHgrow(new javafx.scene.layout.Region(), Priority.ALWAYS);
+            voting.getChildren().addAll(upvote, votes, downvote, new Region());
 
             box.getChildren().addAll(header, description, voting);
             setGraphic(box);
