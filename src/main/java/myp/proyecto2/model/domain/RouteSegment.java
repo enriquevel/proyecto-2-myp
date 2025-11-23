@@ -1,10 +1,10 @@
 package myp.proyecto2.model.domain;
 
 /**
- * Esta clase representa a los segmentos de ruta. Cada instancia de {@link Route}
- * tiene una lista de segmentos de ruta. Los segmentos de ruta nos ayudan a guardar las
- * distintas indicaciones de cada segmento de la ruta y a calcular la duracion 
- * del viaje en dicho segmento. Un segmento de ruta es una linea que une dos localizaciones (puntos).
+ * Esta clase representa a los segmentos de ruta. Cada ruta tiene una lista de segmentos de ruta.
+ * Los segmentos de ruta nos ayudan a guardar las distintas indicaciones de cada segmento de la
+ * ruta y a calcular la duracion del viaje en dicho segmento.
+ * Un segmento de ruta es una linea que une dos localizaciones (puntos).
  */
 public class RouteSegment {
 
@@ -23,25 +23,26 @@ public class RouteSegment {
     /** Lugar donde termina el segmento. Instancia de {@link Location}. */
     private Location endPoint;
 
-    /** Medio de trasnporte asociado al segmento. Un elemento de {@link TransportMode}. */
+    /** Medio de transporte asociado al segmento. Un elemento de {@link TransportMode}. */
     private TransportMode mode;
 
     /**
      * Constructor principal de la clase {@link RouteSegment}. Construye un segmento
      * de ruta con los parametros dados.
+     *
      * @param instruction instruccion que debe seguirse en el segmento.
-     * @param distanceInMeters distancia en metros dese el punto inicial hast el punto final del segmento.
+     * @param distanceInMeters distancia en metros desde el punto inicial hasta el punto final del segmento.
      * @param durationInSeconds duracion esperada (en segundos) de ir desde el punto inicial al punto final del segmento.
      * @param startPoint lugar de inicio del segmento. Instancia de {@link Location}.
      * @param endPoint lugar donde termina el segmento. Instancia de {@link Location}. 
-     * @param mode medio de trasnporte que se asociara al segmento.
-     * @throws NullPointerException si la instruccion, el punto de incio, el punto final 
-     * o el medio de trasnporte dados son <code>null</code>.
+     * @param mode medio de transporte que se asociara al segmento.
+     * @throws NullPointerException si la instruccion, el punto de inicio, el punto final
+     *          o el medio de transporte dados son <code>null</code>.
      * @throws IllegalArgumentException si la distancia o el tiempo que toma recorrer el segmento 
-     * dados son menores que 0.
+     *          dados son menores que 0.
      */
     public RouteSegment(String instruction, double distanceInMeters, double durationInSeconds,
-                        Location startPoint, Location endPoint, TransportMode mode) throws NullPointerException, IllegalArgumentException {
+                        Location startPoint, Location endPoint, TransportMode mode) {
         if (instruction == null)
             throw new NullPointerException("Instruction cannot be null");
 
@@ -70,6 +71,7 @@ public class RouteSegment {
 
     /**
      * Regresa la instruccion del segmento.
+     *
      * @return la instruccion del segmento.
      */
     public String getInstruction() {
@@ -78,6 +80,7 @@ public class RouteSegment {
 
     /**
      * Regresa la distancia (en metros) del punto inicial al punto final del segmento.
+     *
      * @return la distancia (en metros) del punto inicial al punto final del segmento.
      */
     public double getDistanceInMeters() {
@@ -86,6 +89,7 @@ public class RouteSegment {
 
     /**
      * Regresa el tiempo (en segundos) que toma recorrer el segmento.
+     *
      * @return el tiempo (en segundos) que toma recorrer el segmento.
      */
     public double getDurationInSeconds() {
@@ -94,6 +98,7 @@ public class RouteSegment {
 
     /**
      * Regresa el punto de inicio del segmento.
+     *
      * @return el punto de inicio del segmento.
      */
     public Location getStartPoint() {
@@ -102,6 +107,7 @@ public class RouteSegment {
 
     /**
      * Regresa el punto donde termina el segmento.
+     *
      * @return el punto donde termina el segmento.
      */
     public Location getEndPoint() {
@@ -109,16 +115,17 @@ public class RouteSegment {
     }
 
     /**
-     * Regresa el medio de trasnporte asociado al segmento.
-     * @return el medio de trasnporte asociado al segmento.
+     * Regresa el medio de transporte asociado al segmento.
+     *
+     * @return el medio de transporte asociado al segmento.
      */
     public TransportMode getMode() {
         return this.mode;
     }
 
     /**
-     * Regresa una representacion en cadena del segmento.Por defecto esta representacion 
-     * siempre es <code>null</code>.
+     * Regresa una representacion en cadena del segmento.
+     *
      * @return una representacion en cadena del segmento.
      */
     @Override

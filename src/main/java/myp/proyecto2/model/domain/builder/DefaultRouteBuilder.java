@@ -36,18 +36,19 @@ public class DefaultRouteBuilder implements RouteBuilder {
     private Set<TransportMode> transportModes;
 
     /**
-     * Constructor por defecto de {@link DefaultBuilder}
+     * Constructor por defecto de {@link DefaultRouteBuilder}
      */
     public DefaultRouteBuilder() {}
     
     /**
      * Establece el identificador el DefaultRouteBuilder que invoca al metodo.
+     *
      * @param id identificador.
      * @return el objeto DefaultRouteBuilder ahora con el id dado.
      * @throws NullPointerException si el id dado es null.
      */
     @Override
-    public RouteBuilder setId(String id)throws NullPointerException{
+    public RouteBuilder setId(String id) {
         if (id == null) 
             throw new NullPointerException("Route's ID cannot be null.");
 
@@ -57,6 +58,7 @@ public class DefaultRouteBuilder implements RouteBuilder {
 
     /**
      * Establece el punto de origen del DefaultRouteBuilder que invoca al metodo.
+     *
      * @param origin el punto de origen.
      * @return el objeto DefaultRouteBuilder ahora con el punto de origen dado.
      * @throws NullPointerException si el punto de origen es <code>null</code>.
@@ -72,8 +74,9 @@ public class DefaultRouteBuilder implements RouteBuilder {
 
     /**
      * Establece el punto de destino del DefaultRouteBuilder que invoca al metodo.
+     *
      * @param destination el punto de destino.
-     * @return el objeto DefaultRouteBuilder ahora con el punto de deestino dado.
+     * @return el objeto DefaultRouteBuilder ahora con el punto de destino dado.
      * @throws NullPointerException si el punto de destino es <code>null</code>.
      */
     @Override
@@ -87,6 +90,7 @@ public class DefaultRouteBuilder implements RouteBuilder {
 
     /**
      * Establece la distancia del DefaultRouteBuilder que invoca al metodo.
+     *
      * @param distance la distancia.
      * @return el objeto DefaultRouteBuilder ahora con la distancia dada.
      * @throws IllegalArgumentException si la distancia dada es menor igual a cero.
@@ -102,6 +106,7 @@ public class DefaultRouteBuilder implements RouteBuilder {
 
     /**
      * Establece la duracion del DefaultRouteBuilder que invoca al metodo.
+     *
      * @param seconds duracion en segundos.
      * @return el objeto DefaultRouteBuilder ahora con la duracion dada.
      * @throws IllegalArgumentException si la duracion dada es menor igual a cero.
@@ -117,6 +122,7 @@ public class DefaultRouteBuilder implements RouteBuilder {
 
     /**
      * Establece la lista de segmentos de ruta del DefaultRouteBuilder que invoca al metodo.
+     *
      * @param segments una lista de segmentos de ruta.
      * @return el objeto DefaultRouteBuilder ahora con la lista de segmentos de ruta dada.
      * @throws NullPointerException si la lista dada es <code>null</code>.
@@ -132,8 +138,9 @@ public class DefaultRouteBuilder implements RouteBuilder {
     
     /**
      * Establece la lista de localizaciones del DefaultRouteBuilder que invoca al metodo.
-     * @param segments una lista de segmentos de localizaciones.
-     * @return el objeto DefaultRouteBuilder ahora con la lista de segmentos de localizaciones dada.
+     *
+     * @param pathPoints una lista de localizaciones.
+     * @return el objeto DefaultRouteBuilder ahora con la lista de localizaciones dada.
      * @throws NullPointerException si la lista dada es <code>null</code>.
      */
     @Override
@@ -146,9 +153,10 @@ public class DefaultRouteBuilder implements RouteBuilder {
     }
 
     /**
-     * Establece el conjunto de medios de trasnporte del DefaultRouteBuilder que invoca al metodo.
-     * @param segments una conjunto de medios de trasnporte.
-     * @return el objeto DefaultRouteBuilder ahora con el conjunto de medios de trasnporte.
+     * Establece el conjunto de medios de transporte del DefaultRouteBuilder que invoca al metodo.
+     *
+     * @param modes una conjunto de medios de transporte.
+     * @return el objeto DefaultRouteBuilder ahora con el conjunto de medios de transporte.
      * @throws NullPointerException si el conjunto dado es <code>null</code>.
      */
     @Override
@@ -162,6 +170,7 @@ public class DefaultRouteBuilder implements RouteBuilder {
 
     /**
      * Construye una instancia de {@link Route} a partir de un objeto {@link DefaultRouteBuilder}.
+     *
      * @return una instancia de {@link Route}.
      */
     @Override
@@ -183,8 +192,8 @@ public class DefaultRouteBuilder implements RouteBuilder {
      *      La distancia total es 0.
      *      La duracion total es 0.
      *      La lista de segmentos de ruta es <code>null</code>.
-     *      La lista de localizacions es <code>null</code>.
-     *      El conjunto de medios de trasnporte es <code>null</code>.
+     *      La lista de localizaciones es <code>null</code>.
+     *      El conjunto de medios de transporte es <code>null</code>.
      */
     private void validateCompleteBuild() throws IllegalStateException {
         if (this.id == null)  
