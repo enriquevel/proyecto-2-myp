@@ -113,8 +113,8 @@ public class ScoredRoute implements Comparable<ScoredRoute> {
      *
      * @param other ruta puntuada con la que se va a comparar.
      * @return 0 si ambas rutas tienen la misma puntuacion. Un valor positivo
-     *          si la puntuacion de la ruta punutada que llama al metodo es mayor. Un valor
-     *          negativo si la puntuacion de la ruta punutada que invoca al metodo es menor.
+     *          si la puntuacion de la ruta puntuada que llama al metodo es mayor. Un valor
+     *          negativo si la puntuacion de la ruta puntuada que invoca al metodo es menor.
      */
     @Override
     public int compareTo(ScoredRoute other) {

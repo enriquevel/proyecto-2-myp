@@ -31,7 +31,7 @@ public class RouteSegment {
      * de ruta con los parametros dados.
      *
      * @param instruction instruccion que debe seguirse en el segmento.
-     * @param distanceInMeters distancia en metros dese el punto inicial hast el punto final del segmento.
+     * @param distanceInMeters distancia en metros desde el punto inicial hasta el punto final del segmento.
      * @param durationInSeconds duracion esperada (en segundos) de ir desde el punto inicial al punto final del segmento.
      * @param startPoint lugar de inicio del segmento. Instancia de {@link Location}.
      * @param endPoint lugar donde termina el segmento. Instancia de {@link Location}. 

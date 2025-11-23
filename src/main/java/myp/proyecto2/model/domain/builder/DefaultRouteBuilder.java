@@ -139,8 +139,8 @@ public class DefaultRouteBuilder implements RouteBuilder {
     /**
      * Establece la lista de localizaciones del DefaultRouteBuilder que invoca al metodo.
      *
-     * @param pathPoints una lista de segmentos de localizaciones.
-     * @return el objeto DefaultRouteBuilder ahora con la lista de segmentos de localizaciones dada.
+     * @param pathPoints una lista de localizaciones.
+     * @return el objeto DefaultRouteBuilder ahora con la lista de localizaciones dada.
      * @throws NullPointerException si la lista dada es <code>null</code>.
      */
     @Override
