@@ -17,6 +17,7 @@ public enum RoutePreference {
 
     /**
      * Regresa el "nombre" asociado a cada elemento de la enumeracion.
+     *
      * @return el "nombre" asociado a cada elemento de la enumeracion.
      */
     public String getDisplayName() {

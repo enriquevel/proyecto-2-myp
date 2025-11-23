@@ -6,19 +6,25 @@ package myp.proyecto2.model.domain;
 public class Report {
 
     /** Identificador unico del reporte. */
-    private String id;
+    private final String id;
 
     /** Tipo del reporte. */
-    private ReportType type;
+    private final ReportType type;
 
     /** Localizacion del reporte. */
-    private Location location;
+    private final Location location;
 
     /** Descripcion del reporte. */
-    private String description;
+    private final String description;
 
     /** Indica si el reporte esta activo. */
     private boolean active;
+
+    /** Numero de votos a favor. */
+    private int upvotes;
+
+    /** Numero de votos en contra. */
+    private int downvotes;
     
     /**
      * Constructor principal de la clase {@link Report}.
@@ -27,9 +33,12 @@ public class Report {
      * @param type tipo del reporte.
      * @param location localizacion del reporte.
      * @param description descripcion del reporte.
+     * @param upvotes el numero de votos a favor del reporte.
+     * @param downvotes el numero de votos en contra del reporte.
      * @throws NullPointerException si alguno de los parametros es null.
+     * @throws IllegalArgumentException si alguno de los votos es negativo.
      */
-    public Report(String id, ReportType type, Location location, String description) {
+    public Report(String id, ReportType type, Location location, String description, int upvotes, int downvotes) {
         if (id == null)
             throw new NullPointerException("Report's ID cannot be null.");
         
@@ -39,14 +48,32 @@ public class Report {
         if (location == null)
             throw new NullPointerException("Report's location cannot be null.");
         
-        if(description == null)
+        if (description == null)
             throw new NullPointerException("Report's description cannot be null.");
+
+        if (upvotes < 0 || downvotes < 0)
+            throw new IllegalArgumentException("Report's upvotes or downvotes cannot be negative.");
 
         this.id = id;
         this.type = type;
         this.location = location;
         this.description = description;
+        this.upvotes = upvotes;
+        this.downvotes = downvotes;
         this.active = true;
+    }
+
+    /**
+     * Construye un reporte con cero votos.
+     *
+     * @param id identificador unico del reporte.
+     * @param type tipo del reporte.
+     * @param location localizacion del reporte.
+     * @param description descripcion del reporte.
+     * @throws NullPointerException si alguno de los parametros es null.
+     */
+    public Report(String id, ReportType type, Location location, String description) {
+        this(id, type, location, description, 0, 0);
     }
 
     /**
@@ -86,6 +113,24 @@ public class Report {
     }
 
     /**
+     * Devuelve el numero de votos a favor del reporte.
+     *
+     * @return el numero de votos a favor del reporte.
+     */
+    public int getUpvotes() {
+        return this.upvotes;
+    }
+
+    /**
+     * Devuelve el numero de votos en contra del reporte.
+     *
+     * @return el numero de votos en contra del reporte.
+     */
+    public int getDownvotes() {
+        return this.downvotes;
+    }
+
+    /**
      * Nos dice si el reporte esta activo.
      *
      * @return <code>true</code> si el reporte esta activo, <code>false</code> en otro caso.
@@ -94,8 +139,34 @@ public class Report {
         return this.active;
     }
 
+    /**
+     * Marca un reporte como inactivo.
+     */
     public void resolve() {
         this.active = false;
+    }
+
+    /**
+     * Aumenta en uno el numero de votos a favor.
+     */
+    public void upvote() {
+        this.upvotes++;
+    }
+
+    /**
+     * Aumenta en uno el numero de votos en contra.
+     */
+    public void downvote() {
+        this.downvotes++;
+    }
+
+    /**
+     * Devuelve el valor neto de votos de este reporte.
+     *
+     * @return el valor neto de votos de este reporte.
+     */
+    public int getNetVotes() {
+        return this.upvotes + this.downvotes;
     }
 
     /**
@@ -104,12 +175,14 @@ public class Report {
      *
      * @return una representacion en cadena del reporte.
      */
-    @Override
-    public String toString() {
-        return this.type.toString()+ ","
-        + this.location.getLatitude() + ","
-        + this.location.getLongitude() + ","
-        + this.location.getAddress() + ","
-        + this.description;
+    public String getFileFormat() {
+        return this.id + ","
+                + this.type.toString() + ","
+                + this.location.getLatitude() + ","
+                + this.location.getLongitude() + ","
+                + this.location.getAddress() + ","
+                + this.description + ","
+                + this.upvotes + ","
+                + this.downvotes;
     }
 }

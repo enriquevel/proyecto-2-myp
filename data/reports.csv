@@ -1,1 +1,1 @@
-type,latitude,longitude,address,description
+id,type,latitude,longitude,address,description,upvotes,downvotes

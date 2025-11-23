@@ -101,11 +101,12 @@ public class PointOfInterest {
      * escrita en un archivo.
      */
     public String getFileFormat(){
-        return this.type.toString()+","
-        + this.name + ","
-        + this.location.getLatitude() + ","
-        + this.location.getLongitude() + ","
-        + this.location.getAddress() + ","
-        + this.description;
+        return this.id + ","
+                + this.type.toString() + ","
+                + this.name + ","
+                + this.location.getLatitude() + ","
+                + this.location.getLongitude() + ","
+                + this.location.getAddress() + ","
+                + this.description;
     }
 }
