@@ -78,7 +78,7 @@ public class ControlPanel extends VBox {
 
         this.modeGroup = new ToggleGroup();
 
-        this.walkingRadio = new RadioButton("Camninando");
+        this.walkingRadio = new RadioButton("Caminando");
         this.walkingRadio.setToggleGroup(modeGroup);
         this.walkingRadio.setSelected(true);
 

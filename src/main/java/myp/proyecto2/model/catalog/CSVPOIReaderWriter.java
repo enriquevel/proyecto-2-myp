@@ -150,7 +150,7 @@ class CSVPOIReaderWriter implements CSVReaderWriter<PointOfInterest> {
             writer.newLine();
 
             for (PointOfInterest p : all) {
-                writer.write(p.toString());
+                writer.write(p.getFileFormat());
                 writer.newLine();
             }
         }

@@ -55,10 +55,10 @@ public class ApplicationController {
      */
     private void wireViewCallbacks() {
         this.view.setOnFindRoutes(request -> handleFindRoutes(
-                request.origin,
-                request.destination,
-                request.mode,
-                request.preference
+                request.from(),
+                request.to(),
+                request.mode(),
+                request.routePreference()
         ));
 
         this.view.setOnReportSubmit(this::handleReportSubmit);
