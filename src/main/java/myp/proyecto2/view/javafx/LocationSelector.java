@@ -10,6 +10,10 @@ import javafx.scene.layout.Priority;
 import myp.proyecto2.model.domain.Location;
 import myp.proyecto2.model.domain.PointOfInterest;
 
+/**
+ * Clase para seleccionar localizaciones en el mapa, manejar sus atributos
+ * y facilitar la experiencia del usuario.
+ */
 public class LocationSelector extends HBox {
 
     private final ComboBox<LocationOption> comboBox;

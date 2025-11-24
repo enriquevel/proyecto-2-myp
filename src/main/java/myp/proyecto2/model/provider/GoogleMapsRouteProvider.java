@@ -7,6 +7,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import myp.proyecto2.model.domain.Location;
+import myp.proyecto2.model.domain.RouteRequest;
 import myp.proyecto2.model.domain.RouteSegment;
 import myp.proyecto2.model.domain.TransportMode;
 import myp.proyecto2.model.domain.builder.*;
@@ -17,7 +18,7 @@ import org.json.JSONObject;
 public class GoogleMapsRouteProvider implements RouteProvider {
 
     private final String apiKey;
-    private final Map<RouteQuery, List<Route>> cachedRoutes;
+    private final Map<RouteRequest, List<Route>> cachedRoutes;
     private static final String API_URL = "https://maps.googleapis.com/maps/api/directions/json";
     private static final int DEFAULT_TIMEOUT = 10000;
 
@@ -34,7 +35,7 @@ public class GoogleMapsRouteProvider implements RouteProvider {
      */
     @Override
     public List<Route> getRoutes(Location from, Location to, TransportMode mode) {
-        RouteQuery query = new RouteQuery(from, to, mode);
+        RouteRequest query = new RouteRequest(from, to, mode, null);
         List<Route> cached = this.cachedRoutes.get(query);
         if (cached != null)
             return cached;
@@ -105,7 +106,7 @@ public class GoogleMapsRouteProvider implements RouteProvider {
         }
     }
 
-    private List<Route> parseGoogleResponse(String jsonResponse, RouteQuery query) throws APIException {
+    private List<Route> parseGoogleResponse(String jsonResponse, RouteRequest query) throws APIException {
         try {
             JSONObject json = new JSONObject(jsonResponse);
 

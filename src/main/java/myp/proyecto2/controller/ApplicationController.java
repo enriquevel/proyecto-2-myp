@@ -55,10 +55,10 @@ public class ApplicationController {
      */
     private void wireViewCallbacks() {
         this.view.setOnFindRoutes(request -> handleFindRoutes(
-                request.origin,
-                request.destination,
-                request.mode,
-                request.preference
+                request.from(),
+                request.to(),
+                request.mode(),
+                request.routePreference()
         ));
 
         this.view.setOnReportSubmit(this::handleReportSubmit);
@@ -179,9 +179,7 @@ public class ApplicationController {
      * @param poi el punto de interes creado
      */
     private void handlePOIAdd(PointOfInterest poi) {
-        System.out.println("DEBUG: handlePOIAdd() called");
         try {
-            System.out.println("DEBUG: Calling poiController.addPOI()");
             poiController.addPOI(poi);
             view.displaySuccess("Location saved: " + poi.getName());
             refreshPOIs();

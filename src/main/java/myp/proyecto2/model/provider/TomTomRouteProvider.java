@@ -19,7 +19,7 @@ import org.json.JSONObject;
 public class TomTomRouteProvider implements RouteProvider {
 
     private final String apiKey;
-    private final Map<RouteQuery, List<Route>> cachedRoutes;
+    private final Map<RouteRequest, List<Route>> cachedRoutes;
     private static final String API_URL = "https://api.tomtom.com/routing/1/calculateRoute";
     private static final int DEFAULT_TIMEOUT = 10000;
 
@@ -36,7 +36,7 @@ public class TomTomRouteProvider implements RouteProvider {
      */
     @Override
     public List<Route> getRoutes(Location from, Location to, TransportMode mode) {
-        RouteQuery query = new RouteQuery(from, to, mode);
+        RouteRequest query = new RouteRequest(from, to, mode, null);
         List<Route> cached = this.cachedRoutes.get(query);
         if (cached != null)
             return cached;
@@ -143,7 +143,7 @@ public class TomTomRouteProvider implements RouteProvider {
         return response.toString();
     }
 
-    private List<Route> parseTomTomResponse(String jsonResponse, RouteQuery query) {
+    private List<Route> parseTomTomResponse(String jsonResponse, RouteRequest query) {
         try {
             //System.out.println("TomTom raw response:");
             //System.out.println(jsonResponse);
