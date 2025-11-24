@@ -8,6 +8,7 @@ import myp.proyecto2.model.domain.PointOfInterest;
 import myp.proyecto2.model.domain.Report;
 import myp.proyecto2.model.domain.ScoredRoute;
 import myp.proyecto2.model.domain.builder.Route;
+import myp.proyecto2.view.javafx.JavaFXView;
 
 public interface View {
 
@@ -36,4 +37,11 @@ public interface View {
 
     boolean confirm(String question);
 
+    void setOnFindRoutes(Consumer<JavaFXView.RouteRequest> callback);
+    void setOnReportSubmit(Consumer<Report> callback);
+    void setOnReportUpvote(Consumer<Report> callback);
+    void setOnReportDownvote(Consumer<Report> callback);
+    void setOnPOIAdd(Consumer<PointOfInterest> callback);
+    void setOnPOIDelete(Consumer<PointOfInterest> callback);
+    void setOnRefreshData(Runnable callback);
 }

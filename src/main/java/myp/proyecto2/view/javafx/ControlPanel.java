@@ -1,7 +1,5 @@
 package myp.proyecto2.view.javafx;
 
-import java.util.HashSet;
-import java.util.Set;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
@@ -16,10 +14,11 @@ public class ControlPanel extends VBox {
     private final LocationSelector originSelector;
     private final LocationSelector destinationSelector;
 
-    private final CheckBox walkingCheck;
-    private final CheckBox bicyclingCheck;
-    private final CheckBox drivingCheck;
-    private final CheckBox transitCheck;
+    private final RadioButton walkingRadio;
+    private final RadioButton bicyclingRadio;
+    private final RadioButton drivingRadio;
+    private final RadioButton transitRadio;
+    private final ToggleGroup modeGroup;
 
     private final ComboBox<RoutePreference> preferenceCombo;
 
@@ -59,14 +58,20 @@ public class ControlPanel extends VBox {
         Label modesLabel = new Label("Transport Modes:");
         modesLabel.setStyle("-fx-font-weight: bold;");
 
-        this.walkingCheck = new CheckBox("Walking");
-        this.walkingCheck.setSelected(true);
+        this.modeGroup = new ToggleGroup();
 
-        this.bicyclingCheck = new CheckBox("Bicycling");
-        this.bicyclingCheck.setSelected(true);
+        this.walkingRadio = new RadioButton("Walking");
+        this.walkingRadio.setToggleGroup(modeGroup);
+        this.walkingRadio.setSelected(true);
 
-        this.drivingCheck = new CheckBox("Driving");
-        this.transitCheck = new CheckBox("Transit");
+        this.bicyclingRadio = new RadioButton("Bicycling");
+        this.bicyclingRadio.setToggleGroup(modeGroup);
+
+        this.drivingRadio = new RadioButton("Driving");
+        this.drivingRadio.setToggleGroup(modeGroup);
+
+        this.transitRadio = new RadioButton("Transit");
+        this.transitRadio.setToggleGroup(modeGroup);
 
         // Preference
         Label prefLabel = new Label("Route Preference:");
@@ -107,7 +112,7 @@ public class ControlPanel extends VBox {
                 destLabel, this.destinationSelector,
                 new Separator(),
                 modesLabel,
-                this.walkingCheck, this.bicyclingCheck, this.drivingCheck, this.transitCheck,
+                this.walkingRadio, this.bicyclingRadio, this.drivingRadio, this.transitRadio,
                 new Separator(),
                 prefLabel, this.preferenceCombo,
                 new Separator(),
@@ -123,13 +128,18 @@ public class ControlPanel extends VBox {
         return this.destinationSelector;
     }
 
-    public Set<TransportMode> getSelectedModes() {
-        Set<TransportMode> modes = new HashSet<>();
-        if (this.walkingCheck.isSelected()) modes.add(TransportMode.WALKING);
-        if (this.bicyclingCheck.isSelected()) modes.add(TransportMode.BICYCLING);
-        if (this.drivingCheck.isSelected()) modes.add(TransportMode.DRIVING);
-        if (this.transitCheck.isSelected()) modes.add(TransportMode.BUS);
-        return modes;
+    public TransportMode getSelectedMode() {
+        Toggle selected = modeGroup.getSelectedToggle();
+        if (selected == null)
+            return null;
+
+        if (selected == walkingRadio)   return TransportMode.WALKING;
+        if (selected == bicyclingRadio) return TransportMode.BICYCLING;
+        if (selected == drivingRadio)   return TransportMode.DRIVING;
+        if (selected == transitRadio)   return TransportMode.BUS;
+
+        return null;
+
     }
 
     public RoutePreference getPreference() {
@@ -166,7 +176,7 @@ public class ControlPanel extends VBox {
             return false;
         }
 
-        if (getSelectedModes().isEmpty()) {
+        if (getSelectedMode() == null) {
             showAlert("Please select at least one transport mode");
             return false;
         }

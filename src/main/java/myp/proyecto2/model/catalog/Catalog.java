@@ -1,6 +1,7 @@
 package myp.proyecto2.model.catalog;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /** 
  * Interfaz que define el comportamiento de un catalogo.
@@ -52,5 +53,14 @@ public interface Catalog <O,T> {
      * @throws NullPointerException si el tipo dado es <code>null</code>.
      */
     List<O> findByType(T type);
+
+    /**
+     * Actualiza un objeto existente en el catalogo y la base de datos.
+     *
+     * @param object el objeto a actualizar.
+     * @throws NullPointerException si el objeto dado es <code>null</code>.
+     * @throws NoSuchElementException si el objeto no se encuentra en el catalogo.
+     */
+    void update(O object);
 
 }

@@ -1,11 +1,7 @@
 package myp.proyecto2.model.catalog;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import myp.proyecto2.model.domain.Report;
 import myp.proyecto2.model.domain.ReportType;
 
@@ -168,6 +164,34 @@ public class ReportCatalog implements Catalog<Report, ReportType> {
     @Override
     public List<Report> findByType(ReportType type) {
         return this.reportsByType.get(type);
+    }
+
+    /**
+     * Actualiza un reporte existente en el catalogo y la base de datos.
+     *
+     * @param report el reporte a actualizar.
+     * @throws NullPointerException si el reporte dado es <code>null</code>.
+     * @throws NoSuchElementException si el reporte no se encuentra en el catalogo.
+     */
+    @Override
+    public void update(Report report) {
+        if (report == null)
+            throw new NullPointerException("Cannot update a null report.");
+
+        List<Report> all = findAll();
+
+        Report updated = findById(report.getId());
+        if (updated == null)
+            throw new NullPointerException("Report with id " + report.getId() + " does not exist.");
+
+        all.remove(updated);
+        all.add(report);
+
+        try {
+            this.readerWriter.writeAll(all);
+        } catch (IOException ioe) {
+            throw new RuntimeException("Failed to update report: " + ioe.getMessage(), ioe);
+        }
     }
 
     /**

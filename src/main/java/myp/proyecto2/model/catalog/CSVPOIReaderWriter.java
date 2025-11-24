@@ -143,6 +143,19 @@ class CSVPOIReaderWriter implements CSVReaderWriter<PointOfInterest> {
         return true;
     }
 
+    @Override
+    public void writeAll(List<PointOfInterest> all) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.filePath))) {
+            writer.write(HEADER);
+            writer.newLine();
+
+            for (PointOfInterest p : all) {
+                writer.write(p.toString());
+                writer.newLine();
+            }
+        }
+    }
+
     private PointOfInterest parseLine(String line) {
         String[] parts = line.split(",", -1);
 

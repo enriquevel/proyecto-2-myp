@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import myp.proyecto2.model.domain.Location;
+import myp.proyecto2.model.domain.PointOfInterest;
 import myp.proyecto2.model.domain.Report;
 import myp.proyecto2.model.domain.ReportType;
 
@@ -142,6 +143,19 @@ class CSVReportReaderWriter implements CSVReaderWriter<Report> {
                 bw.close();
         }
         return true;
+    }
+
+    @Override
+    public void writeAll(List<Report> all) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.filePath))) {
+            writer.write(HEADER);
+            writer.newLine();
+
+            for (Report r : all) {
+                writer.write(r.toString());
+                writer.newLine();
+            }
+        }
     }
 
     private Report parseLine(String line) {

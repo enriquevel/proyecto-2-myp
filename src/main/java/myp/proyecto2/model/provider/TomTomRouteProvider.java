@@ -8,8 +8,11 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.zip.GZIPInputStream;
+
 import myp.proyecto2.model.domain.*;
 import myp.proyecto2.model.domain.builder.*;
+import myp.proyecto2.model.util.IDGenerator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -58,8 +61,8 @@ public class TomTomRouteProvider implements RouteProvider {
 
     private String buildRequestUrl(Location from, Location to, TransportMode mode) {
         return API_URL + "/" +
-                from.getLatitude() + "," + to.getLongitude() + ":" +
-                from.getLatitude() + "," + to.getLongitude() + "/json?" +
+                from.getLatitude() + "," + from.getLongitude() + ":" +
+                to.getLatitude() + "," + to.getLongitude() + "/json?" +
                 "key=" + apiKey +
                 "&travelMode=" + mode.getTomTomMode() +
                 "&traffic=true" +
@@ -73,6 +76,7 @@ public class TomTomRouteProvider implements RouteProvider {
         HttpURLConnection connection = null;
 
         try {
+            //System.out.println(urlString);
             URI uri = new URI(urlString);
             connection = (HttpURLConnection) uri.toURL().openConnection();
 
@@ -85,13 +89,36 @@ public class TomTomRouteProvider implements RouteProvider {
 
             int responseCode = connection.getResponseCode();
 
-            if (responseCode != HttpURLConnection.HTTP_OK) {
-                String errorBody = readStream(connection.getErrorStream());
-                if (errorBody == null || errorBody.isBlank())
-                    errorBody = "No error body returned.";
-                throw new APIException(String.format("TomTom API HTTP %d: %s", responseCode, errorBody));
+            InputStream stream;
+            if (responseCode == 200) {
+                stream = connection.getInputStream();
+            } else {
+                stream = connection.getErrorStream();
             }
-            return readStream(connection.getInputStream());
+
+            // GZIP decode
+            String encoding = connection.getContentEncoding();
+            if (encoding != null && encoding.equalsIgnoreCase("gzip")) {
+                stream = new GZIPInputStream(stream);
+            }
+
+            StringBuilder sb = new StringBuilder();
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(stream, StandardCharsets.UTF_8))) {
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+            }
+
+            if (responseCode != 200) {
+                throw new APIException(
+                        "TomTom API HTTP " + responseCode + ": " + sb
+                );
+            }
+
+            return sb.toString();
 
         } catch (APIException e) {
             throw e;
@@ -118,6 +145,8 @@ public class TomTomRouteProvider implements RouteProvider {
 
     private List<Route> parseTomTomResponse(String jsonResponse, RouteQuery query) {
         try {
+            //System.out.println("TomTom raw response:");
+            //System.out.println(jsonResponse);
             JSONObject json = new JSONObject(jsonResponse);
 
             if (json.has("detailedError"))
@@ -164,7 +193,7 @@ public class TomTomRouteProvider implements RouteProvider {
 
         RouteBuilder builder = new DefaultRouteBuilder();
 
-        return builder
+        return builder.setId(IDGenerator.generateSequentialID("ROU"))
                 .setOrigin(origin)
                 .setDestination(destination)
                 .setDistance(totalDistance)
@@ -243,8 +272,8 @@ public class TomTomRouteProvider implements RouteProvider {
             JSONObject first = points.getJSONObject(0);
             JSONObject last = points.getJSONObject(points.length() - 1);
 
-            Location start = new Location(first.getDouble("latitude"), first.getDouble("longitude"), null);
-            Location end = new Location(last.getDouble("latitude"), last.getDouble("longitude"), null);
+            Location start = new Location(first.getDouble("latitude"), first.getDouble("longitude"));
+            Location end = new Location(last.getDouble("latitude"), last.getDouble("longitude"));
 
             RouteSegment seg = new RouteSegment(
                     "Proceed to destination",
@@ -277,8 +306,7 @@ public class TomTomRouteProvider implements RouteProvider {
 
                     list.add(new Location(
                             p.getDouble("latitude"),
-                            p.getDouble("longitude"),
-                            null
+                            p.getDouble("longitude")
                     ));
                 }
             }

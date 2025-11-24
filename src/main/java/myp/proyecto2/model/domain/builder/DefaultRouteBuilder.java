@@ -189,8 +189,8 @@ public class DefaultRouteBuilder implements RouteBuilder {
      *      El identificador es <code>null</code>.
      *      El punto de origen es <code>null</code>.
      *      El punto de destino es <code>null</code>.
-     *      La distancia total es 0.
-     *      La duracion total es 0.
+     *      La distancia total es menor a 0.
+     *      La duracion total es menor a 0.
      *      La lista de segmentos de ruta es <code>null</code>.
      *      La lista de localizaciones es <code>null</code>.
      *      El conjunto de medios de transporte es <code>null</code>.
@@ -205,10 +205,10 @@ public class DefaultRouteBuilder implements RouteBuilder {
         if (this.destination == null)
             throw new IllegalStateException("Cannot build route: A destination is required");
 
-        if (this.totalDistance == 0)
+        if (this.totalDistance < 0)
             throw new IllegalStateException("Cannot build route: A route distance is required");
 
-        if (this.totalDurationSeconds == 0.0)
+        if (this.totalDurationSeconds < 0.0)
             throw new IllegalStateException("Cannot build route: A route duration is required");
 
         if (this.segments == null)

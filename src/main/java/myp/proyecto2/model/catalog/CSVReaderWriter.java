@@ -34,4 +34,11 @@ interface CSVReaderWriter<T> {
      */
     boolean delete(T t) throws IOException;
 
+    /**
+     * Escribe todas las entidades de una lista al archivo, sobreescribiendolo.
+     *
+     * @throws IOException si ocurrio un error al escribir el archivo.
+     */
+    void writeAll(List<T> all) throws IOException;
+
 }
