@@ -24,6 +24,7 @@ public class Location {
      * @param address direccion de la nueva localizacion.
      * @throws IllegalArgumentException si la latitud es mayor a 90 o menor a -90, o si la longitud
      *          es mayor a 180 o menor a -180.
+     * @throws NullPointerException si la direccion es null.
      */
     public Location(double latitude, double longitude, String address) {
         if (latitude < -90.0 || latitude > 90.0)
@@ -32,9 +33,24 @@ public class Location {
         if (longitude < -180.0 || longitude > 180.0)
             throw new IllegalArgumentException("Invalid longitude: " + longitude);
 
+        if (address == null)
+            throw new NullPointerException("Address cannot be null");
+
         this.latitude = latitude;
         this.longitude = longitude;
         this.address = address;
+    }
+
+    /**
+     * Construye una localizacion sin direccion.
+     *
+     * @param latitude latitud de la nueva localization.
+     * @param longitude longitud de la nueva localizacion.
+     * @throws IllegalArgumentException si la latitud es mayor a 90 o menor a -90, o si la longitud
+     *          es mayor a 180 o menor a -180.
+     */
+    public Location(double latitude, double longitude) {
+        this(latitude, longitude, "");
     }
 
     /**
@@ -62,6 +78,15 @@ public class Location {
      */
     public String getAddress() {
         return this.address;
+    }
+
+    /**
+     * Establece la direccion de la localizacion
+     *
+     * @param address la nueva direccion de la localizacion
+     */
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     /**

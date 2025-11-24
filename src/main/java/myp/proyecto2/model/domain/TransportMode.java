@@ -16,7 +16,7 @@ public enum TransportMode {
     WALKING;
 
     /**
-     * Regresa la cadena asociada a algun elemento de la enumeracion.
+     * Regresa la cadena necesaria por la API de Google para algun elemento de la enumeracion.
      *
      * @return la cadena asociada a algun elemento de la enumeracion.
      */
@@ -26,6 +26,20 @@ public enum TransportMode {
             case BUS -> "transit";
             case DRIVING -> "driving";
             case WALKING -> "walking";
+        };
+    }
+
+    /**
+     * Regresa la cadena necesaria por la API de TomTom para algun elemento de la enumeracion.
+     *
+     * @return la cadena asociada a algun elemento de la enumeracion.
+     */
+    public String getTomTomMode() {
+        return switch (this) {
+            case BICYCLING -> "bicycle";
+            case BUS -> "bus";
+            case DRIVING -> "car";
+            case WALKING -> "pedestrian";
         };
     }
 
@@ -45,17 +59,33 @@ public enum TransportMode {
     }
 
     /**
-     * Regresa el elemento de la enumeracion asociado a una cadena.
+     * Regresa el elemento de la enumeracion asociado a una cadena, con base a Google.
      * 
      * @param mode cadena que se quiere saber cual es su elemento asociado.
      * @return el elemento de la enumeracion asociado a la cadena.
      */
-    public static TransportMode fromString(String mode) {
+    public static TransportMode fromGoogleString(String mode) {
         return switch (mode.toLowerCase()) {
             case "bicycling" -> BICYCLING;
             case "transit" -> BUS;
             case "driving" -> DRIVING;
             case "walking" -> WALKING;
+            default -> throw new IllegalArgumentException("Unknown mode: " + mode);
+        };
+    }
+
+    /**
+     * Regresa el elemento de la enumeracion asociado a una cadena, con base a TomTom.
+     *
+     * @param mode cadena que se quiere saber cual es su elemento asociado.
+     * @return el elemento de la enumeracion asociado a la cadena.
+     */
+    public static TransportMode fromTomTomString(String mode) {
+        return switch (mode.toLowerCase()) {
+            case "bicycle" -> BICYCLING;
+            case "bus" -> BUS;
+            case "car" -> DRIVING;
+            case "pedestrian" -> WALKING;
             default -> throw new IllegalArgumentException("Unknown mode: " + mode);
         };
     }
