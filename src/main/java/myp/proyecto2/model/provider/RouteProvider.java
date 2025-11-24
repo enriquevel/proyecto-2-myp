@@ -11,4 +11,5 @@ public interface RouteProvider {
 
     String getProviderName();
 
+    record RouteQuery(Location from, Location to, TransportMode mode) {}
 }

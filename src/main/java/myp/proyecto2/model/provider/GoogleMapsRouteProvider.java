@@ -6,7 +6,6 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import myp.proyecto2.model.domain.Location;
 import myp.proyecto2.model.domain.RouteSegment;
 import myp.proyecto2.model.domain.TransportMode;
@@ -16,8 +15,6 @@ import org.json.JSONObject;
 
 public class GoogleMapsRouteProvider implements RouteProvider {
 
-    private record RouteQuery(Location from, Location to, TransportMode mode) {}
-
     private final String apiKey;
     private final Map<RouteQuery, List<Route>> cachedRoutes;
     private static final String API_URL = "https://maps.googleapis.com/maps/api/directions/json";
@@ -25,7 +22,7 @@ public class GoogleMapsRouteProvider implements RouteProvider {
 
     public GoogleMapsRouteProvider(String apiKey) {
         this.apiKey = apiKey;
-        this.cachedRoutes = new ConcurrentHashMap<>();
+        this.cachedRoutes = new HashMap<>();
     }
 
     /**
@@ -99,7 +96,7 @@ public class GoogleMapsRouteProvider implements RouteProvider {
             return response.toString();
 
         } catch (Exception e) {
-            throw new APIException("HTTP request failed: " + e.getMessage());
+            throw new APIException("Failed to execute Google API request: " + e.getMessage());
         } finally {
             if (connection != null)
                 connection.disconnect();
@@ -160,7 +157,7 @@ public class GoogleMapsRouteProvider implements RouteProvider {
             JSONObject step = stepsArray.getJSONObject(i);
 
             String travelMode = step.getString("travel_mode");
-            TransportMode mode = TransportMode.fromString(travelMode.toLowerCase());
+            TransportMode mode = TransportMode.fromGoogleString(travelMode.toLowerCase());
 
             String instruction = step.getString("html_instructions")
                     .replaceAll("<[^>]*>", "");
