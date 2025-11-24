@@ -67,6 +67,9 @@ public class JavaFXView implements View {
     /** Callback ejecutado cuando se solicita refrescar los datos. */
     private Runnable onRefreshData;
 
+    /** Callback ejecutado cuando se solicita cambiar la informacion. */
+    private Runnable onSettingsRequested;
+
     /**
      * Construye una nueva vista JavaFX con todos sus componentes visuales.
      * Inicializa el escenario, la escena, y todos los paneles de la interfaz.
@@ -225,11 +228,14 @@ public class JavaFXView implements View {
             }
         });
 
+        MenuItem settingsItem = new MenuItem("Configuracion...");
+        settingsItem.setOnAction(e -> handleSettings());
+
         MenuItem exitItem = new MenuItem("Salir");
         exitItem.setOnAction(e -> Platform.exit());
 
         fileMenu.getItems().addAll(newReportItem, newPOIItem, new SeparatorMenuItem(),
-                refreshItem, new SeparatorMenuItem(), exitItem);
+                refreshItem, settingsItem, new SeparatorMenuItem(), exitItem);
 
         Menu viewMenu = new Menu("Vista");
 
@@ -299,6 +305,11 @@ public class JavaFXView implements View {
 
     }
 
+    private void handleSettings() {
+        if (onSettingsRequested != null) {
+            onSettingsRequested.run();
+        }
+    }
 
     /**
      * Muestra la ventana principal de la aplicacion.
@@ -594,5 +605,15 @@ public class JavaFXView implements View {
     @Override
     public void setOnRefreshData(Runnable callback) {
         this.onRefreshData = callback;
+    }
+
+    /**
+     * Configura el callback que se ejecuta cuando se solicita cambiar la configuracion.
+     *
+     * @param callback funcion sin parametros
+     */
+    @Override
+    public void setOnSettingsRequested(Runnable callback) {
+        this.onSettingsRequested = callback;
     }
 }

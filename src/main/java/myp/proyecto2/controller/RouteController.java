@@ -29,33 +29,34 @@ public class RouteController {
     }
 
     /**
-     * Busca y puntua rutas desde un origen hasta un destino segun el modo de transporte,
-     * reportes disponibles y la preferencia del usuario.
+     * Encuentra las rutas de un lugar de origen a otro de destino con el proveedor escogido.
      *
-     * @param to la ubicacion de destino
-     * @param from la ubicacion de origen
+     * @param origin el punto de origen de la ruta
+     * @param destination el punto de destino de la ruta
      * @param mode el modo de transporte
-     * @param reports lista de reportes que afectan las rutas
-     * @param preference la preferencia del usuario
-     * @return una lista de rutas puntuadas ordenadas segun la preferencia del usuario
-     * @throws IllegalArgumentException si no se encuentran rutas disponibles
+     * @return una lista con las rutas provistas
      */
-    public List<ScoredRoute> findAndScoreRoutes(Location to, Location from, TransportMode mode, List<Report> reports,
-                                                RoutePreference preference) {
-        List<Route> rawRoutes = this.provider.getRoutes(to, from, mode);
+    public List<Route> findRoutes(Location origin, Location destination, TransportMode mode) {
+        List<Route> routes = provider.getRoutes(origin, destination, mode);
 
-        if (rawRoutes.isEmpty())
+        if (routes.isEmpty())
             throw new IllegalArgumentException("No routes found");
 
-        List<ScoredRoute> scoredRoutes = new ArrayList<>();
-        AbstractRouteScorer scorer = ScorerFactory.createScorer(preference);
+        return routes;
+    }
 
-        for (Route route : rawRoutes) {
-            double score = scorer.score(route, reports);
-            scoredRoutes.add(new ScoredRoute(route, score, reports, scorer.getName()));
-        }
-
-        return sortByPreference(scoredRoutes, preference);
+    /**
+     * Puntua una ruta con base en los reportes que tiene cercanos a ella.
+     *
+     * @param route la ruta a puntuar
+     * @param nearbyReports los reportes a tomar un cuenta
+     * @return una ruta puntuada con los reportes dados
+     */
+    public ScoredRoute scoreRoute(Route route, List<Report> nearbyReports, RoutePreference routePreference) {
+        ScorerFactory scorerFactory = new ScorerFactory();
+        AbstractRouteScorer scorer = scorerFactory.createScorer(routePreference);
+        double score = scorer.score(route, nearbyReports);
+        return new ScoredRoute(route, score, nearbyReports, scorer.getName());
     }
 
     /**
@@ -75,7 +76,7 @@ public class RouteController {
             }
             case SAFEST: {
                 List<ScoredRoute> sorted = new ArrayList<>(routes);
-                sorted.sort(Comparator.comparingDouble(ScoredRoute::getScore).reversed());
+                sorted.sort(Comparator.comparingDouble(ScoredRoute::getScore));
                 return sorted;
             }
             case BALANCED:

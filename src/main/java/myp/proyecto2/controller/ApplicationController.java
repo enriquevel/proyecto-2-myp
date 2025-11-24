@@ -1,9 +1,11 @@
 package myp.proyecto2.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import myp.proyecto2.model.catalog.POICatalog;
 import myp.proyecto2.model.catalog.ReportCatalog;
 import myp.proyecto2.model.domain.*;
+import myp.proyecto2.model.domain.builder.Route;
 import myp.proyecto2.model.provider.RouteProvider;
 import myp.proyecto2.model.provider.RouteProviderFactory;
 import myp.proyecto2.view.View;
@@ -37,7 +39,8 @@ public class ApplicationController {
         this.view = view;
         System.out.println("Inicializando aplicacion.");
 
-        RouteProvider routeProvider = RouteProviderFactory.createRouteProvider(provider, apiKey);
+        RouteProviderFactory routeProviderFactory = new RouteProviderFactory();
+        RouteProvider routeProvider = routeProviderFactory.createRouteProvider(provider, apiKey);
         this.routeController = new RouteController(routeProvider);
 
         ReportCatalog reportCatalog = new ReportCatalog("data/reports.csv");
@@ -55,12 +58,8 @@ public class ApplicationController {
      * Asocia los callback de la vista a metodos de esta clase.
      */
     private void wireViewCallbacks() {
-        this.view.setOnFindRoutes(request -> handleFindRoutes(
-                request.from(),
-                request.to(),
-                request.mode(),
-                request.routePreference()
-        ));
+        this.view.setOnFindRoutes(request -> handleFindRoutes(request.from(), request.to(),
+                request.mode(), request.routePreference()));
 
         this.view.setOnReportSubmit(this::handleReportSubmit);
         this.view.setOnReportUpvote(this::handleReportUpvote);
@@ -77,13 +76,13 @@ public class ApplicationController {
         try {
             List<PointOfInterest> pois = this.poiController.getAllPOIs();
             this.view.displayPOIs(pois);
-            System.out.println("Loaded " + pois.size() + " POIs");
+            System.out.println("Se cargaron " + pois.size() + " POIs");
 
             List<Report> reports = this.reportController.getActiveReports();
             this.view.displayReports(reports);
-            System.out.println("Loaded " + reports.size() + " reports");
+            System.out.println("Se cargaron " + reports.size() + " reports");
         } catch (Exception e) {
-            System.err.println("Error loading data: " + e.getMessage());
+            System.err.println("Error al cargar: " + e.getMessage());
         }
     }
 
@@ -95,29 +94,29 @@ public class ApplicationController {
      * @param mode el modo elegido de la ruta
      * @param preference la preferencia de rutas
      */
-    private void handleFindRoutes(
-            Location origin,
-            Location destination,
-            TransportMode mode,
-            RoutePreference preference) {
-
+    private void handleFindRoutes(Location origin, Location destination,
+                                  TransportMode mode, RoutePreference preference) {
         new Thread(() -> {
             try {
-                List<Report> reports = reportController.getActiveReports();
+                List<Route> routes = routeController.findRoutes(origin, destination, mode);
+                List<ScoredRoute> scoredRoutes = new ArrayList<>();
 
-                List<ScoredRoute> routes = routeController.findAndScoreRoutes(
-                        origin, destination, mode, reports, preference
-                );
+                for (int i = 0; i < routes.size(); i++) {
+                    Route route = routes.get(i);
+                    List<Report> nearbyReports = reportController.findReportsNearRoute(route.getPathPoints(), 100.0);
+                    System.out.println("Ruta " + (i + 1) + ": " + nearbyReports.size() + " reportes cercanos");
+                    ScoredRoute scored = routeController.scoreRoute(route, nearbyReports, preference);
+                    scoredRoutes.add(scored);
+                }
 
+                scoredRoutes = routeController.sortByPreference(scoredRoutes, preference);
+                List<ScoredRoute> finalScoredRoutes = scoredRoutes;
                 javafx.application.Platform.runLater(() -> {
-                    view.displayRoutes(routes);
-                    view.displaySuccess("Found " + routes.size() + " routes");
+                    view.displayRoutes(finalScoredRoutes);
+                    view.displaySuccess("Se encontraron " + finalScoredRoutes.size() + " rutas");
                 });
-
             } catch (Exception e) {
-                javafx.application.Platform.runLater(() -> {
-                    view.displayError("Failed to find routes: " + e.getMessage());
-                });
+                javafx.application.Platform.runLater(() -> view.displayError("Error al encontrar rutas: " + e.getMessage()));
                 e.printStackTrace();
             }
         }).start();
@@ -131,10 +130,10 @@ public class ApplicationController {
     private void handleReportSubmit(Report report) {
         try {
             reportController.submitReport(report);
-            view.displaySuccess("Report submitted");
+            view.displaySuccess("Reporte agregado");
             refreshReports();
         } catch (Exception e) {
-            view.displayError("Failed to submit: " + e.getMessage());
+            view.displayError("Error al agregar: " + e.getMessage());
         }
     }
 
@@ -148,7 +147,7 @@ public class ApplicationController {
             reportController.upvoteReport(report);
             refreshReports();
         } catch (Exception e) {
-            view.displayError("Failed to upvote: " + e.getMessage());
+            view.displayError("Error al votar: " + e.getMessage());
         }
     }
 
@@ -162,7 +161,7 @@ public class ApplicationController {
             reportController.downvoteReport(report);
             refreshReports();
         } catch (Exception e) {
-            view.displayError("Failed to downvote: " + e.getMessage());
+            view.displayError("Error al votar: " + e.getMessage());
         }
     }
 
@@ -182,10 +181,10 @@ public class ApplicationController {
     private void handlePOIAdd(PointOfInterest poi) {
         try {
             poiController.addPOI(poi);
-            view.displaySuccess("Location saved: " + poi.getName());
+            view.displaySuccess("Ubicacion guardada: " + poi.getName());
             refreshPOIs();
         } catch (Exception e) {
-            view.displayError("Failed to save: " + e.getMessage());
+            view.displayError("Error al guardar: " + e.getMessage());
         }
     }
 
@@ -197,10 +196,10 @@ public class ApplicationController {
     private void handlePOIDelete(PointOfInterest poi) {
         try {
             poiController.deletePOI(poi.getId());
-            view.displaySuccess("Location deleted");
+            view.displaySuccess("Ubicacion eliminada: " + poi.getName());
             refreshPOIs();
         } catch (Exception e) {
-            view.displayError("Failed to delete: " + e.getMessage());
+            view.displayError("Error al eliminar: " + e.getMessage());
         }
     }
 
@@ -218,7 +217,7 @@ public class ApplicationController {
     public void refreshAllData() {
         refreshPOIs();
         refreshReports();
-        view.displaySuccess("Data refreshed");
+        view.displaySuccess("Informacion actualizada");
     }
 
     /**
@@ -232,7 +231,7 @@ public class ApplicationController {
      * Termina la aplicacion.
      */
     public void shutdown() {
-        System.out.println("Shutting down...");
+        System.out.println("Finalizando ejecucion...<3");
         view.close();
     }
 }

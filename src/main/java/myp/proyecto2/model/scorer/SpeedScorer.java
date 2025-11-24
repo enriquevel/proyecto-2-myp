@@ -42,7 +42,7 @@ public class SpeedScorer extends AbstractRouteScorer {
      */
     @Override
     public String getName() {
-        return "Speed scorer";
+        return "Ruta mas rapida";
     }
 
     /**

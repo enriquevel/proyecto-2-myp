@@ -42,7 +42,7 @@ public class SafetyScorer extends AbstractRouteScorer {
      */
     @Override
     public String getName() {
-        return "Safety scorer";
+        return "Ruta mas segura";
     }
 
     /**

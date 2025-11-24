@@ -94,28 +94,4 @@ public enum ReportType {
             case OTHER -> 10;
         };
     }
-
-    /*
-     * 
-     *                  Eliminar si no se usa.
-     *                  
-     */
-
-    /**
-     * Regresa la severidad (un entero) asociada a un elemento de la enumeracion.
-     * @return la severidad (un entero) asociada a un elemento de la enumeracion.
-     */
-    public int getSeverity() {
-        return switch (this) {
-            case CRIME_INCIDENT -> 5;
-            case ACCIDENT -> 5;
-            case CONSTRUCTION -> 3;
-            case TRAFFIC_JAM -> 4;
-            case STREETLIGHT_OUT -> 2;
-            case NATURAL_DEBRIS -> 3;
-            case FLOODING -> 4;
-            case LOST_ITEM -> 1;
-            case OTHER -> 1;
-        };
-    }
 }

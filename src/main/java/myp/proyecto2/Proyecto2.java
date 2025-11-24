@@ -29,13 +29,13 @@ public class Proyecto2 extends Application {
 
             String apiKey = params.getNamed().get("apikey");
             if (apiKey == null || apiKey.isBlank()) {
-                System.err.println("Missing --apikey=<value> argument.");
+                System.err.println("Argumento --apikey=<value> faltante.");
                 System.exit(1);
             }
 
             String provider = params.getNamed().get("provider");
             if (provider == null || provider.isBlank()) {
-                System.err.println("Missing --provider=<value> argument.");
+                System.err.println("Argumento --provider=<value> faltante.");
                 System.exit(1);
             }
 
@@ -46,7 +46,7 @@ public class Proyecto2 extends Application {
             controller.start();
 
         } catch (Exception e) {
-            System.err.println("Failed to start:");
+            System.err.println("Error al iniciar:");
             e.printStackTrace();
             System.exit(1);
         }

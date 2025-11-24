@@ -1,10 +1,12 @@
 package myp.proyecto2.model.provider;
 
+import java.util.List;
+
 public class RouteProviderFactory {
 
-    private RouteProviderFactory() {}
+    public RouteProviderFactory() {}
 
-    public static RouteProvider createRouteProvider(String provider, String apiKey) {
+    public RouteProvider createRouteProvider(String provider, String apiKey) {
         if (provider == null)
             throw new NullPointerException("Provider cannot be null");
 
@@ -16,5 +18,9 @@ public class RouteProviderFactory {
             case "google" -> new GoogleMapsRouteProvider(apiKey);
             default -> throw new IllegalArgumentException("Unknown route provider.");
         };
+    }
+
+    public static List<String> getAvailableProviders() {
+        return List.of("Google Maps Directions API", "TomTom Routing API");
     }
 }
