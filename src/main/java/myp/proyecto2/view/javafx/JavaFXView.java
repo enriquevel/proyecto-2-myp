@@ -2,7 +2,6 @@ package myp.proyecto2.view.javafx;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Consumer;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -12,7 +11,6 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import myp.proyecto2.model.domain.*;
 import myp.proyecto2.model.domain.builder.Route;
-import myp.proyecto2.model.scorer.AbstractRouteScorer;
 import myp.proyecto2.view.View;
 
 public class JavaFXView implements View {
@@ -130,13 +128,22 @@ public class JavaFXView implements View {
     private void wireEvents() {
         // Control panel
         controlPanel.setOnFindRoutes(() -> {
-            if (onFindRoutes != null) {
-                Location origin = controlPanel.getOriginSelector().getSelectedLocation();
-                Location dest = controlPanel.getDestinationSelector().getSelectedLocation();
-                TransportMode mode = controlPanel.getSelectedMode();
-                RoutePreference pref = controlPanel.getPreference();
+            Location origin = controlPanel.getOriginSelector().getSelectedLocation();
+            Location dest = controlPanel.getDestinationSelector().getSelectedLocation();
 
-                RouteRequest request = new RouteRequest(origin, dest, mode, pref);
+            if (origin == null || dest == null) {
+                displayError("Please select both origin and destination");
+                return;
+            }
+
+            RouteRequest request = new RouteRequest(
+                    origin,
+                    dest,
+                    controlPanel.getSelectedMode(),
+                    controlPanel.getPreference()
+            );
+
+            if (onFindRoutes != null) {
                 onFindRoutes.accept(request);
             }
         });
@@ -241,26 +248,95 @@ public class JavaFXView implements View {
      * Handle new report dialog.
      */
     private void handleNewReport() {
-        Optional<Report> result = ReportDialog.showNewReport(null);
-        result.ifPresent(report -> {
-            if (onReportSubmit != null) {
+        System.out.println("DEBUG: handleNewReport() called");
+
+        // Create dialog
+        ReportDialog dialog = new ReportDialog(null, null);
+        System.out.println("DEBUG: ReportDialog instance created");
+
+        // Set up map click callback FIRST
+        dialog.setOnRequestMapClick(locationCallback -> {
+            System.out.println("DEBUG: Map click requested for report dialog");
+
+            // Hide dialog first
+            dialog.hideDialog();
+
+            // Enable map click mode
+            enableMapClickMode(location -> {
+                System.out.println("DEBUG: Location selected from map: " + location);
+
+                // Pass location to dialog
+                locationCallback.accept(location);
+
+                // Disable map click mode
+                disableMapClickMode();
+
+                // Show dialog again
+                dialog.showDialog();
+            });
+        });
+        System.out.println("DEBUG: Map click callback set");
+
+        // Set result callback SECOND
+        dialog.setOnResult(report -> {
+            System.out.println("DEBUG: Dialog result received: " + report);
+            if (report != null && onReportSubmit != null) {
+                System.out.println("DEBUG: Firing onReportSubmit callback");
                 onReportSubmit.accept(report);
             }
-            displaySuccess("Report submitted");
         });
+        System.out.println("DEBUG: Result callback set");
+
+        // Show dialog LAST
+        System.out.println("DEBUG: About to show dialog");
+        dialog.showDialog();
+        System.out.println("DEBUG: Dialog shown");
+
     }
 
     /**
      * Handle add POI dialog.
      */
     private void handleAddPOI() {
-        Optional<PointOfInterest> result = POIDialog.showNewPOI(null, currentUser);
-        result.ifPresent(poi -> {
-            if (onPOIAdd != null) {
-                onPOIAdd.accept(poi);
-            }
-            displaySuccess("Location saved");
+        System.out.println("DEBUG: handleAddPOI() called");
+
+        // Force everything on JavaFX thread
+        javafx.application.Platform.runLater(() -> {
+            System.out.println("DEBUG: Creating POIDialog on JavaFX thread");
+
+            // Create dialog
+            POIDialog dialog = new POIDialog(null, null );
+            System.out.println("DEBUG: POIDialog instance created");
+
+            // Set up map click callback
+            dialog.setOnRequestMapClick(locationCallback -> {
+                System.out.println("DEBUG: Map click requested");
+                dialog.hideDialog();
+
+                enableMapClickMode(location -> {
+                    System.out.println("DEBUG: Location selected: " + location);
+                    locationCallback.accept(location);
+                    disableMapClickMode();
+
+                    javafx.application.Platform.runLater(() -> {
+                        dialog.showDialog();
+                    });
+                });
+            });
+
+            // Set result callback
+            dialog.setOnResult(poi -> {
+                System.out.println("DEBUG: Dialog result: " + poi);
+                if (poi != null && onPOIAdd != null) {
+                    onPOIAdd.accept(poi);
+                }
+            });
+
+            // Show dialog
+            System.out.println("DEBUG: Showing dialog");
+            dialog.showDialog();
         });
+
     }
 
 
@@ -493,10 +569,6 @@ public class JavaFXView implements View {
 
     public void setOnRefreshData(Runnable callback) {
         this.onRefreshData = callback;
-    }
-
-    public void setCurrentUser(String username) {
-        this.currentUser = username;
     }
 
     public Stage getStage() {

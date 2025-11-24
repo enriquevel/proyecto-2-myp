@@ -1,22 +1,37 @@
 package myp.proyecto2.controller;
 
+import java.util.List;
 import myp.proyecto2.model.catalog.POICatalog;
 import myp.proyecto2.model.catalog.ReportCatalog;
 import myp.proyecto2.model.domain.*;
 import myp.proyecto2.model.provider.RouteProvider;
 import myp.proyecto2.model.provider.RouteProviderFactory;
-import myp.proyecto2.model.scorer.AbstractRouteScorer;
 import myp.proyecto2.view.View;
 
-import java.util.List;
-
+/**
+ * Clase que representa el controlador principal de la aplicacion.
+ */
 public class ApplicationController {
 
+    /** La vista de la aplicacion. */
     private final View view;
+
+    /** El controlador de rutas. */
     private final RouteController routeController;
+
+    /** El controlador de reportes. */
     private final ReportController reportController;
+
+    /** El controlador de puntos de interes. */
     private final POIController poiController;
 
+    /**
+     * Constructor principal del controlador principal.
+     *
+     * @param view la vista del controlador
+     * @param provider el proveedor de rutas preferido
+     * @param apiKey la llave API del usuario
+     */
     public ApplicationController(View view, String provider, String apiKey) {
         this.view = view;
         System.out.println("Inicializando aplicacion.");
@@ -35,6 +50,9 @@ public class ApplicationController {
         System.out.println("Inicializacion completa.");
     }
 
+    /**
+     * Asocia los callback de la vista a metodos de esta clase.
+     */
     private void wireViewCallbacks() {
         this.view.setOnFindRoutes(request -> handleFindRoutes(
                 request.origin,
@@ -51,6 +69,9 @@ public class ApplicationController {
         this.view.setOnRefreshData(this::refreshAllData);
     }
 
+    /**
+     * Inicializa las bases de datos requeridas para la aplicacion
+     */
     private void initializeApplication() {
         try {
             List<PointOfInterest> pois = this.poiController.getAllPOIs();
@@ -65,6 +86,14 @@ public class ApplicationController {
         }
     }
 
+    /**
+     * Maneja las peticiones de rutas del usuario.
+     *
+     * @param origin el origen de la ruta
+     * @param destination el destino de la ruta
+     * @param mode el modo elegido de la ruta
+     * @param preference la preferencia de rutas
+     */
     private void handleFindRoutes(
             Location origin,
             Location destination,
@@ -93,8 +122,11 @@ public class ApplicationController {
         }).start();
     }
 
-    // ==================== Report Operations ====================
-
+    /**
+     * Maneja las creaciones de reportes del usuario.
+     *
+     * @param report el reporte creado.
+     */
     private void handleReportSubmit(Report report) {
         try {
             reportController.submitReport(report);
@@ -105,6 +137,11 @@ public class ApplicationController {
         }
     }
 
+    /**
+     * Maneja los votos a favor de un reporte.
+     *
+     * @param report el reporte votado
+     */
     private void handleReportUpvote(Report report) {
         try {
             reportController.upvoteReport(report);
@@ -114,6 +151,11 @@ public class ApplicationController {
         }
     }
 
+    /**
+     * Maneja los votos en contra de un reporte.
+     *
+     * @param report el reporte votado
+     */
     private void handleReportDownvote(Report report) {
         try {
             reportController.downvoteReport(report);
@@ -123,15 +165,23 @@ public class ApplicationController {
         }
     }
 
+    /**
+     * Actualiza los reportes mostrados.
+     */
     private void refreshReports() {
         List<Report> reports = reportController.getActiveReports();
         view.displayReports(reports);
     }
 
-    // ==================== POI Operations ====================
-
+    /**
+     * Maneja las creaciones de puntos de interes del usuario.
+     *
+     * @param poi el punto de interes creado
+     */
     private void handlePOIAdd(PointOfInterest poi) {
+        System.out.println("DEBUG: handlePOIAdd() called");
         try {
+            System.out.println("DEBUG: Calling poiController.addPOI()");
             poiController.addPOI(poi);
             view.displaySuccess("Location saved: " + poi.getName());
             refreshPOIs();
@@ -140,6 +190,11 @@ public class ApplicationController {
         }
     }
 
+    /**
+     * Maneja la eliminacion de puntos de interes.
+     *
+     * @param poi el punto de interes a eliminar
+     */
     private void handlePOIDelete(PointOfInterest poi) {
         try {
             poiController.deletePOI(poi.getId());
@@ -150,23 +205,33 @@ public class ApplicationController {
         }
     }
 
+    /**
+     * Actualiza los puntos de interes mostrados.
+     */
     private void refreshPOIs() {
         List<PointOfInterest> pois = poiController.getAllPOIs();
         view.displayPOIs(pois);
     }
 
-    // ==================== General ====================
-
+    /**
+     * Actualiza la informacion mostrada al usuario.
+     */
     public void refreshAllData() {
         refreshPOIs();
         refreshReports();
         view.displaySuccess("Data refreshed");
     }
 
+    /**
+     * Inicia la aplicacion.
+     */
     public void start() {
         view.show();
     }
 
+    /**
+     * Termina la aplicacion.
+     */
     public void shutdown() {
         System.out.println("Shutting down...");
         view.close();
