@@ -9,7 +9,8 @@ import myp.proyecto2.model.provider.RouteProviderFactory;
 import myp.proyecto2.view.View;
 
 /**
- * Clase que representa el controlador principal de la aplicacion.
+ * Controlador principal de la aplicacion. Maneja otros controladores y el inicio y
+ * final de la aplicacion.
  */
 public class ApplicationController {
 

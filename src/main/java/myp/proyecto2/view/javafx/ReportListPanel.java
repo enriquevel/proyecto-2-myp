@@ -149,7 +149,7 @@ public class ReportListPanel extends VBox {
 
             HBox voting = new HBox(8);
 
-            Button upvote = new Button("▲");
+            Button upvote = new Button(":)");
             upvote.setStyle("-fx-font-size: 10; -fx-padding: 2 6;");
             upvote.setOnAction(e -> {
                 if (onUpvote != null) onUpvote.accept(report);
@@ -158,7 +158,7 @@ public class ReportListPanel extends VBox {
             Label votes = new Label(String.valueOf(report.getNetVotes()));
             votes.setStyle("-fx-font-weight: bold;");
 
-            Button downvote = new Button("▼");
+            Button downvote = new Button(":(");
             downvote.setStyle("-fx-font-size: 10; -fx-padding: 2 6;");
             downvote.setOnAction(e -> {
                 if (onDownvote != null) onDownvote.accept(report);

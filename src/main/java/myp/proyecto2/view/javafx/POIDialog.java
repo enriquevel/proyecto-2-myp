@@ -115,7 +115,7 @@ public class POIDialog extends Dialog<PointOfInterest> {
         locationLabel.setStyle("-fx-border-color: #ccc; -fx-border-width: 1; " +
                 "-fx-padding: 5; -fx-background-color: #f5f5f5; -fx-min-width: 150;");
 
-        mapClickButton = new Button("📍 Mapa");
+        mapClickButton = new Button("@ Mapa");
         mapClickButton.setOnAction(e -> handleMapClick());
 
         locationBox.getChildren().addAll(locationLabel, mapClickButton);
@@ -163,7 +163,7 @@ public class POIDialog extends Dialog<PointOfInterest> {
             selectedLocation = location;
             locationLabel.setText(formatLocation(location));
             mapClickButton.setDisable(false);
-            mapClickButton.setText("📍 Mapa");
+            mapClickButton.setText("@ Mapa");
         }));
 
     }
@@ -246,22 +246,22 @@ public class POIDialog extends Dialog<PointOfInterest> {
     private boolean validate() {
         String name = nameField.getText().trim();
         if (name.isEmpty()) {
-            showError("Please enter a name");
+            showError("Por favor ingresa un nombre");
             return false;
         }
 
         if (name.length() < 3) {
-            showError("Name must be at least 3 characters");
+            showError("Nombre debe tener minimo 3 caracteres");
             return false;
         }
 
         if (typeCombo.getValue() == null) {
-            showError("Please select a location type");
+            showError("Por favor selecciona un tipo de ubicacion");
             return false;
         }
 
         if (selectedLocation == null) {
-            showError("Please select a location on the map");
+            showError("Por favor selecciona una ubicacion en el mapa");
             return false;
         }
 

@@ -6,10 +6,22 @@ import myp.proyecto2.controller.ApplicationController;
 import myp.proyecto2.view.javafx.JavaFXView;
 import myp.proyecto2.view.javafx.UniversityBounds;
 
+/**
+ * Clase principal del proyecto.
+ */
 public class Proyecto2 extends Application {
 
+    /** El controlador principal de la aplicacion. */
     private ApplicationController controller;
 
+    /**
+     * Inicia la aplicacion de JavaFX.
+     *
+     * @param primaryStage the primary stage for this application, onto which
+     * the application scene can be set.
+     * Applications may create other stages, if needed, but they will not be
+     * primary stages.
+     */
     @Override
     public void start(Stage primaryStage) {
         try {
@@ -40,6 +52,9 @@ public class Proyecto2 extends Application {
         }
     }
 
+    /**
+     * Termina la aplicacion de JavaFX.
+     */
     @Override
     public void stop() {
         if (controller != null) {
@@ -47,6 +62,11 @@ public class Proyecto2 extends Application {
         }
     }
 
+    /**
+     * Metodo de entrada al proyecto.
+     *
+     * @param args argumentos de la linea de comandos.
+     */
     public static void main(String[] args) {
         launch(args);
     }
