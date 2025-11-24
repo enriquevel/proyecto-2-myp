@@ -15,42 +15,71 @@ import myp.proyecto2.model.domain.Report;
 import myp.proyecto2.model.domain.ScoredRoute;
 import myp.proyecto2.model.domain.builder.Route;
 
+/**
+ * Lienzo interactivo que muestra el mapa del campus universitario con rutas,
+ * reportes y puntos de interes. Maneja la proyeccion de coordenadas geograficas
+ * a coordenadas de pantalla y permite la interaccion del usuario mediante clicks.
+ */
 public class MapCanvas extends Canvas {
 
-    private final UniversityBounds bounds;
+    /** Sistema de proyeccion para convertir coordenadas geograficas a pantalla. */
     private final CoordinateProjection projection;
 
-    private Image campusImage;
+    /** Imagen de fondo del mapa. */
+    private Image backgroundImage;
+
+    /** Lista de rutas puntuadas a mostrar en el mapa. */
     private final List<ScoredRoute> routes;
+
+    /** Lista de reportes activos a mostrar en el mapa. */
     private final List<Report> reports;
+
+    /** Lista de puntos de interes a mostrar en el mapa. */
     private final List<PointOfInterest> pois;
 
+    /** Ruta actualmente resaltada con color diferente. */
     private Route highlightedRoute;
+
+    /** Callback ejecutado cuando el usuario hace clic en el mapa en modo seleccion. */
     private Consumer<Location> mapClickCallback;
 
+    /**
+     * Construye un nuevo lienzo de mapa con las dimensiones y limites especificados.
+     * Inicializa el sistema de proyeccion, carga la imagen del campus si esta disponible
+     * y configura el handler de eventos de clic.
+     *
+     * @param width ancho del lienzo en pixeles
+     * @param height alto del lienzo en pixeles
+     * @param bounds limites geograficos del area a mostrar
+     */
     public MapCanvas(double width, double height, UniversityBounds bounds) {
         super(width, height);
 
-        this.bounds = bounds;
         this.projection = new CoordinateProjection(bounds, width, height);
 
         this.routes = new ArrayList<>();
         this.reports = new ArrayList<>();
         this.pois = new ArrayList<>();
 
-        // Load campus image (if exists)
         try {
-            this.campusImage = new Image("file:data/ciudad_universitaria.png");
-            System.out.println("Campus map image loaded successfully");
+            this.backgroundImage = new Image("file:data/ciudad_universitaria.png");
+            System.out.println("Imagen del mapa cargada exitosamente");
         } catch (Exception e) {
-            System.out.println("No campus image found, using blank background");
-            this.campusImage = null;
+            System.out.println("No se encontro imagen para fondo del mapa");
+            this.backgroundImage = null;
         }
 
         setOnMouseClicked(this::handleClick);
         redraw();
     }
 
+    /**
+     * Maneja los eventos de clic del mouse en el lienzo. Si el modo de seleccion
+     * en mapa esta activo, convierte las coordenadas de pantalla a coordenadas
+     * geograficas y ejecuta el callback correspondiente.
+     *
+     * @param event evento del mouse con informacion de la posicion del clic
+     */
     private void handleClick(MouseEvent event) {
         if (this.mapClickCallback != null) {
             Location location = this.projection.unprojectToGeo(event.getX(), event.getY());
@@ -58,81 +87,133 @@ public class MapCanvas extends Canvas {
         }
     }
 
+    /**
+     * Establece la lista de rutas a mostrar en el mapa y redibuja el lienzo.
+     *
+     * @param routes lista de rutas puntuadas a mostrar
+     */
     public void setRoutes(List<ScoredRoute> routes) {
         this.routes.clear();
         this.routes.addAll(routes);
         redraw();
     }
 
+    /**
+     * Resalta una ruta especifica dibujandola con color y grosor diferente.
+     * Actualiza el lienzo inmediatamente para reflejar el cambio.
+     *
+     * @param route la ruta a resaltar
+     */
     public void highlightRoute(Route route) {
         this.highlightedRoute = route;
         redraw();
     }
 
+    /**
+     * Limpia todas las rutas del mapa incluyendo la ruta resaltada.
+     * Redibuja el lienzo sin rutas.
+     */
     public void clearRoutes() {
         this.routes.clear();
         this.highlightedRoute = null;
         redraw();
     }
 
+    /**
+     * Establece la lista de reportes a mostrar en el mapa y redibuja el lienzo.
+     *
+     * @param reports lista de reportes activos a mostrar
+     */
     public void setReports(List<Report> reports) {
         this.reports.clear();
         this.reports.addAll(reports);
         redraw();
     }
 
+    /**
+     * Limpia todos los reportes del mapa y redibuja el lienzo.
+     */
     public void clearReports() {
         this.reports.clear();
         redraw();
     }
 
+    /**
+     * Establece la lista de puntos de interes a mostrar en el mapa y redibuja el lienzo.
+     *
+     * @param pois lista de puntos de interes a mostrar
+     */
     public void setPOIs(List<PointOfInterest> pois) {
         this.pois.clear();
         this.pois.addAll(pois);
         redraw();
     }
 
+    /**
+     * Limpia todos los puntos de interes del mapa y redibuja el lienzo.
+     */
     public void clearPOIs() {
         this.pois.clear();
         redraw();
     }
 
+    /**
+     * Limpia todos los elementos del mapa: rutas, reportes y puntos de interes.
+     * Redibuja el lienzo mostrando solo el fondo del campus.
+     */
     public void clearAll() {
         clearRoutes();
         clearReports();
         clearPOIs();
     }
 
+    /**
+     * Habilita el modo de seleccion de ubicacion en el mapa. Cambia el cursor
+     * a una cruz y espera a que el usuario haga clic para seleccionar una ubicacion.
+     *
+     * @param callback funcion que recibe la ubicacion seleccionada
+     */
     public void enableMapClickMode(Consumer<Location> callback) {
         this.mapClickCallback = callback;
         setCursor(javafx.scene.Cursor.CROSSHAIR);
     }
 
+    /**
+     * Deshabilita el modo de seleccion de ubicacion en el mapa y restaura
+     * el cursor normal.
+     */
     public void disableMapClickMode() {
         this.mapClickCallback = null;
         setCursor(javafx.scene.Cursor.DEFAULT);
     }
 
+    /**
+     * Centra la vista del mapa en una ubicacion especifica. Actualmente
+     * solo redibuja el mapa. Funcionalidad de zoom/pan pendiente de implementar.
+     *
+     * @param location la ubicacion donde centrar el mapa
+     */
     public void centerOn(Location location) {
-        // For now just redraw (future: pan/zoom support)
         redraw();
     }
 
+    /**
+     * Redibuja completamente el lienzo del mapa. Limpia el area de dibujo,
+     * dibuja el fondo del campus, luego dibuja en orden las rutas, reportes
+     * y puntos de interes. Las rutas se dibujan con diferentes colores segun
+     * si estan resaltadas o son la ruta principal.
+     */
     private void redraw() {
         GraphicsContext gc = getGraphicsContext2D();
-
-        // Clear
         gc.clearRect(0, 0, getWidth(), getHeight());
 
-        // Background
-        if (this.campusImage != null)
-            gc.drawImage(this.campusImage, 0, 0, getWidth(), getHeight());
+        if (this.backgroundImage != null)
+            gc.drawImage(this.backgroundImage, 0, 0, getWidth(), getHeight());
         else {
             gc.setFill(Color.rgb(245, 245, 245));
             gc.fillRect(0, 0, getWidth(), getHeight());
         }
 
-        // Draw routes
         for (int i = 0; i < this.routes.size(); i++) {
             ScoredRoute scoredRoute = this.routes.get(i);
             Route route = scoredRoute.getRoute();
@@ -143,26 +224,33 @@ public class MapCanvas extends Canvas {
             drawRoute(gc, route, highlighted, primary);
         }
 
-        // Draw reports
         for (Report report : this.reports) {
             Point2D point = this.projection.projectToScreen(report.getLocation());
             IconRenderer.drawReportIcon(gc, point, report.getType(), 8);
         }
 
-        // Draw POIs
         for (PointOfInterest poi : this.pois) {
             Point2D point = this.projection.projectToScreen(poi.getLocation());
             IconRenderer.drawLocationPin(gc, point, Color.rgb(76, 175, 80), 10);
         }
     }
 
+    /**
+     * Dibuja una ruta individual en el lienzo. La ruta se dibuja con diferentes
+     * colores y grosores dependiendo de si esta resaltada o es la ruta principal.
+     * Tambien dibuja marcadores para el origen (verde) y destino (rojo).
+     *
+     * @param gc contexto grafico donde dibujar
+     * @param route la ruta a dibujar
+     * @param highlighted true si la ruta debe dibujarse resaltada (naranja, grosor 5)
+     * @param primary true si es la ruta principal (azul, grosor 4)
+     */
     private void drawRoute(GraphicsContext gc, Route route, boolean highlighted, boolean primary) {
         List<Location> polyline = route.getPathPoints();
 
         if (polyline.isEmpty())
             return;
 
-        // Colors (inlined)
         Color color;
         double lineWidth;
 
@@ -180,24 +268,17 @@ public class MapCanvas extends Canvas {
         gc.setStroke(color);
         gc.setLineWidth(lineWidth);
 
-        // Draw polyline
         for (int i = 0; i < polyline.size() - 1; i++) {
             Point2D p1 = this.projection.projectToScreen(polyline.get(i));
             Point2D p2 = this.projection.projectToScreen(polyline.get(i + 1));
             gc.strokeLine(p1.getX(), p1.getY(), p2.getX(), p2.getY());
         }
 
-        // Start marker (green)
         Point2D start = this.projection.projectToScreen(route.getOrigin());
         IconRenderer.drawLocationPin(gc, start, Color.rgb(76, 175, 80), 12);
 
-        // End marker (red)
         Point2D end = this.projection.projectToScreen(route.getDestination());
         IconRenderer.drawLocationPin(gc, end, Color.rgb(244, 67, 54), 12);
-    }
-
-    public CoordinateProjection getProjection() {
-        return this.projection;
     }
 
 }

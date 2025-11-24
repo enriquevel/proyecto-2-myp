@@ -10,6 +10,4 @@ public interface RouteProvider {
     List<Route> getRoutes(Location from, Location to, TransportMode mode);
 
     String getProviderName();
-
-    record RouteQuery(Location from, Location to, TransportMode mode) {}
 }

@@ -179,9 +179,7 @@ public class ApplicationController {
      * @param poi el punto de interes creado
      */
     private void handlePOIAdd(PointOfInterest poi) {
-        System.out.println("DEBUG: handlePOIAdd() called");
         try {
-            System.out.println("DEBUG: Calling poiController.addPOI()");
             poiController.addPOI(poi);
             view.displaySuccess("Location saved: " + poi.getName());
             refreshPOIs();

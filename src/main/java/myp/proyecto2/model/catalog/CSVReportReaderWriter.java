@@ -152,7 +152,7 @@ class CSVReportReaderWriter implements CSVReaderWriter<Report> {
             writer.newLine();
 
             for (Report r : all) {
-                writer.write(r.toString());
+                writer.write(r.getFileFormat());
                 writer.newLine();
             }
         }

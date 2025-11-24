@@ -22,9 +22,9 @@ public enum RoutePreference {
      */
     public String getDisplayName() {
         return switch(this) {
-            case SAFEST -> "Safe route";
-            case FASTEST -> "Fast route";
-            case BALANCED -> "Balanced route";
+            case SAFEST -> "Ruta mas segura";
+            case FASTEST -> "Ruta mas rapida";
+            case BALANCED -> "Ruta balanceada";
         };
     }
 }
