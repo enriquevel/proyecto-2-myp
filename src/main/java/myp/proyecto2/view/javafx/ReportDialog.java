@@ -103,7 +103,7 @@ public class ReportDialog extends Dialog<Report> {
         locationLabel.setStyle("-fx-border-color: #ccc; -fx-border-width: 1; " +
                 "-fx-padding: 5; -fx-background-color: #f5f5f5; -fx-min-width: 150;");
 
-        mapClickButton = new Button("📍 Mapa");
+        mapClickButton = new Button("@ Mapa");
         mapClickButton.setOnAction(e -> handleMapClick());
 
         locationBox.getChildren().addAll(locationLabel, mapClickButton);
@@ -150,7 +150,7 @@ public class ReportDialog extends Dialog<Report> {
             selectedLocation = location;
             locationLabel.setText(formatLocation(location));
             mapClickButton.setDisable(false);
-            mapClickButton.setText("📍 Mapa");
+            mapClickButton.setText("@ Mapa");
         }));
     }
 
