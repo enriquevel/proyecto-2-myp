@@ -102,7 +102,7 @@ public class PointOfInterest {
      */
     public String getFileFormat(){
         return this.id + ","
-                + this.type.toString() + ","
+                + this.type.getDisplayName() + ","
                 + this.name + ","
                 + this.location.getLatitude() + ","
                 + this.location.getLongitude() + ","

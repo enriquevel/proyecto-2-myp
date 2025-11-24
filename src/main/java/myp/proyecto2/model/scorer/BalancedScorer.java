@@ -42,7 +42,7 @@ public class BalancedScorer extends AbstractRouteScorer {
      */
     @Override
     public String getName() {
-        return "Balanced scorer";
+        return "Ruta balanceada";
     }
 
     /**

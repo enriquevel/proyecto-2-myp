@@ -178,4 +178,11 @@ public interface View {
      * @param callback funcion sin parametros
      */
     void setOnRefreshData(Runnable callback);
+
+    /**
+     * Configura el callback que se ejecuta cuando se solicita cambiar la configuracion.
+     *
+     * @param callback funcion que recibe una llave API
+     */
+    void setOnSettingsRequested(Runnable callback);
 }

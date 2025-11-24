@@ -166,7 +166,7 @@ public class Report {
      * @return el valor neto de votos de este reporte.
      */
     public int getNetVotes() {
-        return this.upvotes + this.downvotes;
+        return this.upvotes - this.downvotes;
     }
 
     /**
@@ -177,7 +177,7 @@ public class Report {
      */
     public String getFileFormat() {
         return this.id + ","
-                + this.type.toString() + ","
+                + this.type.getDisplayName() + ","
                 + this.location.getLatitude() + ","
                 + this.location.getLongitude() + ","
                 + this.location.getAddress() + ","
