@@ -10,6 +10,7 @@ import myp.proyecto2.model.domain.Location;
 import myp.proyecto2.model.domain.RouteSegment;
 import myp.proyecto2.model.domain.TransportMode;
 import myp.proyecto2.model.domain.builder.*;
+import myp.proyecto2.model.util.IDGenerator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -68,6 +69,7 @@ public class GoogleMapsRouteProvider implements RouteProvider {
         return API_URL + "?origin=" + from.getLatitude() + "," + from.getLongitude() +
                 "&destination=" + to.getLatitude() + "," + to.getLongitude() +
                 "&mode=" + mode.getGoogleMapsMode() +
+                "&alternatives=true" +
                 "&key=" + apiKey;
     }
 
@@ -140,7 +142,8 @@ public class GoogleMapsRouteProvider implements RouteProvider {
         Set<TransportMode> modes = extractTransportModes(segments);
 
         RouteBuilder builder = new DefaultRouteBuilder();
-        return builder.setOrigin(origin)
+        return builder.setId(IDGenerator.generateSequentialID("ROU"))
+                .setOrigin(origin)
                 .setDestination(destination)
                 .setDistance(totalDistance)
                 .setDuration(totalDuration)
@@ -167,28 +170,11 @@ public class GoogleMapsRouteProvider implements RouteProvider {
 
             JSONObject startLoc = step.getJSONObject("start_location");
             Location startLocation = new Location(startLoc.getDouble("lat"),
-                    startLoc.getDouble("lng"), null);
+                    startLoc.getDouble("lng"));
 
             JSONObject endLoc = step.getJSONObject("end_location");
             Location endLocation = new Location(endLoc.getDouble("lat"),
-                    endLoc.getDouble("lng"), null);
-
-            /*
-            Optional<TransitDetails> transitDetails = extractTransitDetails(step);
-
-            RouteSegment segment;
-            if (transitDetails.isPresent()) {
-                segment = new RouteSegment(
-                        instruction, mode, duration, distance,
-                        startLocation, endLocation, transitDetails.get()
-                );
-            } else {
-                segment = new RouteSegment(
-                        instruction, mode, duration, distance,
-                        startLocation, endLocation
-                );
-            }
-             */
+                    endLoc.getDouble("lng"));
 
             RouteSegment segment = new RouteSegment(instruction, distance, duration, startLocation, endLocation, mode);
             segments.add(segment);
@@ -196,36 +182,6 @@ public class GoogleMapsRouteProvider implements RouteProvider {
 
         return segments;
     }
-
-    /*
-    private Optional<TransitDetails> extractTransitDetails(JSONObject step) {
-        if (!step.has("transit_details")) {
-            return Optional.empty();
-        }
-
-        try {
-            JSONObject transit = step.getJSONObject("transit_details");
-
-            JSONObject line = transit.getJSONObject("line");
-            String lineNumber = line.optString("short_name", "");
-            String lineName = line.optString("name", "");
-
-            String departureStop = transit.getJSONObject("departure_stop").getString("name");
-            String arrivalStop = transit.getJSONObject("arrival_stop").getString("name");
-            int numStops = transit.getInt("num_stops");
-
-            TransitDetails details = new TransitDetails(
-                    lineNumber, lineName, departureStop, arrivalStop, numStops
-            );
-
-            return Optional.of(details);
-
-        } catch (Exception e) {
-            System.err.println("Failed to parse transit details: " + e.getMessage());
-            return Optional.empty();
-        }
-    }
-     */
 
     private List<Location> extractPathPoints(JSONObject routeJson) {
         try {
@@ -274,7 +230,7 @@ public class GoogleMapsRouteProvider implements RouteProvider {
             double latitude = lat / 1e5;
             double longitude = lng / 1e5;
 
-            polyline.add(new Location(latitude, longitude, null));
+            polyline.add(new Location(latitude, longitude));
         }
 
         return polyline;

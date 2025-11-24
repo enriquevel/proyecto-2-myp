@@ -12,6 +12,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import myp.proyecto2.model.domain.*;
 import myp.proyecto2.model.domain.builder.Route;
+import myp.proyecto2.model.scorer.AbstractRouteScorer;
 import myp.proyecto2.view.View;
 
 public class JavaFXView implements View {
@@ -49,14 +50,14 @@ public class JavaFXView implements View {
     public static class RouteRequest {
         public final Location origin;
         public final Location destination;
-        public final Set<TransportMode> modes;
+        public final TransportMode mode;
         public final RoutePreference preference;
 
         public RouteRequest(Location origin, Location destination,
-                            Set<TransportMode> modes, RoutePreference preference) {
+                            TransportMode mode, RoutePreference preference) {
             this.origin = origin;
             this.destination = destination;
-            this.modes = modes;
+            this.mode = mode;
             this.preference = preference;
         }
     }
@@ -132,10 +133,10 @@ public class JavaFXView implements View {
             if (onFindRoutes != null) {
                 Location origin = controlPanel.getOriginSelector().getSelectedLocation();
                 Location dest = controlPanel.getDestinationSelector().getSelectedLocation();
-                Set<TransportMode> modes = controlPanel.getSelectedModes();
+                TransportMode mode = controlPanel.getSelectedMode();
                 RoutePreference pref = controlPanel.getPreference();
 
-                RouteRequest request = new RouteRequest(origin, dest, modes, pref);
+                RouteRequest request = new RouteRequest(origin, dest, mode, pref);
                 onFindRoutes.accept(request);
             }
         });

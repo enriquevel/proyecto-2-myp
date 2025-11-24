@@ -6,6 +6,8 @@ public class IDGenerator {
 
     private static int poiCounter = 0;
 
+    private static int routeCounter = 0;
+
     private static String formatCounter(int counter) {
         return String.format("%04d", counter);
     }
@@ -14,6 +16,7 @@ public class IDGenerator {
         return switch (prefix) {
             case "REP" -> prefix + "-" + formatCounter(++reportCounter);
             case "POI" -> prefix + "-" + formatCounter(++poiCounter);
+            case "ROU" -> prefix + "-" + formatCounter(++routeCounter);
             default -> throw new IllegalArgumentException("Unknown prefix: " + prefix);
         };
     }

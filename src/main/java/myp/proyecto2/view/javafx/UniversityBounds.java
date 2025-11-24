@@ -44,8 +44,8 @@ public class UniversityBounds {
     }
 
     public static UniversityBounds ciudadUniversitaria() {
-        Location nw = new Location(19.3350, -99.1950);
-        Location se = new Location(19.3100, -99.1700);
+        Location nw = new Location(19.3410, -99.2015);
+        Location se = new Location(19.3060, -99.1695);
         return new UniversityBounds(nw, se);
     }
 }

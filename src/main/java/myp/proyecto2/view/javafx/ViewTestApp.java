@@ -18,7 +18,7 @@ public class ViewTestApp extends Application {
             System.out.println("Find routes clicked:");
             System.out.println("  Origin: " + request.origin);
             System.out.println("  Destination: " + request.destination);
-            System.out.println("  Modes: " + request.modes);
+            //System.out.println("  Modes: " + request.modes);
             System.out.println("  Preference: " + request.preference);
 
             //view.showLoading("Finding routes...");

@@ -7,6 +7,7 @@ import myp.proyecto2.model.domain.*;
 import myp.proyecto2.model.domain.builder.Route;
 import myp.proyecto2.model.provider.RouteProvider;
 import myp.proyecto2.model.scorer.AbstractRouteScorer;
+import myp.proyecto2.model.scorer.ScorerFactory;
 
 public class RouteController {
 
@@ -17,13 +18,14 @@ public class RouteController {
     }
 
     public List<ScoredRoute> findAndScoreRoutes(Location to, Location from, TransportMode mode, List<Report> reports,
-                                                RoutePreference preference, AbstractRouteScorer scorer) {
+                                                RoutePreference preference) {
         List<Route> rawRoutes = this.provider.getRoutes(to, from, mode);
 
         if (rawRoutes.isEmpty())
             throw new IllegalArgumentException("No routes found");
 
         List<ScoredRoute> scoredRoutes = new ArrayList<>();
+        AbstractRouteScorer scorer = ScorerFactory.createScorer(preference);
 
         for (Route route : rawRoutes) {
             double score = scorer.score(route, reports);
