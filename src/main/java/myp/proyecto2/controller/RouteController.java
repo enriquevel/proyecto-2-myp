@@ -72,7 +72,7 @@ public class RouteController {
             case FASTEST: {
                 List<ScoredRoute> sorted = new ArrayList<>(routes);
                 sorted.sort(Comparator.comparingDouble(sr -> sr.getRoute().getTotalDurationMinutes()));
-                return sorted;
+                return sorted.reversed();
             }
             case SAFEST: {
                 List<ScoredRoute> sorted = new ArrayList<>(routes);
