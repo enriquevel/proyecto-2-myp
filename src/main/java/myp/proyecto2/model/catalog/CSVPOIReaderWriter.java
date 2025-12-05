@@ -121,7 +121,9 @@ class CSVPOIReaderWriter implements CSVReaderWriter<PointOfInterest> {
             throw new NullPointerException("Point of interest cannot be null.");
 
         List<PointOfInterest> allPOIs = readAll();
-        if (!allPOIs.remove(poi))
+        String poiId = poi.getId();
+        boolean removed = allPOIs.removeIf(p -> p.getId().equals(poiId));
+        if (!removed)
             return false;
 
         BufferedWriter bw = null;
